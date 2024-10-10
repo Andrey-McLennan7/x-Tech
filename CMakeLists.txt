@@ -4,8 +4,8 @@ project(X-TECH)
 
 include_directories(
 	src
-	contrib
 	contrib/cl-windows-x64/SDL2/include
+	contrib
 )
 
 link_directories(
@@ -21,7 +21,10 @@ add_library(x-Tech
 	src/x-Tech/Entity.cpp
 	src/x-Tech/Component.h
 	src/x-Tech/Component.cpp
+	src/x-Tech/Debug.h
+	src/x-Tech/Debug.cpp
 )
+target_link_libraries(x-Tech SDL2)
 
 add_executable(demo
 	src/demo/main.cpp

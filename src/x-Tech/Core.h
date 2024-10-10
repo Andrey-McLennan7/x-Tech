@@ -1,15 +1,23 @@
+#include "SDL.h"
+
 #include <memory>
 #include <vector>
 
 namespace xTech
 {
+	// Forward decleration
 	class Entity;
 
+	// Core implementation
 	class Core
 	{
+	public:
+
+		static std::shared_ptr<Core> initialize();
+
 	private:
 
-		//SDL_Window* m_window;
+		SDL_Window* m_window;
 		bool m_running;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
@@ -17,7 +25,7 @@ namespace xTech
 
 	public:
 
-		static std::shared_ptr<Core> initialize();
+		~Core();
 
 		void run();
 		void end();
