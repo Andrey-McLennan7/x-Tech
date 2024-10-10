@@ -1,11 +1,19 @@
-#include <x-Tech/dummy.h>
-#include <iostream>
+#include <x-Tech/x-Tech.h>
+
+using namespace xTech;
+
+class Player : public Component
+{
+
+};
 
 int main()
 {
-	std::cout << "Hello World" << std::endl;
+	std::shared_ptr<Core> core{ Core::initialize() };
+	std::shared_ptr<Entity> entity{ core->add_entity() };
+	std::shared_ptr<Player> player{ entity->add_component<Player>() };
 
-	dummy();
+	core->run();
 
 	return 0;
 }
