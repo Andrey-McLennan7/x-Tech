@@ -1,20 +1,23 @@
 #include "Entity.h"
+#include "Component.h"
 
 namespace xTech
 {
 	void Entity::tick()
 	{
-		for (size_t ci{ 0 }; ci < this->m_components.size(); ++ci)
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			//this->m_components.at(ci)->tick();
+			(*itr)->tick();
 		}
 	}
 
 	void Entity::display()
 	{
-		for (size_t ci{ 0 }; ci < this->m_components.size(); ++ci)
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			//this->m_components.at(ci)->display();
+			(*itr)->display();
 		}
 	}
 
@@ -24,9 +27,15 @@ namespace xTech
 
 		m_alive = false;
 
-		for (size_t ci{ 0 }; ci < this->m_components.size(); ++ci)
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			//this->m_components.at(ci)->kill();
+			(*itr)->kill();
 		}
+	}
+
+	std::shared_ptr<Core> Entity::get_core()
+	{
+		return this->m_core.lock();
 	}
 }

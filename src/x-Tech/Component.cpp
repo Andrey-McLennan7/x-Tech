@@ -2,25 +2,27 @@
 
 namespace xTech
 {
-	void Component::initialize()
-	{
-
-	}
-
-	void Component::onTick() {};
-	void Component::onDisplay() {};
-
+	void Component::on_initialize() {}
+	void Component::on_tick()       {}
+	void Component::on_display()    {}
+	
 	void Component::tick()
 	{
-		this->onTick();
+		this->on_tick();
 	}
 
 	void Component::display()
 	{
-		this->onDisplay();
+		this->on_display();
 	}
+
 	void Component::kill()
 	{
 		m_alive = false;
+	}
+
+	std::shared_ptr<Entity> Component::get_entity()
+	{
+		return this->m_entity.lock();
 	}
 }

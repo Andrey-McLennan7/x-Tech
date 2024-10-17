@@ -6,11 +6,24 @@ class Player : public Component
 {
 private:
 
-
+	vec3 abc;
 
 public:
 
+	virtual void on_initialize() override
+	{
+		Debug::print("Player::initialize()\n");
+	}
 
+	virtual void on_tick() override
+	{
+		Debug::print("Player::tick()\n");
+	}
+
+	virtual void on_display() override
+	{
+		Debug::print("Player::display()\n");
+	}
 
 };
 

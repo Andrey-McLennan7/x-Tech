@@ -5,8 +5,8 @@
 
 namespace xTech
 {
-	// Forward decleration
 	class Entity;
+	class Window;
 
 	// Core implementation
 	class Core
@@ -17,15 +17,13 @@ namespace xTech
 
 	private:
 
-		SDL_Window* m_window;
+		std::shared_ptr<Window> m_window;
 		bool m_running;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
 		std::weak_ptr<Core> m_self;
 
 	public:
-
-		~Core();
 
 		void run();
 		void end();

@@ -11,10 +11,9 @@ namespace xTech
 	{
 	public:
 
-		void initialize();
-
-		virtual void onTick();
-		virtual void onDisplay();
+		virtual void on_initialize();
+		virtual void on_tick();
+		virtual void on_display();
 
 	private:
 
@@ -28,6 +27,8 @@ namespace xTech
 		void kill();
 
 	public:
+
+		std::shared_ptr<Entity> get_entity();
 
 		friend Entity;
 	};

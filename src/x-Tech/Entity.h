@@ -31,13 +31,15 @@ namespace xTech
 
 			rtn->m_entity = this->m_self;
 
-			rtn->initialize();
+			rtn->on_initialize();
 			this->m_components.push_back(rtn);
 
 			return rtn;
 		}
 
 		void kill();
+
+		std::shared_ptr<Core> get_core();
 
 		friend Core;
 	};
