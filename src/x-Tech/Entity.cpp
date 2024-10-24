@@ -1,5 +1,9 @@
+#include <SDL.h>
+
+#include "Core.h"
 #include "Entity.h"
 #include "Component.h"
+#include "Window.h"
 
 namespace xTech
 {

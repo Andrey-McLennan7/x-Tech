@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
 
 project(X-TECH)
 
+add_definitions(
+	-DGLEW_STATIC
+)
+
 include_directories(
 	src
 	contrib/cl-windows-x64/SDL2/include
@@ -29,6 +33,8 @@ add_library(x-Tech
 	src/x-Tech/Transform.cpp
 	src/x-Tech/Window.h
 	src/x-Tech/Window.cpp
+	src/x-Tech/Shader.h
+	src/x-Tech/Shader.cpp
 )
 target_link_libraries(x-Tech SDL2 glew32s opengl32)
 

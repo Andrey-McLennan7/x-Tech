@@ -1,5 +1,6 @@
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
 namespace xTech
 {
@@ -8,6 +9,7 @@ namespace xTech
 
 	class Entity
 	{
+	// Private data members
 	private:
 
 		std::vector<std::shared_ptr<Component>> m_components;
@@ -17,9 +19,13 @@ namespace xTech
 
 		bool m_alive;
 
+	// Private member functions
+	private:
+
 		void tick();
 		void display();
 
+	// Public member functions
 	public:
 
 		~Entity() {};
@@ -35,6 +41,23 @@ namespace xTech
 			this->m_components.push_back(rtn);
 
 			return rtn;
+		}
+
+		template <typename T>
+		std::shared_ptr<T> get_component()
+		{
+			std::vector<std::shared_ptr<Component>>::iterator itr;
+			for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
+			{
+				std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(*itr);
+
+				if (rtn)
+				{
+					return rtn;
+				}
+			}
+
+			throw std::runtime_error("ERROR::FAILED TO FIND COMPONENT");
 		}
 
 		void kill();
