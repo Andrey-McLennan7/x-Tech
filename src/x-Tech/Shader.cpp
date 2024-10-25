@@ -126,60 +126,60 @@ namespace xTech
 		glUseProgram(0);
 	}
 
-	void Shader::setFloat(const std::string& attribute, float value) const
+	void Shader::set_float(const std::string& attribute, float value) const
 	{
 		this->use();
 		glUniform1f(glGetUniformLocation(this->m_id, attribute.c_str()), (GLfloat)value);
 		this->unuse();
 	}
 
-	void Shader::setInt(const std::string& attribute, int value) const
+	void Shader::set_int(const std::string& attribute, int value) const
 	{
 		this->use();
 		glUniform1i(glGetUniformLocation(this->m_id, attribute.c_str()), (GLint)value);
 		this->unuse();
 	}
 
-	void Shader::setBool(const std::string& attribute, bool value) const
+	void Shader::set_bool(const std::string& attribute, bool value) const
 	{
-		this->setInt(attribute, (int)value);
+		this->set_int(attribute, (int)value);
 	}
 
-	void Shader::setVec3(const std::string& attribute, float x, float y, float z) const
+	void Shader::set_vec3(const std::string& attribute, float x, float y, float z) const
 	{
 		this->use();
 		glUniform3fv(glGetUniformLocation(this->m_id, attribute.c_str()), 1, glm::value_ptr(glm::vec3(x, y, z)));
 		this->unuse();
 	}
 
-	void Shader::setVec3(const std::string& attribute, const glm::vec3& value) const
+	void Shader::set_vec3(const std::string& attribute, const glm::vec3& value) const
 	{
-		this->setVec3(attribute, value.x, value.y, value.z);
+		this->set_vec3(attribute, value.x, value.y, value.z);
 	}
 
-	void Shader::setVec3(const std::string& attribute, const float* value) const
+	void Shader::set_vec3(const std::string& attribute, const float* value) const
 	{
-		this->setVec3(attribute, value[0], value[1], value[2]);
+		this->set_vec3(attribute, value[0], value[1], value[2]);
 	}
 
-	void Shader::setVec4(const std::string& attribute, float x, float y, float z, float w) const
+	void Shader::set_vec4(const std::string& attribute, float x, float y, float z, float w) const
 	{
 		this->use();
 		glUniform4fv(glGetUniformLocation(this->m_id, attribute.c_str()), 1, glm::value_ptr(glm::vec4(x, y, z, w)));
 		this->unuse();
 	}
 
-	void Shader::setVec4(const std::string& attribute, const glm::vec4& value) const
+	void Shader::set_vec4(const std::string& attribute, const glm::vec4& value) const
 	{
-		this->setVec4(attribute, value.x, value.y, value.z, value.w);
+		this->set_vec4(attribute, value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::setVec4(const std::string& attribute, const float* value) const
+	void Shader::set_vec4(const std::string& attribute, const float* value) const
 	{
-		this->setVec4(attribute, value[0], value[1], value[2], value[3]);
+		this->set_vec4(attribute, value[0], value[1], value[2], value[3]);
 	}
 
-	void Shader::setMat4(const std::string& attribute, const glm::mat4& value) const
+	void Shader::set_mat4(const std::string& attribute, const glm::mat4& value) const
 	{
 		this->use();
 		glUniformMatrix4fv(glGetUniformLocation(this->m_id, attribute.c_str()), 1, GL_FALSE, glm::value_ptr(value));

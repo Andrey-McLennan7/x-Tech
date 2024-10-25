@@ -40,19 +40,19 @@ namespace xTech
 
 		// Utility uniforms
 		// Setters
-		void setFloat(const std::string& attribute, float value) const;
-		void setInt(const std::string& attribute, int value) const;
-		void setBool(const std::string& attribute, bool value) const;
+		void set_float(const std::string& attribute, float value) const;
+		void set_int(const std::string& attribute, int value) const;
+		void set_bool(const std::string& attribute, bool value) const;
 
-		void setVec3(const std::string& attribute, float x, float y, float z) const;
-		void setVec3(const std::string& attribute, const glm::vec3& value) const;
-		void setVec3(const std::string& attribute, const float* value) const;
+		void set_vec3(const std::string& attribute, float x, float y, float z) const;
+		void set_vec3(const std::string& attribute, const glm::vec3& value) const;
+		void set_vec3(const std::string& attribute, const float* value) const;
 
-		void setVec4(const std::string& attribute, float x, float y, float z, float w) const;
-		void setVec4(const std::string& attribute, const glm::vec4& value) const;
-		void setVec4(const std::string& attribute, const float* value) const;
+		void set_vec4(const std::string& attribute, float x, float y, float z, float w) const;
+		void set_vec4(const std::string& attribute, const glm::vec4& value) const;
+		void set_vec4(const std::string& attribute, const float* value) const;
 
-		void setMat4(const std::string& attribute, const glm::mat4& value) const;
+		void set_mat4(const std::string& attribute, const glm::mat4& value) const;
 
 		// Getters
 		GLuint ID() const;

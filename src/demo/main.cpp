@@ -58,14 +58,15 @@ public:
 		int height{ this->get_entity()->get_core()->get_window()->get_height() };
 
 		model = this->get_entity()->get_component<Transform>()->m_model_matrix;
-		this->m_shader->setMat4("model", model);
+		this->m_shader->set_mat4("model", model);
 
 		projection = glm::perspective(45.0f, float(width) / float(height), 0.1f, 100.0f);
-		this->m_shader->setMat4("projection", projection);
+		this->m_shader->set_mat4("projection", projection);
 
-		this->m_shader->setMat4("view", view);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+		this->m_shader->set_mat4("view", view);
 
-		this->m_shader->setVec3("uColour", glm::vec3(1.0f, 0.0f, 0.0f));
+		this->m_shader->set_vec3("uColour", glm::vec3(1.0f, 0.0f, 0.0f));
 
 
 

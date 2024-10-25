@@ -5,6 +5,7 @@
 namespace xTech
 {
 	class Core;
+	class Window;
 	class Component;
 
 	class Entity
@@ -65,5 +66,6 @@ namespace xTech
 		std::shared_ptr<Core> get_core();
 
 		friend Core;
+		friend Window;
 	};
 }

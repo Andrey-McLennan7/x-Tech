@@ -13,18 +13,11 @@ namespace xTech
 	private:
 
 		std::shared_ptr<Window> m_window;
-		bool m_running;
+		bool m_run;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
+		std::vector<std::shared_ptr<Entity>>::iterator m_ent_itr;
 		std::weak_ptr<Core> m_self;
-
-		float m_delta_time;
-		unsigned int m_tick_count;
-
-	// Private member functions
-	private:
-
-		void delta_time();
 
 	// Public member functions
 	public:
@@ -37,8 +30,7 @@ namespace xTech
 		std::shared_ptr<Entity> add_entity();
 		std::shared_ptr<Window> get_window();
 
-		float get_delta_time();
-
 		friend Entity;
+		friend Window;
 	};
 }
