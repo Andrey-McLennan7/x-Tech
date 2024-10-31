@@ -18,7 +18,7 @@ namespace xTech
 
 	void Component::kill()
 	{
-		m_alive = false;
+		this->m_alive = false;
 	}
 
 	std::shared_ptr<Entity> Component::get_entity()

@@ -1,10 +1,8 @@
 #include "Core.h"
 #include "Entity.h"
-#include "Debug.h"
 #include "Transform.h"
 
-#include <rend/Window.h>
-#include <rend/Shader.h>
+#include "Window.h"
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -58,7 +56,7 @@ namespace xTech
 		return rtn;
 	}
 
-	std::shared_ptr<Window> Core::get_window()
+	std::shared_ptr<Window> Core::get_window() const
 	{
 		return this->m_window;
 	}

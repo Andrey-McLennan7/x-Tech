@@ -1,7 +1,7 @@
 #include "Window.h"
 
-#include <x-Tech/Core.h>
-#include <x-Tech/Entity.h>
+#include "Core.h"
+#include "Entity.h"
 
 #include <vector>
 #include <stdexcept>
@@ -16,13 +16,6 @@ namespace xTech
 		m_delta_time{ 0.0f },
 		m_tick_count{ 0 }
 	{
-		// Initialise everything in the SDL2 library
-		if (SDL_Init(SDL_INIT_EVERYTHING))
-		{
-			SDL_Log("ERROR::%s", SDL_GetError());
-			throw std::runtime_error("FAILED TO INITIALISE SDL2");
-		}
-
 		// Create SDL2 window
 		this->m_id = SDL_CreateWindow("x-Tech", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->m_width,
 			this->m_height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -33,9 +26,10 @@ namespace xTech
 			throw std::runtime_error("FAILED TO CREATE SDL2 WINDOW");
 		}
 
-		SDL_GL_CreateContext(this->m_id);
+		// Create OpenGL context
+		this->m_context = SDL_GL_CreateContext(this->m_id);
 
-		// Check GLEW
+		// Initialise and check for GLEW
 		if (glewInit() != GLEW_OK)
 		{
 			throw std::runtime_error("ERROR::FAILED TO INITIALISE GLEW");
@@ -43,6 +37,13 @@ namespace xTech
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	Window::~Window()
+	{
+		SDL_GL_DeleteContext(this->m_context);
+		SDL_DestroyWindow(this->m_id);
+		SDL_Quit();
 	}
 
 	void Window::delta_time()
@@ -80,12 +81,8 @@ namespace xTech
 
 	void Window::tick()
 	{
-		int width{ 0 }, height{ 0 };
-		SDL_GetWindowSize(this->m_id, &width, &height);
-		glViewport(0, 0, width, height);
-
-		this->m_width = width;
-		this->m_height = height;
+		SDL_GetWindowSize(this->m_id, &this->m_width, &this->m_height);
+		glViewport(0, 0, this->m_width, this->m_height);
 
 		std::vector<std::shared_ptr<Entity>>::iterator itr;
 		for (itr = this->m_core.lock()->m_entities.begin(); itr < this->m_core.lock()->m_entities.end(); ++itr)
@@ -97,7 +94,7 @@ namespace xTech
 	void Window::display()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.1f, 0.2f, 0.5f, 1.0f);
+		glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -108,12 +105,6 @@ namespace xTech
 		}
 
 		SDL_GL_SwapWindow(this->m_id);
-	}
-
-	Window::~Window()
-	{
-		SDL_DestroyWindow(this->m_id);
-		SDL_Quit();
 	}
 
 	SDL_Window* Window::ID()

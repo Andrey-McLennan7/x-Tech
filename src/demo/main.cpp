@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace xTech;
+using namespace rend;
 
 class TriangleRenderer : public Component
 {
@@ -15,14 +16,22 @@ private:
 
 public:
 
+	TriangleRenderer() : m_vao{ 0 }, m_size{ 0 } {}
+
 	virtual void on_initialize() override
 	{
 		float vertices[]
 		{
 			-0.5f, -0.5f, 0.0f,
 			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f,
+
+			-0.5f,  0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f
 		};
+
+		this->m_size = (sizeof(vertices) / sizeof(vertices[0])) / 3;
 
 		GLuint vbo{ 0 };
 
@@ -46,11 +55,6 @@ public:
 
 	virtual void on_tick() override
 	{
-
-	}
-
-	virtual void on_display() override
-	{
 		mat4 model{ mat4(1.0f) };
 		mat4 projection{ mat4(1.0f) };
 		mat4 view{ mat4(1.0f) };
@@ -58,23 +62,24 @@ public:
 		int width{ this->get_entity()->get_core()->get_window()->get_width() };
 		int height{ this->get_entity()->get_core()->get_window()->get_height() };
 
-		model = this->get_entity()->get_component<Transform>()->m_model_matrix;
+		model = this->get_entity()->get_component<Transform>()->get_model_matrix();
 		this->m_shader->set_mat4("model", model);
 
 		projection = glm::perspective(45.0f, float(width) / float(height), 0.1f, 100.0f);
 		this->m_shader->set_mat4("projection", projection);
 
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+		view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 		this->m_shader->set_mat4("view", view);
 
 		this->m_shader->set_vec3("uColour", glm::vec3(1.0f, 0.0f, 0.0f));
+	}
 
-
-
+	virtual void on_display() override
+	{
 		this->m_shader->use();
 
 		glBindVertexArray(this->m_vao);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, this->m_size);
 		glBindVertexArray(0);
 
 		this->m_shader->unuse();
@@ -86,7 +91,6 @@ public:
 int main()
 {
 	std::shared_ptr<Core> core{ Core::initialize() };
-
 	std::shared_ptr<Entity> entity{ core->add_entity() };
 	std::shared_ptr<TriangleRenderer> triangle{ entity->add_component<TriangleRenderer>() };
 

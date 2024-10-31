@@ -17,13 +17,13 @@ namespace xTech
 		glm::vec3 m_rotation;
 		glm::vec3 m_scale;
 
-		glm::mat4 m_model_matrix;
-
 	// Public member functions
 	public:
 
 		virtual void on_initialize() override;
 		virtual void on_tick() override;
+
+		glm::mat4 get_model_matrix();
 
 	};
 }

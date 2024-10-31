@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "Component.h"
 
-#include <rend/Window.h>
+#include "Window.h"
 
 namespace xTech
 {
@@ -28,9 +28,9 @@ namespace xTech
 
 	void Entity::kill()
 	{
-		if (!m_alive) return;
+		if (!this->m_alive) return;
 
-		m_alive = false;
+		this->m_alive = false;
 
 		std::vector<std::shared_ptr<Component>>::iterator itr;
 		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)

@@ -12,6 +12,7 @@ namespace xTech
 	private:
 
 		SDL_Window* m_id;
+		SDL_GLContext m_context;
 
 		std::weak_ptr<Core> m_core;
 

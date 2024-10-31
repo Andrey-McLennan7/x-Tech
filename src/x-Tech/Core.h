@@ -16,7 +16,6 @@ namespace xTech
 		bool m_run;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
-		std::vector<std::shared_ptr<Entity>>::iterator m_ent_itr;
 		std::weak_ptr<Core> m_self;
 
 	// Public member functions
@@ -28,7 +27,8 @@ namespace xTech
 		void end();
 
 		std::shared_ptr<Entity> add_entity();
-		std::shared_ptr<Window> get_window();
+
+		std::shared_ptr<Window> get_window() const;
 
 		friend Entity;
 		friend Window;

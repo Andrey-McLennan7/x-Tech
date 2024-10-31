@@ -18,8 +18,6 @@ link_directories(
 
 add_library(rend
 	src/rend/rend.h
-	src/rend/Window.h
-	src/rend/Window.cpp
 	src/rend/Shader.h
 	src/rend/Shader.cpp
 )
@@ -36,6 +34,8 @@ add_library(x-Tech
 	src/x-Tech/Debug.cpp
 	src/x-Tech/Transform.h
 	src/x-Tech/Transform.cpp
+	src/x-Tech/Window.h
+	src/x-Tech/Window.cpp
 )
 
 target_link_libraries(rend SDL2 glew32s opengl32)

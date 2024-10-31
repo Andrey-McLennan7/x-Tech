@@ -3,10 +3,9 @@
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 
-// Reading Files
 #include <string>
 
-namespace xTech
+namespace rend
 {
 	class Shader
 	{

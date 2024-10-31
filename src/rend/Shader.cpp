@@ -9,7 +9,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace xTech
+namespace rend
 {
 	Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	{
