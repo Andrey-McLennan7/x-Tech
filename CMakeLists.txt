@@ -8,15 +8,20 @@ add_definitions(
 
 include_directories(
 	src
-	contrib/cl-windows-x64/SDL2/include
-	contrib/cl-windows-x64/GLEW/include
-	contrib
+	contrib/cl-windows-x86_64/include
+	contrib/include
 )
 
 link_directories(
-	src
-	contrib/cl-windows-x64/SDL2/lib
-	contrib/cl-windows-x64/GLEW/lib
+	contrib/cl-windows-x86_64/lib
+)
+
+add_library(rend
+	src/rend/rend.h
+	src/rend/Window.h
+	src/rend/Window.cpp
+	src/rend/Shader.h
+	src/rend/Shader.cpp
 )
 
 add_library(x-Tech
@@ -31,12 +36,11 @@ add_library(x-Tech
 	src/x-Tech/Debug.cpp
 	src/x-Tech/Transform.h
 	src/x-Tech/Transform.cpp
-	src/x-Tech/Window.h
-	src/x-Tech/Window.cpp
-	src/x-Tech/Shader.h
-	src/x-Tech/Shader.cpp
 )
-target_link_libraries(x-Tech SDL2 glew32s opengl32)
+
+target_link_libraries(rend SDL2 glew32s opengl32)
+
+target_link_libraries(x-Tech rend)
 
 add_executable(demo
 	src/demo/main.cpp

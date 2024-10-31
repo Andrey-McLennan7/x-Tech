@@ -17,6 +17,6 @@ namespace xTech
 		// Update the model matrix
 		this->m_model_matrix = glm::translate(glm::mat4(1.0f), this->m_position);
 		this->m_model_matrix = glm::rotate(this->m_model_matrix, 1.0f, this->m_rotation);
-		this->m_model_matrix = glm::translate(this->m_model_matrix, this->m_scale);
+		this->m_model_matrix = glm::scale(this->m_model_matrix, this->m_scale);
 	}
 }

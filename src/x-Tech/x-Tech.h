@@ -14,7 +14,5 @@ namespace xTech
 #include "Component.h"
 #include "Debug.h"
 #include "Transform.h"
-#include "Window.h"
-#include "Shader.h"
 
 #endif

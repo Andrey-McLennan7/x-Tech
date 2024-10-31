@@ -1,11 +1,13 @@
 #include "Core.h"
 #include "Entity.h"
 #include "Debug.h"
-#include "Window.h"
 #include "Transform.h"
 
+#include <rend/Window.h>
+#include <rend/Shader.h>
+
 #include <GL/glew.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 namespace xTech
 {
@@ -32,6 +34,8 @@ namespace xTech
 		{
 			this->m_window->delta_time();
 			this->m_window->input();
+			this->m_window->tick();
+			this->m_window->display();
 		}
 	}
 
