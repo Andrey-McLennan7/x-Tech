@@ -20,6 +20,8 @@ add_library(rend
 	src/rend/rend.h
 	src/rend/Shader.h
 	src/rend/Shader.cpp
+	src/rend/TriangleRenderer.h
+	src/rend/TriangleRenderer.cpp
 )
 
 add_library(x-Tech

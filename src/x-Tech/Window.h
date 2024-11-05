@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <memory>
+#include <glm/glm.hpp>
 
 namespace xTech
 {
@@ -14,11 +15,6 @@ namespace xTech
 		SDL_Window* m_id;
 		SDL_GLContext m_context;
 
-		std::weak_ptr<Core> m_core;
-
-		int m_width;
-		int m_height;
-
 		float m_delta_time;
 		unsigned int m_tick_count;
 
@@ -28,19 +24,11 @@ namespace xTech
 		Window(int width = 1920, int height = 1080);
 		~Window();
 
-		void delta_time();
-
-		void input();
 		void tick();
-		void display();
+
+		glm::ivec2 size();
 
 		SDL_Window* ID();
-
-		int get_width();
-		int get_height();
-
-		void set_width(int width);
-		void set_height(int height);
 
 		friend Core;
 	};

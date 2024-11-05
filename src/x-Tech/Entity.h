@@ -63,7 +63,7 @@ namespace xTech
 
 		void kill();
 
-		std::shared_ptr<Core> get_core();
+		std::shared_ptr<Core> core();
 
 		friend Core;
 		friend Window;

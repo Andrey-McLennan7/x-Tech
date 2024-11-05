@@ -20,7 +20,6 @@ namespace xTech
 
 		// Create window
 		rtn->m_window = std::make_shared<Window>();
-		rtn->m_window->m_core = rtn->m_self;
 
 		return rtn;
 	}
@@ -30,10 +29,42 @@ namespace xTech
 		// Start game loop
 		while (this->m_run)
 		{
-			this->m_window->delta_time();
-			this->m_window->input();
+			// Input
+			// Read mouse input
+			SDL_Event e;
+
+			// Read keyboard input
+			const Uint8* state{ SDL_GetKeyboardState(NULL) };
+
+			while (SDL_PollEvent(&e))
+			{
+				if (e.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
+				{
+					this->end();
+				}
+			}
+
+			// Update
 			this->m_window->tick();
-			this->m_window->display();
+
+			std::vector<std::shared_ptr<Entity>>::iterator itr;
+			for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
+			{
+				(*itr)->tick();
+			}
+
+			// Render
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
+
+			glEnable(GL_DEPTH_TEST);
+
+			for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
+			{
+				(*itr)->display();
+			}
+
+			SDL_GL_SwapWindow(this->m_window->ID());
 		}
 	}
 
@@ -56,7 +87,7 @@ namespace xTech
 		return rtn;
 	}
 
-	std::shared_ptr<Window> Core::get_window() const
+	std::shared_ptr<Window> Core::window() const
 	{
 		return this->m_window;
 	}

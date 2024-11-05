@@ -6,6 +6,8 @@
 namespace xTech
 {
 	class Entity;
+	class Core;
+	class Window;
 
 	class Component
 	{
@@ -31,7 +33,9 @@ namespace xTech
 		virtual void on_tick();
 		virtual void on_display();
 
-		std::shared_ptr<Entity> get_entity();
+		std::shared_ptr<Entity> entity();
+		std::shared_ptr<Core> core();
+		std::shared_ptr<Window> window();
 
 		friend Entity;
 	};

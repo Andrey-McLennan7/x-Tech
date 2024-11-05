@@ -39,7 +39,7 @@ namespace xTech
 		}
 	}
 
-	std::shared_ptr<Core> Entity::get_core()
+	std::shared_ptr<Core> Entity::core()
 	{
 		return this->m_core.lock();
 	}

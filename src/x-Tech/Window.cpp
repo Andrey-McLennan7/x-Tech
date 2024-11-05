@@ -11,14 +11,12 @@ namespace xTech
 {
 	Window::Window(int width, int height) :
 		m_id{ nullptr },
-		m_width { width },
-		m_height{ height },
 		m_delta_time{ 0.0f },
 		m_tick_count{ 0 }
 	{
 		// Create SDL2 window
-		this->m_id = SDL_CreateWindow("x-Tech", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->m_width,
-			this->m_height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+		this->m_id = SDL_CreateWindow("x-Tech", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width,
+			height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 		if (!this->m_id)
 		{
@@ -46,7 +44,7 @@ namespace xTech
 		SDL_Quit();
 	}
 
-	void Window::delta_time()
+	void Window::tick()
 	{
 		// Wait until 16ms has elapsed since last frame
 		while (!SDL_TICKS_PASSED(SDL_GetTicks64(), this->m_tick_count + 16));
@@ -60,75 +58,28 @@ namespace xTech
 		{
 			this->m_delta_time = 0.05f;
 		}
+
+		int w{ 0 };
+		int h{ 0 };
+
+		SDL_GetWindowSize(this->m_id, &w, &h);
+		glViewport(0, 0, w, h);
 	}
 
-	void Window::input()
+	glm::ivec2 Window::size()
 	{
-		// Read mouse input
-		SDL_Event e;
+		int w{ 0 };
+		int h{ 0 };
 
-		// Read keyboard input
-		const Uint8* state{ SDL_GetKeyboardState(NULL) };
+		SDL_GetWindowSize(this->m_id, &w, &h);
 
-		while (SDL_PollEvent(&e))
-		{
-			if (e.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
-			{
-				this->m_core.lock()->end();
-			}
-		}
-	}
+		glm::ivec2 rtn{ w, h };
 
-	void Window::tick()
-	{
-		SDL_GetWindowSize(this->m_id, &this->m_width, &this->m_height);
-		glViewport(0, 0, this->m_width, this->m_height);
-
-		std::vector<std::shared_ptr<Entity>>::iterator itr;
-		for (itr = this->m_core.lock()->m_entities.begin(); itr < this->m_core.lock()->m_entities.end(); ++itr)
-		{
-			(*itr)->tick();
-		}
-	}
-
-	void Window::display()
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
-
-		glEnable(GL_DEPTH_TEST);
-
-		std::vector<std::shared_ptr<Entity>>::iterator itr;
-		for (itr = this->m_core.lock()->m_entities.begin(); itr < this->m_core.lock()->m_entities.end(); ++itr)
-		{
-			(*itr)->display();
-		}
-
-		SDL_GL_SwapWindow(this->m_id);
+		return rtn;
 	}
 
 	SDL_Window* Window::ID()
 	{
 		return this->m_id;
-	}
-
-	int Window::get_width()
-	{
-		return this->m_width;
-	}
-
-	int Window::get_height()
-	{
-		return this->m_height;
-	}
-
-	void Window::set_width(int width)
-	{
-		this->m_width = width;
-	}
-
-	void Window::set_height(int height)
-	{
-		this->m_height = height;
 	}
 }

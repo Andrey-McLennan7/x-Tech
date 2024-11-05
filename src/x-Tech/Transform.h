@@ -5,11 +5,6 @@ namespace xTech
 {
 	class Transform : public Component
 	{
-	// Private data members
-	private:
-
-		
-
 	// Public data members
 	public:
 
@@ -23,7 +18,7 @@ namespace xTech
 		virtual void on_initialize() override;
 		virtual void on_tick() override;
 
-		glm::mat4 get_model_matrix();
+		glm::mat4 model();
 
 	};
 }

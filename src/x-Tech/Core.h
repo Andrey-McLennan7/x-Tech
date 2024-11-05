@@ -13,6 +13,11 @@ namespace xTech
 	private:
 
 		std::shared_ptr<Window> m_window;
+		//std::shared_ptr<Input> m_input;
+		//std::shared_ptr<Audio> m_audio;
+		//std::shared_ptr<Cache> m_cache;
+		//std::shared_ptr<Physics> m_physics;
+
 		bool m_run;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
@@ -28,9 +33,8 @@ namespace xTech
 
 		std::shared_ptr<Entity> add_entity();
 
-		std::shared_ptr<Window> get_window() const;
+		std::shared_ptr<Window> window() const;
 
 		friend Entity;
-		friend Window;
 	};
 }
