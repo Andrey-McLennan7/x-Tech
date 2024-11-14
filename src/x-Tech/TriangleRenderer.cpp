@@ -42,7 +42,7 @@ namespace xTech
 
 		glBindVertexArray(0);
 
-		this->m_shader = std::make_shared<rend::Shader>("../res/Shaders/vertexShader.glsl", "../res/Shaders/fragmentShader.glsl");
+		this->m_shader = std::make_shared<rend::Shader>("../res/Shader/vertexShader.glsl", "../res/Shader/fragmentShader.glsl");
 	}
 
 	void TriangleRenderer::on_tick()
