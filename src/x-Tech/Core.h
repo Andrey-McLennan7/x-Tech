@@ -5,6 +5,7 @@ namespace xTech
 {
 	class Entity;
 	class Window;
+	class Cache;
 
 	// Core implementation
 	class Core
@@ -15,7 +16,7 @@ namespace xTech
 		std::shared_ptr<Window> m_window;
 		//std::shared_ptr<Input> m_input;
 		//std::shared_ptr<Audio> m_audio;
-		//std::shared_ptr<Cache> m_cache;
+		std::shared_ptr<Cache> m_cache;
 		//std::shared_ptr<Physics> m_physics;
 
 		bool m_run;

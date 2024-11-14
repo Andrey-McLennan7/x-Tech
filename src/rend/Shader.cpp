@@ -56,24 +56,24 @@ namespace rend
 		fragmentShaderData = fragmentCode.c_str();
 
 		// Vertex
-		this->CompileShader(this->m_vertex, vertexShaderData, GL_VERTEX_SHADER, "VERTEX");
+		this->compile_shader(this->m_vertex, vertexShaderData, GL_VERTEX_SHADER, "VERTEX");
 
 		// Fragment
-		this->CompileShader(this->m_fragment, fragmentShaderData, GL_FRAGMENT_SHADER, "FRAGMENT");
+		this->compile_shader(this->m_fragment, fragmentShaderData, GL_FRAGMENT_SHADER, "FRAGMENT");
 
 		// Program
-		this->CreateShaderProgram();
+		this->create_shader_program();
 	}
 
 	Shader::~Shader()
 	{}
 
-	void Shader::CompileShader(GLuint& shader, const char* shaderData, GLenum type)
+	void Shader::compile_shader(GLuint& shader, const char* shaderData, GLenum type)
 	{
-		this->CompileShader(shader, shaderData, type, "");
+		this->compile_shader(shader, shaderData, type, "");
 	}
 
-	void Shader::CompileShader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName)
+	void Shader::compile_shader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName)
 	{
 		int success{ 0 };
 		char infolog[1024];
@@ -92,7 +92,7 @@ namespace rend
 		}
 	}
 
-	void Shader::CreateShaderProgram()
+	void Shader::create_shader_program()
 	{
 		int success{ 0 };
 		char infolog[1024];

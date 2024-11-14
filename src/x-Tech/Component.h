@@ -29,9 +29,9 @@ namespace xTech
 	// Public member functions
 	public:
 
-		virtual void on_initialize();
-		virtual void on_tick();
-		virtual void on_display();
+		virtual void on_initialize() {};
+		virtual void on_tick() {};
+		virtual void on_display() {};
 
 		std::shared_ptr<Entity> entity();
 		std::shared_ptr<Core> core();

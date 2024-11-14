@@ -20,8 +20,9 @@ add_library(rend
 	src/rend/rend.h
 	src/rend/Shader.h
 	src/rend/Shader.cpp
-	src/rend/TriangleRenderer.h
-	src/rend/TriangleRenderer.cpp
+	src/rend/Texture.h
+	src/rend/Texture.cpp
+	src/rend/stb_image.h
 )
 
 add_library(x-Tech
@@ -38,6 +39,16 @@ add_library(x-Tech
 	src/x-Tech/Transform.cpp
 	src/x-Tech/Window.h
 	src/x-Tech/Window.cpp
+	src/x-Tech/Shader.h
+	src/x-Tech/Shader.cpp
+	src/x-Tech/TriangleRenderer.h
+	src/x-Tech/TriangleRenderer.cpp
+	src/x-Tech/Resource.h
+	src/x-Tech/Resource.cpp
+	src/x-Tech/Cache.h
+	src/x-Tech/Cache.cpp
+	src/x-Tech/Texture.h
+	src/x-Tech/Texture.cpp
 )
 
 target_link_libraries(rend SDL2 glew32s opengl32)

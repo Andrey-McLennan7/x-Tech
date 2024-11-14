@@ -20,9 +20,9 @@ namespace rend
 	// Private member functions
 	private:
 
-		void CompileShader(GLuint& shader, const char* shaderData, GLenum type);
-		void CompileShader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName);
-		void CreateShaderProgram();
+		void compile_shader(GLuint& shader, const char* shaderData, GLenum type);
+		void compile_shader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName);
+		void create_shader_program();
 
 	// Public member functions
 	public:
@@ -37,8 +37,8 @@ namespace rend
 		// Shader Unuse
 		void unuse() const;
 
-		// Utility uniforms
 		// Setters
+		// Utility uniforms
 		void set_float(const std::string& attribute, float value) const;
 		void set_int(const std::string& attribute, int value) const;
 		void set_bool(const std::string& attribute, bool value) const;

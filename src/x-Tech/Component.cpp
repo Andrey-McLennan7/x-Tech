@@ -6,10 +6,6 @@
 
 namespace xTech
 {
-	void Component::on_initialize() {}
-	void Component::on_tick()       {}
-	void Component::on_display()    {}
-	
 	void Component::tick()
 	{
 		this->on_tick();

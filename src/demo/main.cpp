@@ -1,8 +1,6 @@
 #include <x-Tech/x-Tech.h>
-#include <rend/rend.h>
 
 using namespace xTech;
-using namespace rend;
 
 #undef main
 int main()

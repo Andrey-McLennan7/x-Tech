@@ -1,24 +1,25 @@
 #include <x-Tech/Component.h>
+#include <rend/rend.h>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-namespace rend
+namespace xTech
 {
 	class Shader;
 
-	class TriangleRenderer : public xTech::Component
+	class TriangleRenderer : public Component
 	{
 	private:
 
 		GLuint m_vao;
 		int m_size;
 
-		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<rend::Shader> m_shader;
 
 	public:
 
-		TriangleRenderer() : m_vao{ 0 }, m_size{ 0 } {}
+		TriangleRenderer() : m_vao{ 0 }, m_size{ 0 } {};
 
 		virtual void on_initialize() override;
 		virtual void on_tick() override;

@@ -3,6 +3,7 @@
 #include "Transform.h"
 
 #include "Window.h"
+#include "Cache.h"
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -18,8 +19,9 @@ namespace xTech
 
 		rtn->m_run = true;
 
-		// Create window
+		// Create engine resrouces
 		rtn->m_window = std::make_shared<Window>();
+		rtn->m_cache = std::make_shared<Cache>();
 
 		return rtn;
 	}

@@ -8,7 +8,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace rend
+namespace xTech
 {
 	void TriangleRenderer::on_initialize()
 	{
@@ -42,7 +42,7 @@ namespace rend
 
 		glBindVertexArray(0);
 
-		this->m_shader = std::make_shared<Shader>("../res/Shaders/vertexShader.glsl", "../res/Shaders/fragmentShader.glsl");
+		this->m_shader = std::make_shared<rend::Shader>("../res/Shaders/vertexShader.glsl", "../res/Shaders/fragmentShader.glsl");
 	}
 
 	void TriangleRenderer::on_tick()

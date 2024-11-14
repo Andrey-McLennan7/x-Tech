@@ -15,5 +15,7 @@ namespace xTech
 #include "Debug.h"
 #include "Transform.h"
 #include "Window.h"
+#include "TriangleRenderer.h"
+#include "Resource.h"
 
 #endif
