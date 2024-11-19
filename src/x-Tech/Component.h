@@ -8,6 +8,7 @@ namespace xTech
 	class Entity;
 	class Core;
 	class Window;
+	class Cache;
 
 	class Component
 	{
@@ -36,6 +37,7 @@ namespace xTech
 		std::shared_ptr<Entity> entity();
 		std::shared_ptr<Core> core();
 		std::shared_ptr<Window> window();
+		std::shared_ptr<Cache> cache();
 
 		friend Entity;
 	};

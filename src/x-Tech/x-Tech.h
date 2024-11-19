@@ -17,5 +17,8 @@ namespace xTech
 #include "Window.h"
 #include "TriangleRenderer.h"
 #include "Resource.h"
+#include "Cache.h"
+#include "Texture.h"
+#include "Shader.h"
 
 #endif

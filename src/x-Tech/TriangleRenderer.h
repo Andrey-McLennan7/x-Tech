@@ -15,7 +15,7 @@ namespace xTech
 		GLuint m_vao;
 		int m_size;
 
-		std::shared_ptr<rend::Shader> m_shader;
+		std::shared_ptr<Shader> m_shader;
 
 	public:
 

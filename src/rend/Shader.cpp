@@ -11,7 +11,7 @@
 
 namespace rend
 {
-	Shader::Shader(const char* vertexPath, const char* fragmentPath)
+	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 	{
 		std::string vertexCode;
 		std::string fragmentCode;
@@ -31,8 +31,8 @@ namespace rend
 		try
 		{
 			// Open Files
-			vertexShaderFile.open(vertexPath);
-			fragmentShaderFile.open(fragmentPath);
+			vertexShaderFile.open(vertexPath.c_str());
+			fragmentShaderFile.open(fragmentPath.c_str());
 
 			// Read Files
 			vertexShaderStream << vertexShaderFile.rdbuf();

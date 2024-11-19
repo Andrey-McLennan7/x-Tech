@@ -18,5 +18,10 @@ namespace xTech
 	public:
 
 		virtual void on_load() override;
+
+		void use();
+		void unuse();
+
+		std::shared_ptr<rend::Shader> ID();
 	};
 }

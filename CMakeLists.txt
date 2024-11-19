@@ -49,6 +49,7 @@ add_library(x-Tech
 	src/x-Tech/Cache.cpp
 	src/x-Tech/Texture.h
 	src/x-Tech/Texture.cpp
+	src/x-Tech/ModelRenderer.h
 )
 
 target_link_libraries(rend SDL2 glew32s opengl32)

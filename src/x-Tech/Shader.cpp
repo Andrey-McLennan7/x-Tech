@@ -13,6 +13,21 @@ namespace xTech
 {
 	void Shader::on_load()
 	{
-		//this->m_shader = std::make_shared<rend::Shader>();
+		this->m_shader = std::make_shared<rend::Shader>(this->get_path() + ".vert", this->get_path() + ".frag");
+	}
+
+	void Shader::use()
+	{
+		this->m_shader->use();
+	}
+
+	void Shader::unuse()
+	{
+		this->m_shader->unuse();
+	}
+
+	std::shared_ptr<rend::Shader> Shader::ID()
+	{
+		return this->m_shader;
 	}
 }

@@ -93,4 +93,9 @@ namespace xTech
 	{
 		return this->m_window;
 	}
+
+	std::shared_ptr<Cache> Core::cache() const
+	{
+		return this->m_cache;
+	}
 }

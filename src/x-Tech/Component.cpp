@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Core.h"
 #include "Window.h"
+#include "Cache.h"
 
 namespace xTech
 {
@@ -34,5 +35,9 @@ namespace xTech
 	std::shared_ptr<Window> Component::window()
 	{
 		return this->core()->window();
+	}
+	std::shared_ptr<Cache> Component::cache()
+	{
+		return this->core()->cache();
 	}
 }
