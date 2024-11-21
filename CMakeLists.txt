@@ -50,9 +50,13 @@ add_library(x-Tech
 	src/x-Tech/Texture.h
 	src/x-Tech/Texture.cpp
 	src/x-Tech/ModelRenderer.h
+	src/x-Tech/Audio.h
+	src/x-Tech/Audio.cpp
+	src/x-Tech/SoundSource.h
+	src/x-Tech/SoundSource.cpp
 )
 
-target_link_libraries(rend SDL2 glew32s opengl32)
+target_link_libraries(rend SDL2 glew32s opengl32 OpenAL32)
 
 target_link_libraries(x-Tech rend)
 

@@ -7,6 +7,8 @@
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 
 namespace xTech
 {
@@ -22,6 +24,28 @@ namespace xTech
 		// Create engine resrouces
 		rtn->m_window = std::make_shared<Window>();
 		rtn->m_cache = std::make_shared<Cache>();
+
+		ALCdevice* device{ alcOpenDevice(NULL) };
+
+		if (!device)
+		{
+			throw std::runtime_error("ERROR::FAILED TO OPEN AUDIO DEVICE");
+		}
+
+		ALCcontext* context{ alcCreateContext(device, NULL) };
+
+		if (!context)
+		{
+			alcCloseDevice(device);
+			throw std::runtime_error("FAILED::FAILED TO CREATE AUDIO CONTEXT");
+		}
+
+		if (!alcMakeContextCurrent(context))
+		{
+			alcDestroyContext(context);
+			alcCloseDevice(device);
+			throw std::runtime_error("ERROR::FAILED TO MAKE CONTEXT CURRENT");
+		}
 
 		return rtn;
 	}

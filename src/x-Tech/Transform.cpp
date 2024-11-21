@@ -10,7 +10,7 @@ namespace xTech
 		this->m_scale = glm::vec3(1.0f);
 	}
 
-	glm::mat4 Transform::model()
+	glm::mat4 Transform::model_matrix()
 	{
 		// Update the model matrix
 		glm::mat4 rtn;
@@ -24,10 +24,5 @@ namespace xTech
 		rtn = glm::scale(rtn, this->m_scale);
 
 		return rtn;
-	}
-
-	void Transform::on_tick()
-	{
-
 	}
 }

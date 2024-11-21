@@ -28,7 +28,7 @@ namespace xTech
 				// Return it if found
 				if ((*itr)->get_path() == path)
 				{
-					return *itr;
+					return std::dynamic_pointer_cast<T>(*itr);
 				}
 			}
 
@@ -41,23 +41,6 @@ namespace xTech
 			this->m_resources.push_back(rtn);
 
 			return rtn;
-		}
-
-		template <typename T>
-		std::shared_ptr<T> get_resource()
-		{
-			std::vector<std::shared_ptr<Resource>>::iterator itr;
-			for (itr = this->m_resources.begin(); itr != this->m_resources.end(); ++itr)
-			{
-				std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(*itr);
-
-				if (rtn)
-				{
-					return rtn;
-				}
-			}
-
-			throw std::runtime_error("ERROR::FAILED TO FIND RESROURCE");
 		}
 	};
 }

@@ -78,6 +78,11 @@ namespace xTech
 		return rtn;
 	}
 
+	float Window::delta_time()
+	{
+		return this->m_delta_time;
+	}
+
 	SDL_Window* Window::ID()
 	{
 		return this->m_id;

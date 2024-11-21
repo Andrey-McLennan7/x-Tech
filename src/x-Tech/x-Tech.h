@@ -20,5 +20,7 @@ namespace xTech
 #include "Cache.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Audio.h"
+#include "SoundSource.h"
 
 #endif

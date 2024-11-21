@@ -16,9 +16,7 @@ namespace xTech
 	public:
 
 		virtual void on_initialize() override;
-		virtual void on_tick() override;
 
-		glm::mat4 model();
-
+		glm::mat4 model_matrix();
 	};
 }

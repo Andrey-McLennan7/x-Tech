@@ -44,7 +44,7 @@ namespace xTech
 
 		glBindVertexArray(0);
 
-		this->m_shader = this->cache()->get_resource<Shader>();
+		this->m_shader = this->cache()->load<Shader>("Shader/basic");
 	}
 
 	void TriangleRenderer::on_tick()
@@ -55,7 +55,7 @@ namespace xTech
 
 		glm::ivec2 wsize{ this->window()->size() };
 
-		model = this->entity()->get_component<xTech::Transform>()->model();
+		model = this->entity()->get_component<xTech::Transform>()->model_matrix();
 		this->m_shader->ID()->set_mat4("u_Model", model);
 
 		projection = glm::perspective(45.0f, float(wsize.x) / float(wsize.y), 0.1f, 100.0f);
@@ -69,6 +69,9 @@ namespace xTech
 
 	void TriangleRenderer::on_display()
 	{
+		if (!this->m_shader)
+			return;
+
 		this->m_shader->use();
 
 		glBindVertexArray(this->m_vao);
@@ -76,5 +79,10 @@ namespace xTech
 		glBindVertexArray(0);
 
 		this->m_shader->unuse();
+	}
+
+	void TriangleRenderer::shader(std::shared_ptr<Shader> shader)
+	{
+		this->m_shader = shader;
 	}
 }

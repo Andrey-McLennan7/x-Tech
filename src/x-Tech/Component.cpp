@@ -4,6 +4,7 @@
 #include "Core.h"
 #include "Window.h"
 #include "Cache.h"
+#include "Transform.h"
 
 namespace xTech
 {
@@ -25,6 +26,11 @@ namespace xTech
 	std::shared_ptr<Entity> Component::entity()
 	{
 		return this->m_entity.lock();
+	}
+
+	std::shared_ptr<Transform> Component::transform()
+	{
+		return this->entity()->get_component<Transform>();
 	}
 
 	std::shared_ptr<Core> Component::core()
