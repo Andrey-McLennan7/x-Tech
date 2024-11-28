@@ -54,6 +54,14 @@ add_library(x-Tech
 	src/x-Tech/Audio.cpp
 	src/x-Tech/SoundSource.h
 	src/x-Tech/SoundSource.cpp
+	src/x-Tech/Collider.h
+	src/x-Tech/Collider.cpp
+	src/x-Tech/BoxCollider.h
+	src/x-Tech/BoxCollider.cpp
+	src/x-Tech/SphereCollider.h
+	src/x-Tech/SphereCollider.cpp
+	src/x-Tech/RigidBody.h
+	src/x-Tech/RigidBody.cpp
 )
 
 target_link_libraries(rend SDL2 glew32s opengl32 OpenAL32)

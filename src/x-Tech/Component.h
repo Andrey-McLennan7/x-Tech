@@ -25,21 +25,23 @@ namespace xTech
 
 		void tick();
 		void display();
-
 		void kill();
 
-	// Public member functions
-	public:
+	// Protected member functions
+	protected:
 
 		virtual void on_initialize() {};
 		virtual void on_tick() {};
 		virtual void on_display() {};
 
-		std::shared_ptr<Entity> entity();
-		std::shared_ptr<Transform> transform();
-		std::shared_ptr<Core> core();
-		std::shared_ptr<Window> window();
-		std::shared_ptr<Cache> cache();
+	// Public member functions
+	public:
+
+		std::shared_ptr<Entity> entity()	   const;
+		std::shared_ptr<Transform> transform() const;
+		std::shared_ptr<Core> core()		   const;
+		std::shared_ptr<Window> window()	   const;
+		std::shared_ptr<Cache> cache()		   const;
 
 		friend Entity;
 	};
