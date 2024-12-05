@@ -47,9 +47,9 @@ namespace xTech
 				for (component = (*entity)->m_components.begin(); component != (*entity)->m_components.end(); ++component)
 				{
 					// Try to dynamic cast the component to a T
-					std::shared_ptr<T> t{ std::dynamic_pointer_cast<T>(component) };
+					std::shared_ptr<T> t { std::dynamic_pointer_cast<T>(*component) };
 
-					// If succeeds then add it to the outpus array
+					// If succeeds then add it to the output array
 					if (t)
 					{
 						out.push_back(t);

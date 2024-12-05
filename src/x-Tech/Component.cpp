@@ -8,9 +8,19 @@
 
 namespace xTech
 {
+	void Component::fixed_tick()
+	{
+		this->on_fixed_tick();
+	}
+
 	void Component::tick()
 	{
 		this->on_tick();
+	}
+
+	void Component::late_tick()
+	{
+		this->on_late_tick();
 	}
 
 	void Component::display()
@@ -23,6 +33,14 @@ namespace xTech
 		this->m_alive = false;
 	}
 
+	void Component::on_initialize() {}
+
+	void Component::on_fixed_tick() {}
+	void Component::on_tick()		{}
+	void Component::on_late_tick()  {}
+
+	void Component::on_display()	{}
+
 	std::shared_ptr<Entity> Component::entity() const
 	{
 		return this->m_entity.lock();
@@ -30,7 +48,7 @@ namespace xTech
 
 	std::shared_ptr<Transform> Component::transform() const
 	{
-		return this->entity()->get_component<Transform>();
+		return this->entity()->transform();
 	}
 
 	std::shared_ptr<Core> Component::core() const

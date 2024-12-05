@@ -2,18 +2,25 @@
 #include "Core.h"
 #include "Collider.h"
 #include "Entity.h"
+#include "Transform.h"
+
+#include <iostream>
+#include <vector>
+#include <memory>
 
 namespace xTech
 {
 	void RigidBody::on_tick()
 	{
-		this->core()->find<Collider>(this->m_colliders);
+		std::vector<std::shared_ptr<Collider>> colliders;
+
+		this->core()->find<Collider>(colliders);
 
 		std::vector<std::shared_ptr<Collider>>::iterator itr1;
-		for (itr1 = this->m_colliders.begin(); itr1 != this->m_colliders.end(); ++itr1)
+		for (itr1 = colliders.begin(); itr1 != colliders.end(); ++itr1)
 		{
 			std::vector<std::shared_ptr<Collider>>::iterator itr2;
-			for (itr2 = this->m_colliders.begin(); itr2 != this->m_colliders.end(); ++itr2)
+			for (itr2 = colliders.begin(); itr2 != colliders.end(); ++itr2)
 			{
 				if (itr1 == itr2)
 				{
@@ -24,6 +31,7 @@ namespace xTech
 
 				if ((*itr1)->on_collision(*ec2))
 				{
+					std::cout << "Colliding" << std::endl;
 					(*itr1)->get_collision_response(*ec2);
 				}
 			}

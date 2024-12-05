@@ -5,8 +5,8 @@ namespace xTech
 {
 	class Transform : public Component
 	{
-	// Public data members
-	public:
+	// Private data members
+	private:
 
 		glm::vec3 m_position;
 		glm::vec3 m_rotation;
@@ -18,5 +18,15 @@ namespace xTech
 		virtual void on_initialize() override;
 
 		glm::mat4 model_matrix();
+
+		void move(const glm::vec3& move);
+
+		void position(const glm::vec3& position);
+		void rotation(const glm::vec3& rotation);
+		void scale(const glm::vec3& scale);
+
+		glm::vec3 position() const;
+		glm::vec3 rotation() const;
+		glm::vec3 scale() const;
 	};
 }

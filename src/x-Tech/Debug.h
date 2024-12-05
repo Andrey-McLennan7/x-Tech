@@ -1,3 +1,5 @@
+#include <string>
+
 namespace xTech
 {
 	class Debug

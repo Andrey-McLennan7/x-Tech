@@ -7,6 +7,7 @@ namespace xTech
 	class Core;
 	class Window;
 	class Component;
+	class Transform;
 
 	class Entity
 	{
@@ -17,13 +18,17 @@ namespace xTech
 
 		std::weak_ptr<Core> m_core;
 		std::weak_ptr<Entity> m_self;
+		std::weak_ptr<Transform> m_transform;
 
 		bool m_alive;
 
 	// Private member functions
 	private:
 
+		void fixed_tick();
 		void tick();
+		void late_tick();
+
 		void display();
 
 	// Public member functions
@@ -62,6 +67,8 @@ namespace xTech
 		}
 
 		void kill();
+
+		std::shared_ptr<Transform> transform();
 
 		std::shared_ptr<Core> core();
 

@@ -1,23 +1,25 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 
+#include <iostream>
+
 namespace xTech
 {
 	void BoxCollider::on_initialize()
 	{
 		this->m_size = glm::vec3{ 1.0f };
-		this->m_offset = glm::vec3{ this->m_size / 2.0f };
+		this->m_offset = glm::vec3{ 0.0f };
 	}
 
 	bool BoxCollider::on_collision(const Collider& other) const
 	{
-		const BoxCollider* _other = (const BoxCollider*)&other;
+		const BoxCollider* _other{ (const BoxCollider*)&other };
 
-		glm::vec3 a{ this->transform()->m_position };
-		glm::vec3 b{ _other->transform()->m_position };
+		glm::vec3 a{ this->transform()->position() + this->m_offset};
+		glm::vec3 b{ _other->transform()->position() + _other->m_offset};
 
-		glm::vec3 ahs{ this->m_offset };
-		glm::vec3 bhs{ _other->m_offset };
+		glm::vec3 ahs{ this->m_size / 2.0f };
+		glm::vec3 bhs{ _other->m_size / 2.0f };
 
 		// Detect interseption with x
 		if (a.x > b.x)
@@ -72,38 +74,34 @@ namespace xTech
 
 	void BoxCollider::get_collision_response(const Collider& other) const
 	{
-		float amount{ 0.1f };
-		float step{ 0.1f };
+		float amount{ 0.001f };
+		float step{ 0.001f };
 
-		glm::vec3& position{ this->transform()->m_position };
+		std::shared_ptr<Transform> transform{ this->transform() };
 
 		while (true)
 		{
 			if (!this->on_collision(other)) break;
-			position.x += amount;
+			transform->move(glm::vec3{ amount, 0.0f, 0.0f });
 
 			if (!this->on_collision(other)) break;
-			position.x -= amount;
-			position.x -= amount;
+			transform->move(glm::vec3{ -(amount * 2.0f), 0.0f, 0.0f });
 
 			if (!this->on_collision(other)) break;
-			position.x += amount;
-			position.z += amount;
+			transform->move(glm::vec3{ amount, 0.0f, amount });
 
 			if (!this->on_collision(other)) break;
-			position.z -= amount;
-			position.z -= amount;
+			transform->move(glm::vec3{ 0.0f, 0.0f, -(amount * 2.0f) });
 
 			if (!this->on_collision(other)) break;
-			position.z += amount;
-			position.y += amount;
+			transform->move(glm::vec3{ 0.0f, amount, amount });
 
 			if (!this->on_collision(other)) break;
-			position.y -= amount;
-			position.y -= amount;
+			transform->move(glm::vec3{ 0.0f, -(amount * 2.0f), 0.0f});
 
 			if (!this->on_collision(other)) break;
-			position.y += amount;
+			transform->move(glm::vec3{ 0.0f, amount, 0.0f });
+
 			amount += step;
 		}
 	}
@@ -111,6 +109,5 @@ namespace xTech
 	void BoxCollider::size(const glm::vec3& size)
 	{
 		this->m_size = size;
-		this->m_offset = size / 2.0f;
 	}
 }

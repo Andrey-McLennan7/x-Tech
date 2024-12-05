@@ -55,7 +55,7 @@ namespace xTech
 		// Start game loop
 		while (this->m_run)
 		{
-			// Input
+			/* Input */
 			// Read mouse input
 			SDL_Event e;
 
@@ -70,16 +70,32 @@ namespace xTech
 				}
 			}
 
-			// Update
+			/* Update */
 			this->m_window->tick();
 
+			// Execute on specified ticks randomly
 			std::vector<std::shared_ptr<Entity>>::iterator itr;
-			for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
+			for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+			{
+				(*itr)->fixed_tick();
+
+				//(*itr)->tick();
+				//(*itr)->late_tick();
+			}
+
+			// Execute on every tick sequentially
+			for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 			{
 				(*itr)->tick();
 			}
 
-			// Render
+			// Be the last tick to execute sequentially
+			for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+			{
+				(*itr)->late_tick();
+			}
+
+			/* Render */
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
 
@@ -106,7 +122,7 @@ namespace xTech
 		rtn->m_core = this->m_self;
 		rtn->m_self = rtn;
 
-		rtn->add_component<Transform>();
+		rtn->m_transform = rtn->add_component<Transform>();
 
 		this->m_entities.push_back(rtn);
 

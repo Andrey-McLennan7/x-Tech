@@ -22,5 +22,8 @@ namespace xTech
 #include "Shader.h"
 #include "Audio.h"
 #include "SoundSource.h"
+#include "RigidBody.h"
+#include "BoxCollider.h"
+#include "SphereCollider.h"
 
 #endif

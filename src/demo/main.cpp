@@ -1,46 +1,157 @@
 #include <x-Tech/x-Tech.h>
 
+#include <iostream>
+#include <ctime>
+
 using namespace xTech;
 
-class EntityMover : public Component
+class Entity1Mover : public Component
 {
 private:
 
-	vec3* position;
 	float speed;
 
 public:
 
 	virtual void on_initialize() override
 	{
-		position = &this->transform()->m_position;
-
-		position->x = -10.0f;
-		speed = 10.0f;
+		speed = 5.0f;
 	}
 
 	virtual void on_tick() override
 	{
-		position->x += speed * this->window()->delta_time();
+		float deltaTime{ core()->window()->delta_time() };
+
+		vec3 position{ 0.0f };
+
+		// Read keyboard input
+		const Uint8* state{ SDL_GetKeyboardState(NULL) };
+
+		if (state[SDL_SCANCODE_W])
+		{
+			if (state[SDL_SCANCODE_LSHIFT])
+			{
+				position.z -= speed * deltaTime;
+			}
+			else
+			{
+				position.y += speed * deltaTime;
+			}
+		}
+
+		if (state[SDL_SCANCODE_A])
+		{
+			position.x -= speed * deltaTime;
+		}
+
+		if (state[SDL_SCANCODE_S])
+		{
+			if (state[SDL_SCANCODE_LSHIFT])
+			{
+				position.z += speed * deltaTime;
+			}
+			else
+			{
+				position.y -= speed * deltaTime;
+			}
+		}
+
+		if (state[SDL_SCANCODE_D])
+		{
+			position.x += speed * deltaTime;
+		}
+
+		transform()->move(position);
+	}
+};
+
+class Entity2Mover : public Component
+{
+private:
+
+	float speed;
+
+public:
+
+	virtual void on_initialize() override
+	{
+		speed = 5.0f;
+	}
+
+	virtual void on_tick() override
+	{
+		float deltaTime{ core()->window()->delta_time() };
+
+		vec3 position{ 0.0f };
+
+		// Read keyboard input
+		const Uint8* state{ SDL_GetKeyboardState(NULL) };
+
+		if (state[SDL_SCANCODE_UP])
+		{
+			if (state[SDL_SCANCODE_LSHIFT])
+			{
+				position.z -= speed * deltaTime;
+			}
+			else
+			{
+				position.y += speed * deltaTime;
+			}
+		}
+
+		if (state[SDL_SCANCODE_LEFT])
+		{
+			position.x -= speed * deltaTime;
+		}
+
+		if (state[SDL_SCANCODE_DOWN])
+		{
+			if (state[SDL_SCANCODE_LSHIFT])
+			{
+				position.z += speed * deltaTime;
+			}
+			else
+			{
+				position.y -= speed * deltaTime;
+			}
+		}
+
+		if (state[SDL_SCANCODE_RIGHT])
+		{
+			position.x += speed * deltaTime;
+		}
+
+		transform()->move(position);
 	}
 };
 
 #undef main
 int main()
 {
+	srand(time(0));
+
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
 	std::shared_ptr<Shader> triangle_shader{ core->cache()->load<Shader>("Shader/basic") };
 	std::shared_ptr<Audio> triangle_audio{ core->cache()->load<Audio>("Audio/dixie_horn")};
 
-	// Create entity and attach components
-	std::shared_ptr<Entity> triangle_entity{ core->add_entity() };
-	std::shared_ptr<TriangleRenderer> triangle{ triangle_entity->add_component<TriangleRenderer>() };
-	std::shared_ptr<SoundSource> triangle_sound_source{ triangle_entity->add_component<SoundSource>() };
+	// Create entity 1 and attach components
+	std::shared_ptr<Entity> entity1{ core->add_entity() };
 
-	triangle_entity->add_component<EntityMover>();
-	triangle_sound_source->audio(triangle_audio);
-	triangle_sound_source->play();
+	entity1->add_component<TriangleRenderer>();
+	entity1->add_component<BoxCollider>();
+	entity1->add_component<RigidBody>();
+	entity1->add_component<Entity1Mover>();
+
+	// Create entity 2 and attach components
+	std::shared_ptr<Entity> entity2{ core->add_entity() };
+
+	entity2->add_component<TriangleRenderer>();
+	entity2->add_component<BoxCollider>();
+	entity2->add_component<RigidBody>();
+	entity2->add_component<Entity2Mover>();
+
+	entity2->get_component<Transform>()->position(glm::vec3{ 1.0f, 0.0f, 0.0f });
 
 	core->run();
 

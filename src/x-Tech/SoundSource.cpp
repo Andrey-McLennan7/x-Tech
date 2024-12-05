@@ -14,7 +14,7 @@ namespace xTech
 
 	void SoundSource::on_tick()
 	{
-		glm::vec3 position{ this->transform()->m_position };
+		glm::vec3 position{ this->transform()->position()};
 
 		alSource3f(this->m_id, AL_POSITION, position.x, position.y, position.z);
 	}

@@ -23,16 +23,23 @@ namespace xTech
 	// Private member functions
 	private:
 
+		void fixed_tick();
 		void tick();
+		void late_tick();
+
 		void display();
 		void kill();
 
 	// Protected member functions
 	protected:
 
-		virtual void on_initialize() {};
-		virtual void on_tick() {};
-		virtual void on_display() {};
+		virtual void on_initialize();
+
+		virtual void on_fixed_tick();
+		virtual void on_tick();
+		virtual void on_late_tick();
+
+		virtual void on_display();
 
 	// Public member functions
 	public:

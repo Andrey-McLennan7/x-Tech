@@ -25,4 +25,39 @@ namespace xTech
 
 		return rtn;
 	}
+
+	void Transform::move(const glm::vec3& move)
+	{
+		this->m_position += move;
+	}
+
+	void Transform::position(const glm::vec3& position)
+	{
+		this->m_position = position;
+	}
+
+	void Transform::rotation(const glm::vec3& rotation)
+	{
+		this->m_rotation = rotation;
+	}
+
+	void Transform::scale(const glm::vec3& scale)
+	{
+		this->m_scale = scale;
+	}
+
+	glm::vec3 Transform::position() const
+	{
+		return this->m_position;
+	}
+
+	glm::vec3 Transform::rotation() const
+	{
+		return this->m_rotation;
+	}
+
+	glm::vec3 Transform::scale() const
+	{
+		return this->m_scale;
+	}
 }

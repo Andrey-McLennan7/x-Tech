@@ -12,10 +12,10 @@ namespace xTech
 
 	bool SphereCollider::on_collision(const Collider& other) const
 	{
-		const SphereCollider* _other = (const SphereCollider*)&other;
+		const SphereCollider* _other{ (const SphereCollider*)&other };
 
-		glm::vec3 a{ this->transform()->m_position };
-		glm::vec3 b{ _other->transform()->m_position };
+		glm::vec3 a{ this->transform()->position()};
+		glm::vec3 b{ _other->transform()->position()};
 
 		float ar{ this->m_radius };
 		float br{ _other->m_radius };
