@@ -143,16 +143,6 @@ int main()
 	entity1->add_component<RigidBody>();
 	entity1->add_component<Entity1Mover>();
 
-	// Create entity 2 and attach components
-	std::shared_ptr<Entity> entity2{ core->add_entity() };
-
-	entity2->add_component<TriangleRenderer>();
-	entity2->add_component<BoxCollider>();
-	entity2->add_component<RigidBody>();
-	entity2->add_component<Entity2Mover>();
-
-	entity2->get_component<Transform>()->position(glm::vec3{ 1.0f, 0.0f, 0.0f });
-
 	core->run();
 
 	return 0;
