@@ -1,20 +1,41 @@
 cmake_minimum_required(VERSION ${CMAKE_VERSION})
-
 project(X-TECH)
 
 add_definitions(
 	-DGLEW_STATIC
 )
 
-include_directories(
-	src
-	contrib/cl-windows-x86_64/include
-	contrib/include
-)
+if(WIN32)
 
-link_directories(
-	contrib/cl-windows-x86_64/lib
-)
+	include_directories(
+		src
+		contrib/cl-windows-x86_64/include
+		contrib/include
+	)
+
+	link_directories(
+		contrib/cl-windows-x86_64/lib
+	)
+
+	set(LIBOPENAL OpenAL32)
+
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+
+	include_directories(
+		src
+  		contrib/emcc-emscripten-wasm/include
+		contrib/include
+	)
+
+	link_directories(
+		contrib/emcc-emscripten-wasm/lib
+	)
+
+	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --preload-file ${CMAKE_SOURCE_DIR}/res@res")
+	set(LIBOPENAL openal)
+
+endif()
 
 add_library(rend
 	src/rend/rend.h
@@ -64,7 +85,7 @@ add_library(x-Tech
 	src/x-Tech/RigidBody.cpp
 )
 
-target_link_libraries(rend SDL2 glew32s opengl32 OpenAL32)
+target_link_libraries(rend SDL2 glew32s opengl32 ${LIBOPENAL})
 
 target_link_libraries(x-Tech rend)
 

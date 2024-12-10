@@ -65,66 +65,6 @@ public:
 	}
 };
 
-class Entity2Mover : public Component
-{
-private:
-
-	float speed;
-
-public:
-
-	virtual void on_initialize() override
-	{
-		speed = 5.0f;
-	}
-
-	virtual void on_tick() override
-	{
-		float deltaTime{ core()->window()->delta_time() };
-
-		vec3 position{ 0.0f };
-
-		// Read keyboard input
-		const Uint8* state{ SDL_GetKeyboardState(NULL) };
-
-		if (state[SDL_SCANCODE_UP])
-		{
-			if (state[SDL_SCANCODE_LSHIFT])
-			{
-				position.z -= speed * deltaTime;
-			}
-			else
-			{
-				position.y += speed * deltaTime;
-			}
-		}
-
-		if (state[SDL_SCANCODE_LEFT])
-		{
-			position.x -= speed * deltaTime;
-		}
-
-		if (state[SDL_SCANCODE_DOWN])
-		{
-			if (state[SDL_SCANCODE_LSHIFT])
-			{
-				position.z += speed * deltaTime;
-			}
-			else
-			{
-				position.y -= speed * deltaTime;
-			}
-		}
-
-		if (state[SDL_SCANCODE_RIGHT])
-		{
-			position.x += speed * deltaTime;
-		}
-
-		transform()->move(position);
-	}
-};
-
 #undef main
 int main()
 {

@@ -1,9 +1,11 @@
+#include "Entity.h"
+#include "Component.h"
+
 #include <memory>
 #include <vector>
 
 namespace xTech
 {
-	class Entity;
 	class Window;
 	class Cache;
 	class Audio;
@@ -24,6 +26,8 @@ namespace xTech
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
 		std::weak_ptr<Core> m_self;
+
+		static void loop(void* _core);
 
 	// Public member functions
 	public:
