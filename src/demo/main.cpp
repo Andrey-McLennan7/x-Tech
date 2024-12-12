@@ -87,8 +87,8 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> triangle_shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Audio> triangle_audio{ core->cache()->load<Audio>("Audio/dixie_horn") };
+	std::shared_ptr<Shader> shaders{ core->cache()->load<Shader>("Shader/basic") };
+	std::shared_ptr<Audio> audio{ core->cache()->load<Audio>("Audio/dixie_horn") };
 
 	// Create entity 1 and attach components
 	std::shared_ptr<Entity> entity1{ core->add_entity() };
@@ -97,6 +97,12 @@ int safe_main()
 	entity1->add_component<BoxCollider>();
 	entity1->add_component<RigidBody>();
 	entity1->add_component<Entity1Mover>();
+
+	std::shared_ptr<SoundSource> sound{ entity1->add_component<SoundSource>() };
+
+	sound->audio(audio);
+
+	sound->play();
 
 	core->run();
 
