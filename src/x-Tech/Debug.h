@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_DEBUG_H
+#define X_TECH_DEBUG_H
+
 #include <string>
 
 namespace xTech
@@ -9,3 +14,5 @@ namespace xTech
 		static void print(char* str);
 	};
 }
+
+#endif

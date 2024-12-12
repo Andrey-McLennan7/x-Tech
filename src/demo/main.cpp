@@ -65,8 +65,7 @@ public:
 	}
 };
 
-#undef main
-int main()
+int safe_main()
 {
 	srand(time(0));
 
@@ -84,6 +83,20 @@ int main()
 	entity1->add_component<Entity1Mover>();
 
 	core->run();
+
+	return 0;
+}
+
+int main()
+{
+	try
+	{
+		safe_main();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
 	return 0;
 }

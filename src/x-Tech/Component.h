@@ -1,7 +1,9 @@
-#include <memory>
+#pragma once
 
-#ifndef X_TECH_COMPNENT_H
-#define X_TECH_COMPNENT_H
+#ifndef X_TECH_COMPONENT_H
+#define X_TECH_COMPONENT_H
+
+#include <memory>
 
 namespace xTech
 {

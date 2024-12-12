@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef REND_H
 #define REND_H
 

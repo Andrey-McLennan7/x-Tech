@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_TRANSFORM_H
+#define X_TECH_TRANSFORM_H
+
 #include "Component.h"
 #include <glm/glm.hpp>
 
@@ -5,14 +10,14 @@ namespace xTech
 {
 	class Transform : public Component
 	{
-	// Private data members
+		// Private data members
 	private:
 
 		glm::vec3 m_position;
 		glm::vec3 m_rotation;
 		glm::vec3 m_scale;
 
-	// Public member functions
+		// Public member functions
 	public:
 
 		virtual void on_initialize() override;
@@ -30,3 +35,5 @@ namespace xTech
 		glm::vec3 scale() const;
 	};
 }
+
+#endif

@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_WINDOW_H
+#define X_TECH_WINDOW_H
+
 #include <SDL2/SDL.h>
 #include <memory>
 #include <glm/glm.hpp>
@@ -9,7 +14,7 @@ namespace xTech
 
 	class Window
 	{
-	// Private data members
+		// Private data members
 	private:
 
 		SDL_Window* m_id;
@@ -18,7 +23,7 @@ namespace xTech
 		float m_delta_time;
 		unsigned int m_tick_count;
 
-	// Public member functions
+		// Public member functions
 	public:
 
 		Window(int width = 1920, int height = 1080);
@@ -34,3 +39,5 @@ namespace xTech
 		friend Core;
 	};
 }
+
+#endif

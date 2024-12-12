@@ -1,6 +1,9 @@
 #pragma once
 
-#include <x-Tech/Resource.h>
+#ifndef X_TECH_CACHE_H
+#define X_TECH_CACHE_H
+
+#include "Resource.h"
 
 #include <memory>
 #include <string>
@@ -44,3 +47,5 @@ namespace xTech
 		}
 	};
 }
+
+#endif

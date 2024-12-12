@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_CORE_H
+#define X_TECH_CORE_H
+
 #include "Entity.h"
 #include "Component.h"
 
@@ -26,6 +31,9 @@ namespace xTech
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
 		std::weak_ptr<Core> m_self;
+
+	// Private member functions
+	private:
 
 		static void loop(void* _core);
 
@@ -68,3 +76,5 @@ namespace xTech
 		friend Entity;
 	};
 }
+
+#endif

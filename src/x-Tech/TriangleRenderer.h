@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_TRIANGLE_RENDERER_H
+#define X_TECH_TRIANGLE_RENDERER_H
+
 #include <x-Tech/Component.h>
 #include <rend/rend.h>
 
@@ -28,3 +33,5 @@ namespace xTech
 		void shader(std::shared_ptr<Shader> shader);
 	};
 }
+
+#endif

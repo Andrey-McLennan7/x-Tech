@@ -1,5 +1,15 @@
+#pragma once
+
 #ifndef X_TECH_H
 #define X_TECH_H
+
+bool windows
+
+#ifdef _WIN32
+= true;
+#else
+= false;
+#endif
 
 #include <glm/glm.hpp>
 namespace xTech

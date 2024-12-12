@@ -1,16 +1,20 @@
 #pragma once
+
+#ifndef X_TECH_SPHERE_COLLIDER_H
+#define X_TECH_SPHERE_COLLIDER_H
+
 #include "Collider.h"
 
 namespace xTech
 {
 	class SphereCollider : public Collider
 	{
-	// Private data members
+		// Private data members
 	private:
 
 		float m_radius;
 
-	// Public member functions
+		// Public member functions
 	public:
 
 		virtual void on_initialize() override;
@@ -21,3 +25,5 @@ namespace xTech
 		void radius(float radius);
 	};
 }
+
+#endif

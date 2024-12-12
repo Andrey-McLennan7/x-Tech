@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_SOUND_SOURCE_H
+#define X_TECH_SOUND_SOURCE_H
+
 #include "Component.h"
 
 #include <AL/al.h>
@@ -28,3 +33,5 @@ namespace xTech
 		void audio(std::shared_ptr<Audio> audio);
 	};
 }
+
+#endif

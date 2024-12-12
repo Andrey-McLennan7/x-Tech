@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_MODEL_RENDERER_H
+#define X_TECH_MODEL_RENDERER_H
+
 #include <x-Tech/Component.h>
 #include <rend/rend.h>
 
@@ -24,3 +29,5 @@ namespace xTech
 		void texture(std::shared_ptr<rend::Texture> texture);
 	};
 }
+
+#endif

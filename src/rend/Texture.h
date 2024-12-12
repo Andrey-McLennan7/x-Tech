@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef REND_TEXTURE_H
+#define REND_TEXTURE_H
+
 #include <x-Tech/Resource.h>
 
 #include <glm/glm.hpp>
@@ -53,3 +56,5 @@ namespace rend
 	};
 
 }
+
+#endif

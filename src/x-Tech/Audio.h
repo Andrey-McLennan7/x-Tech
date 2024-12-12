@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef X_TECH_AUDIO_H
+#define X_TECH_AUDIO_H
+
 #include "Resource.h"
 
 #include <AL/al.h>
@@ -29,3 +34,5 @@ namespace xTech
 		friend class SoundSource;
 	};
 }
+
+#endif

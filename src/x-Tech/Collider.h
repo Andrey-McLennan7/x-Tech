@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef X_TECH_COLLIDER_H
+#define X_TECH_COLLIDER_H
+
 #include "Component.h"
 
 #include <glm/glm.hpp>
@@ -14,3 +18,5 @@ namespace xTech
 		virtual void get_collision_response(const Collider& other) const = 0;
 	};
 }
+
+#endif

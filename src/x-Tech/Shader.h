@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef X_TECH_SHADER_H
+#define X_TECH_SHADER_H
+
 #include <x-Tech/Resource.h>
 #include <rend/rend.h>
 
@@ -25,3 +28,5 @@ namespace xTech
 		std::shared_ptr<rend::Shader> ID();
 	};
 }
+
+#endif

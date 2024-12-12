@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef REND_SHADER_H
+#define REND_SHADER_H
+
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 
@@ -57,3 +60,5 @@ namespace rend
 		GLuint ID() const;
 	};
 }
+
+#endif

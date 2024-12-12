@@ -1,3 +1,10 @@
+#pragma once
+
+#ifndef X_TECH_ENTITY_H
+#define X_TECH_ENTITY_H
+
+#include "Component.h"
+
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -6,7 +13,6 @@ namespace xTech
 {
 	class Core;
 	class Window;
-	class Component;
 	class Transform;
 
 	class Entity
@@ -76,3 +82,5 @@ namespace xTech
 		friend Window;
 	};
 }
+
+#endif

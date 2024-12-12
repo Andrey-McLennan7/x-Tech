@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef X_TECH_BOX_COLLIDER_H
+#define X_TECH_BOX_COLLIDER_H
+
 #include "Collider.h"
 
 #include <glm/glm.hpp>
@@ -24,3 +28,5 @@ namespace xTech
 		void size(const glm::vec3& size);
 	};
 }
+
+#endif

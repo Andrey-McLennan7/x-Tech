@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef X_TECH_TEXTURE_H
+#define X_TECH_TEXTURE_H
+
 #include <x-Tech/Resource.h>
 #include <rend/rend.h>
 
@@ -9,14 +12,16 @@ namespace xTech
 {
 	class Texture : public Resource
 	{
-	// Private data members
+		// Private data members
 	private:
 
 		std::shared_ptr<rend::Texture> m_texture;
 
-	// Public member functions
+		// Public member functions
 	public:
 
 		virtual void on_load() override;
 	};
 }
+
+#endif

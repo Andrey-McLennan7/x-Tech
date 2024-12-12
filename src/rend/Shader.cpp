@@ -51,6 +51,11 @@ namespace rend
 			throw std::runtime_error("ERROR::FAILED TO OPEN FILE");
 		}
 
+		#ifdef _WIN32
+			vertexCode = "#version 330 core\n" + vertexCode;
+			fragmentCode = "#version 330 core\n" + fragmentCode;
+		#endif
+
 		// Read as constant character
 		vertexShaderData = vertexCode.c_str();
 		fragmentShaderData = fragmentCode.c_str();

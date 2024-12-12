@@ -1,5 +1,4 @@
 #include "Core.h"
-#include "Entity.h"
 #include "Transform.h"
 
 #include "Window.h"
@@ -121,7 +120,7 @@ namespace xTech
 	void Core::run()
 	{
 		#ifdef __EMSCRIPTEN__
-			emscripten_set_main_loop_arg(loop, (void*)this, 60, 1);
+			emscripten_set_main_loop_arg(loop, (void*)this, 0, 1);
 		#else
 
 		// Start game loop

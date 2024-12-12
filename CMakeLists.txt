@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION ${CMAKE_VERSION})
 project(X-TECH)
 
-add_definitions(
-	-DGLEW_STATIC
-)
-
 if(WIN32)
+
+	add_definitions(-DGLEW_STATIC -DSDL_MAIN_HANDLED)
 
 	include_directories(
 		src
@@ -18,6 +16,8 @@ if(WIN32)
 	)
 
 	set(LIBOPENAL OpenAL32)
+	set(LIBOPENGL opengl32)
+	set(LIBGLEW	   glew32s)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 
@@ -32,8 +32,12 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	)
 
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+	set(CMAKE_CXX_FLAGS "-sNO_DISABLE_EXCEPTION_CATCHING")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --preload-file ${CMAKE_SOURCE_DIR}/res@res")
+
 	set(LIBOPENAL openal)
+	set(LIBOPENGL     GL)
+	set(LIBGLEW	    GLEW)
 
 endif()
 
@@ -85,7 +89,7 @@ add_library(x-Tech
 	src/x-Tech/RigidBody.cpp
 )
 
-target_link_libraries(rend SDL2 glew32s opengl32 ${LIBOPENAL})
+target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL})
 
 target_link_libraries(x-Tech rend)
 

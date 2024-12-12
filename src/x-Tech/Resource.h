@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef X_TECH_RESOURCE_H
+#define X_TECH_RESOURCE_H
+
 #include <string>
 
 namespace xTech
@@ -25,3 +28,5 @@ namespace xTech
 		friend class Cache;
 	};
 }
+
+#endif
