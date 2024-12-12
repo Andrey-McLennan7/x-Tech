@@ -65,27 +65,7 @@ public:
 	}
 };
 
-int safe_main()
-{
-	srand(time(0));
-
-	// Create core and add resources
-	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> triangle_shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Audio> triangle_audio{ core->cache()->load<Audio>("Audio/dixie_horn")};
-
-	// Create entity 1 and attach components
-	std::shared_ptr<Entity> entity1{ core->add_entity() };
-
-	entity1->add_component<TriangleRenderer>();
-	entity1->add_component<BoxCollider>();
-	entity1->add_component<RigidBody>();
-	entity1->add_component<Entity1Mover>();
-
-	core->run();
-
-	return 0;
-}
+int safe_main();
 
 int main()
 {
@@ -97,6 +77,28 @@ int main()
 	{
 		std::cout << e.what() << std::endl;
 	}
+
+	return 0;
+}
+
+int safe_main()
+{
+	srand(time(0));
+
+	// Create core and add resources
+	std::shared_ptr<Core> core{ Core::initialize() };
+	std::shared_ptr<Shader> triangle_shader{ core->cache()->load<Shader>("Shader/basic") };
+	std::shared_ptr<Audio> triangle_audio{ core->cache()->load<Audio>("Audio/dixie_horn") };
+
+	// Create entity 1 and attach components
+	std::shared_ptr<Entity> entity1{ core->add_entity() };
+
+	entity1->add_component<TriangleRenderer>();
+	entity1->add_component<BoxCollider>();
+	entity1->add_component<RigidBody>();
+	entity1->add_component<Entity1Mover>();
+
+	core->run();
 
 	return 0;
 }
