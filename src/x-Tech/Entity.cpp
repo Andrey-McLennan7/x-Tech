@@ -1,10 +1,9 @@
-#include <SDL2/SDL.h>
-
-#include "Core.h"
 #include "Entity.h"
+#include "Core.h"
 #include "Component.h"
-
 #include "Window.h"
+
+#include <SDL2/SDL.h>
 
 namespace xTech
 {
@@ -41,6 +40,15 @@ namespace xTech
 		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
 			(*itr)->display();
+		}
+	}
+
+	void Entity::gui()
+	{
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
+		{
+			(*itr)->gui();
 		}
 	}
 

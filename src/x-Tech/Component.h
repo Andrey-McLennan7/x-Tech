@@ -12,6 +12,7 @@ namespace xTech
 	class Core;
 	class Window;
 	class Cache;
+	class Input;
 
 	class Component
 	{
@@ -30,6 +31,7 @@ namespace xTech
 		void late_tick();
 
 		void display();
+		void gui();
 		void kill();
 
 	// Protected member functions
@@ -43,6 +45,8 @@ namespace xTech
 
 		virtual void on_display();
 
+		virtual void on_gui();
+
 	// Public member functions
 	public:
 
@@ -51,6 +55,9 @@ namespace xTech
 		std::shared_ptr<Core> core()		   const;
 		std::shared_ptr<Window> window()	   const;
 		std::shared_ptr<Cache> cache()		   const;
+		std::shared_ptr<Input> input()		   const;
+
+		float delta_time() const;
 
 		friend Entity;
 	};

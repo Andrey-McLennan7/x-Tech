@@ -33,6 +33,9 @@ namespace xTech
 			throw std::runtime_error("ERROR::FAILED TO INITIALISE GLEW");
 		}
 
+		// Enable/Disable VSYNC
+		SDL_GL_SetSwapInterval(0);
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
@@ -50,8 +53,10 @@ namespace xTech
 		while (!SDL_TICKS_PASSED(SDL_GetTicks64(), this->m_tick_count + 16));
 
 		// Delta time is the difference in ticks from last frame
-		this->m_delta_time = (SDL_GetTicks64() - this->m_tick_count) / 1000.0f;
-		this->m_tick_count = SDL_GetTicks64();
+		Uint64 ticks{ SDL_GetTicks64() };
+
+		this->m_delta_time = (ticks - this->m_tick_count) / 1000.0f;
+		this->m_tick_count = ticks;
 
 		// Clamp maximum delta time value
 		if (this->m_delta_time > 0.05f)

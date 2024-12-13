@@ -25,6 +25,8 @@ namespace xTech
 #include "Debug.h"
 #include "Transform.h"
 #include "Window.h"
+#include "Input.h"
+#include "Keycode.h"
 #include "TriangleRenderer.h"
 #include "Resource.h"
 #include "Cache.h"

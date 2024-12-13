@@ -3,8 +3,6 @@
 #ifndef X_TECH_ENTITY_H
 #define X_TECH_ENTITY_H
 
-#include "Component.h"
-
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -14,6 +12,7 @@ namespace xTech
 	class Core;
 	class Window;
 	class Transform;
+	class Component;
 
 	class Entity
 	{
@@ -37,50 +36,62 @@ namespace xTech
 
 		void display();
 
+		void gui();
+
 	// Public member functions
 	public:
 
 		~Entity() {};
 
 		template <typename T>
-		std::shared_ptr<T> add_component()
-		{
-			std::shared_ptr<T> rtn{ std::make_shared<T>() };
-
-			rtn->m_entity = this->m_self;
-
-			rtn->on_initialize();
-			this->m_components.push_back(rtn);
-
-			return rtn;
-		}
+		std::shared_ptr<T> add_component();
 
 		template <typename T>
-		std::shared_ptr<T> get_component()
-		{
-			std::vector<std::shared_ptr<Component>>::iterator itr;
-			for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
-			{
-				std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(*itr);
-
-				if (rtn)
-				{
-					return rtn;
-				}
-			}
-
-			throw std::runtime_error("ERROR::FAILED TO FIND COMPONENT");
-		}
+		std::shared_ptr<T> get_component();
 
 		void kill();
 
 		std::shared_ptr<Transform> transform();
-
 		std::shared_ptr<Core> core();
 
 		friend Core;
 		friend Window;
 	};
+}
+
+#include "Component.h"
+
+namespace xTech
+{
+	template <typename T>
+	std::shared_ptr<T> Entity::add_component()
+	{
+		std::shared_ptr<T> rtn{ std::make_shared<T>() };
+
+		rtn->m_entity = this->m_self;
+
+		rtn->on_initialize();
+		this->m_components.push_back(rtn);
+
+		return rtn;
+	}
+
+	template <typename T>
+	std::shared_ptr<T> Entity::get_component()
+	{
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
+		{
+			std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(*itr);
+
+			if (rtn)
+			{
+				return rtn;
+			}
+		}
+
+		throw std::runtime_error("ERROR::FAILED TO FIND COMPONENT");
+	}
 }
 
 #endif

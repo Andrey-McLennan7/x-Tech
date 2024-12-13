@@ -3,8 +3,6 @@
 #include "Entity.h"
 #include "Core.h"
 #include "Window.h"
-#include "Cache.h"
-#include "Transform.h"
 
 namespace xTech
 {
@@ -28,6 +26,11 @@ namespace xTech
 		this->on_display();
 	}
 
+	void Component::gui()
+	{
+		this->on_gui();
+	}
+
 	void Component::kill()
 	{
 		this->m_alive = false;
@@ -40,6 +43,7 @@ namespace xTech
 	void Component::on_late_tick()  {}
 
 	void Component::on_display()	{}
+	void Component::on_gui()		{}
 
 	std::shared_ptr<Entity> Component::entity() const
 	{
@@ -60,8 +64,19 @@ namespace xTech
 	{
 		return this->core()->window();
 	}
+
 	std::shared_ptr<Cache> Component::cache() const
 	{
 		return this->core()->cache();
+	}
+
+	std::shared_ptr<Input> Component::input() const
+	{
+		return this->core()->input();
+	}
+
+	float Component::delta_time() const
+	{
+		return this->window()->delta_time();
 	}
 }

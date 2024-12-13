@@ -21,7 +21,7 @@ namespace xTech
 		SDL_GLContext m_context;
 
 		float m_delta_time;
-		unsigned int m_tick_count;
+		Uint64 m_tick_count;
 
 		// Public member functions
 	public:

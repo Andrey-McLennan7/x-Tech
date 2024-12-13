@@ -87,6 +87,10 @@ add_library(x-Tech
 	src/x-Tech/SphereCollider.cpp
 	src/x-Tech/RigidBody.h
 	src/x-Tech/RigidBody.cpp
+	src/x-Tech/Input.h
+	src/x-Tech/Input.cpp
+	src/x-Tech/Keycode.h
+	src/x-Tech/Keycode.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL})

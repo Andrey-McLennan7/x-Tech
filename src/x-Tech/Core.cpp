@@ -1,8 +1,10 @@
 #include "Core.h"
+#include "Entity.h"
 #include "Transform.h"
 
 #include "Window.h"
 #include "Cache.h"
+#include "Input.h"
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -29,14 +31,30 @@ namespace xTech
 		// Read mouse input
 		SDL_Event e;
 
-		// Read keyboard input
-		const Uint8* state{ SDL_GetKeyboardState(NULL) };
-
 		while (SDL_PollEvent(&e))
 		{
-			if (e.type == SDL_QUIT || state[SDL_SCANCODE_ESCAPE])
+			if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
 			{
 				core->end();
+			}
+			else if (e.type == SDL_KEYDOWN)
+			{
+				core->m_input->m_keys.push_back(e.key.keysym.sym);
+				core->m_input->m_pressed_keys.push_back(e.key.keysym.sym);
+			}
+			else if (e.type == SDL_KEYUP)
+			{
+				std::vector<int>::iterator itr;
+				for (itr = core->m_input->m_keys.begin(); itr != core->m_input->m_keys.end(); ++itr)
+				{
+					if ((*itr) == e.key.keysym.sym)
+					{
+						core->m_input->m_keys.erase(itr);
+						--itr;
+					}
+				}
+
+				core->m_input->m_released_keys.push_back(e.key.keysym.sym);
 			}
 		}
 
@@ -48,9 +66,6 @@ namespace xTech
 		for (itr = core->m_entities.begin(); itr != core->m_entities.end(); ++itr)
 		{
 			(*itr)->fixed_tick();
-
-			//(*itr)->tick();
-			//(*itr)->late_tick();
 		}
 
 		// Execute on every tick sequentially
@@ -65,6 +80,10 @@ namespace xTech
 			(*itr)->late_tick();
 		}
 
+		// Clear input buffers
+		core->m_input->m_pressed_keys.clear();
+		core->m_input->m_released_keys.clear();
+
 		/* Render */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
@@ -76,6 +95,11 @@ namespace xTech
 			(*itr)->display();
 		}
 
+		for (itr = core->m_entities.begin(); itr < core->m_entities.end(); ++itr)
+		{
+			(*itr)->gui();
+		}
+
 		SDL_GL_SwapWindow(core->m_window->ID());
 	}
 
@@ -85,12 +109,12 @@ namespace xTech
 
 		// Make pointer reference to self
 		rtn->m_self = rtn;
-
 		rtn->m_run = true;
 
 		// Create engine resrouces
 		rtn->m_window = std::make_shared<Window>();
 		rtn->m_cache = std::make_shared<Cache>();
+		rtn->m_input = std::make_shared<Input>();
 
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
@@ -159,5 +183,10 @@ namespace xTech
 	std::shared_ptr<Cache> Core::cache() const
 	{
 		return this->m_cache;
+	}
+
+	std::shared_ptr<Input> Core::input() const
+	{
+		return this->m_input;
 	}
 }

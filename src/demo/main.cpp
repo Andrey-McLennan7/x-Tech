@@ -20,45 +20,40 @@ public:
 
 	virtual void on_tick() override
 	{
-		float deltaTime{ core()->window()->delta_time() };
-
 		vec3 position{ 0.0f };
 
-		// Read keyboard input
-		const Uint8* state{ SDL_GetKeyboardState(NULL) };
-
-		if (state[SDL_SCANCODE_W])
+		if (input()->is_key(KEY_W))
 		{
-			if (state[SDL_SCANCODE_LSHIFT])
+			if (input()->is_key(KEY_LSHIFT))
 			{
-				position.z -= speed * deltaTime;
+				position.z -= speed * this->delta_time();
 			}
 			else
 			{
-				position.y += speed * deltaTime;
+				position.y += speed * this->delta_time();
 			}
 		}
 
-		if (state[SDL_SCANCODE_A])
+		if (input()->is_key(KEY_A))
 		{
-			position.x -= speed * deltaTime;
+			position.x -= speed * this->delta_time();
 		}
 
-		if (state[SDL_SCANCODE_S])
+		if (input()->is_key(KEY_S))
 		{
-			if (state[SDL_SCANCODE_LSHIFT])
+			if (input()->is_key(KEY_LSHIFT))
 			{
-				position.z += speed * deltaTime;
+				position.z += speed * this->delta_time();
 			}
 			else
 			{
-				position.y -= speed * deltaTime;
+				position.y -= speed * this->delta_time();
 			}
 		}
 
-		if (state[SDL_SCANCODE_D])
+		if (input()->is_key(KEY_D))
 		{
-			position.x += speed * deltaTime;
+			position.x += speed * this->delta_time();
 		}
 
 		transform()->move(position);
