@@ -45,4 +45,9 @@ namespace xTech
 
 		return false;
 	}
+
+	std::shared_ptr<Mouse> Input::mouse() const
+	{
+		return this->m_mouse;
+	}
 }

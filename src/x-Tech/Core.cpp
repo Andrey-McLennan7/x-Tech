@@ -11,6 +11,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
+#include <iostream>
+
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 #endif
@@ -55,6 +57,26 @@ namespace xTech
 				}
 
 				core->m_input->m_released_keys.push_back(e.key.keysym.sym);
+			}
+
+			if (e.type == SDL_MOUSEBUTTONDOWN)
+			{
+
+			}
+			else if (e.type == SDL_MOUSEBUTTONUP)
+			{
+
+			}
+			else if (e.type == SDL_MOUSEWHEEL)
+			{
+				if (e.wheel.y > 0)
+				{
+
+				}
+				else if (e.wheel.y < 0)
+				{
+
+				}
 			}
 		}
 

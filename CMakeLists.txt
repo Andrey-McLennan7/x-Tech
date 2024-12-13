@@ -90,7 +90,8 @@ add_library(x-Tech
 	src/x-Tech/Input.h
 	src/x-Tech/Input.cpp
 	src/x-Tech/Keycode.h
-	src/x-Tech/Keycode.cpp
+	src/x-Tech/Mouse.h
+	src/x-Tech/Mouse.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL})

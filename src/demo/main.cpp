@@ -5,7 +5,7 @@
 
 using namespace xTech;
 
-class Entity1Mover : public Component
+class EntityMover : public Component
 {
 private:
 
@@ -91,12 +91,11 @@ int safe_main()
 	entity1->add_component<TriangleRenderer>();
 	entity1->add_component<BoxCollider>();
 	entity1->add_component<RigidBody>();
-	entity1->add_component<Entity1Mover>();
+	entity1->add_component<EntityMover>();
 
 	std::shared_ptr<SoundSource> sound{ entity1->add_component<SoundSource>() };
 
 	sound->audio(audio);
-
 	sound->play();
 
 	core->run();

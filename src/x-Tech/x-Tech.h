@@ -26,6 +26,7 @@ namespace xTech
 #include "Transform.h"
 #include "Window.h"
 #include "Input.h"
+#include "Mouse.h"
 #include "Keycode.h"
 #include "TriangleRenderer.h"
 #include "Resource.h"
