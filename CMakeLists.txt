@@ -48,6 +48,8 @@ add_library(rend
 	src/rend/Texture.h
 	src/rend/Texture.cpp
 	src/rend/stb_image.h
+	src/rend/Model.h
+	src/rend/Model.cpp
 )
 
 add_library(x-Tech
@@ -89,9 +91,10 @@ add_library(x-Tech
 	src/x-Tech/RigidBody.cpp
 	src/x-Tech/Input.h
 	src/x-Tech/Input.cpp
-	src/x-Tech/Keycode.h
-	src/x-Tech/Mouse.h
-	src/x-Tech/Mouse.cpp
+	src/x-Tech/KeyCode.h
+	src/x-Tech/MouseCode.h
+	src/x-Tech/Model.h
+	src/x-Tech/Model.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL})

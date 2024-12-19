@@ -11,30 +11,31 @@ namespace rend
         this->size(256, 256);
     }
 
-    Texture::Texture(const std::string& _path)
+    Texture::Texture(const std::string& path)
     {
-        this->load(_path);
+        this->load(path);
     }
 
-    Texture::Texture(int _width, int _height)
+    Texture::Texture(int width, int height)
     {
-        this->size(_width, _height);
+        this->size(width, height);
     }
 
-    Texture::Texture(const Texture& _copy)
-        : m_data(_copy.m_data)
-        , m_width(_copy.m_width)
-        , m_height(_copy.m_height)
-        , m_dirty(true)
+    Texture::Texture(const Texture& copy) :
+        m_data{ copy.m_data },
+        m_width{ copy.m_width },
+        m_height{ copy.m_height },
+        m_dirty{ true },
+        m_id{ 0 }
     { }
 
-    Texture& Texture::operator=(const Texture& _assign)
+    Texture& Texture::operator=(const Texture& assign)
     {
-        if (this == &_assign) return *this;
+        if (this == &assign) return *this;
 
-        this->m_data = _assign.m_data;
-        this->m_width = _assign.m_width;
-        this->m_height = _assign.m_height;
+        this->m_data = assign.m_data;
+        this->m_width = assign.m_width;
+        this->m_height = assign.m_height;
         this->m_dirty = true;
 
         return *this;
@@ -48,20 +49,20 @@ namespace rend
         }
     }
 
-    void Texture::load(const std::string& _path)
+    void Texture::load(const std::string& path)
     {
         int width{ 0 };
         int height{ 0 };
 
         stbi_set_flip_vertically_on_load(1);
 
-        float* data{ stbi_loadf(_path.c_str(), &width, &height, NULL, 4) };
+        float* data{ stbi_loadf(path.c_str(), &width, &height, NULL, 4) };
 
         stbi_set_flip_vertically_on_load(0);
 
         if (!data)
         {
-            throw std::runtime_error("ERROR::FAILED TO LOAD TEXTURE::[" + _path + "]");
+            throw std::runtime_error("ERROR::FAILED TO LOAD TEXTURE::[" + path + "]");
         }
 
         this->size(width, height);
@@ -139,29 +140,29 @@ namespace rend
         this->m_height = height;
     }
 
-    void Texture::pixel(int _x, int _y, glm::vec4 _pixel)
+    void Texture::pixel(int x, int y, glm::vec4 pixel)
     {
-        if (_x < 0 || _x >= this->m_width || _y < 0 || _y >= this->m_height)
+        if (x < 0 || x >= this->m_width || y < 0 || y >= this->m_height)
         {
             throw std::runtime_error("ERROR::PIXEL OUTSIDE OF TEXTURE BOUNDS");
         }
 
-        int offset{ this->m_width * _y * 4 + _x * 4 };
+        int offset{ this->m_width * y * 4 + x * 4 };
 
-        this->m_data[offset]     = _pixel.x;
-        this->m_data[offset + 1] = _pixel.y;
-        this->m_data[offset + 2] = _pixel.z;
-        this->m_data[offset + 3] = _pixel.w;
+        this->m_data[offset]     = pixel.x;
+        this->m_data[offset + 1] = pixel.y;
+        this->m_data[offset + 2] = pixel.z;
+        this->m_data[offset + 3] = pixel.w;
     }
 
-    glm::vec4 Texture::pixel(int _x, int _y) const
+    glm::vec4 Texture::pixel(int x, int y) const
     {
-        if (_x < 0 || _x >= this->m_width || _y < 0 || _y >= this->m_height)
+        if (x < 0 || x >= this->m_width || y < 0 || y >= this->m_height)
         {
             throw std::runtime_error("ERROR::PIXEL OUTSIDE OF TEXTURE BOUNDS");
         }
 
-        int offset{ this->m_width * _y * 4 + _x * 4 };
+        int offset{ this->m_width * y * 4 + x * 4 };
 
         glm::vec4 rtn
         (

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef X_TECH_SHADER_H
-#define X_TECH_SHADER_H
+#ifndef X_TECH_MODEL_H
+#define X_TECH_MODEL_H
 
 #include "Resource.h"
 #include <rend/rend.h>
@@ -10,23 +10,21 @@
 
 namespace xTech
 {
-	class Shader : public Resource
+	class Model : public Resource
 	{
 	// Private data members
 	private:
 
-		std::shared_ptr<rend::Shader> m_shader;
+		std::shared_ptr<rend::Model> m_model;
 
 	// Public member functions
 	public:
 
 		virtual void on_load() override;
 
-		void use();
-		void unuse();
-
-		std::shared_ptr<rend::Shader> ID();
+		std::shared_ptr<rend::Model> ID() const;
 	};
+
 }
 
 #endif

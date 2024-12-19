@@ -34,10 +34,10 @@ namespace rend
 
 		~Texture();
 
-		Texture(const std::string& _path);
-		Texture(int _width, int _height);
+		Texture(const std::string& path);
+		Texture(int width, int height);
 
-		void load(const std::string& _path);
+		void load(const std::string& path);
 		void load(const std::vector<unsigned char>& data);
 
 		int width() const;

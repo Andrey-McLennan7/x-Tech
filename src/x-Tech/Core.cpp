@@ -27,102 +27,138 @@ namespace xTech
 {
 	void Core::loop(void* _core)
 	{
-		Core* core{ (Core*) _core };
+		Core* core{ (Core*)_core };
 
+		core->do_input();
+		core->do_tick();
+		core->do_render();
+	}
+
+	void Core::do_input()
+	{
 		/* Input */
-		// Read mouse input
 		SDL_Event e;
-
 		while (SDL_PollEvent(&e))
 		{
-			if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
+			// Quit program
+			if (SDL_QUIT == e.type)
 			{
-				core->end();
+				this->end();
 			}
-			else if (e.type == SDL_KEYDOWN)
+
+			// Detect keyboard inputs
+			if (SDL_KEYDOWN == e.type)
 			{
-				core->m_input->m_keys.push_back(e.key.keysym.sym);
-				core->m_input->m_pressed_keys.push_back(e.key.keysym.sym);
+				this->m_input->m_keys.push_back(e.key.keysym.sym);
+				this->m_input->m_pressed_keys.push_back(e.key.keysym.sym);
 			}
-			else if (e.type == SDL_KEYUP)
+			else if (SDL_KEYUP == e.type)
 			{
 				std::vector<int>::iterator itr;
-				for (itr = core->m_input->m_keys.begin(); itr != core->m_input->m_keys.end(); ++itr)
+				for (itr = this->m_input->m_keys.begin(); itr != this->m_input->m_keys.end(); ++itr)
 				{
-					if ((*itr) == e.key.keysym.sym)
+					if (e.key.keysym.sym == *itr)
 					{
-						core->m_input->m_keys.erase(itr);
+						this->m_input->m_keys.erase(itr);
 						--itr;
 					}
 				}
 
-				core->m_input->m_released_keys.push_back(e.key.keysym.sym);
+				this->m_input->m_released_keys.push_back(e.key.keysym.sym);
 			}
 
-			if (e.type == SDL_MOUSEBUTTONDOWN)
+			// Detect mouse inputs
+			if (SDL_MOUSEMOTION == e.type)
 			{
-
+				this->m_input->m_motion = true;
+				this->m_input->m_cursor.x = e.motion.x;
+				this->m_input->m_cursor.y = e.motion.y;
 			}
-			else if (e.type == SDL_MOUSEBUTTONUP)
+
+			if (SDL_MOUSEBUTTONDOWN == e.type)
 			{
-
+				this->m_input->m_buttons.push_back(e.button.button);
+				this->m_input->m_pressed_buttons.push_back(e.button.button);
 			}
-			else if (e.type == SDL_MOUSEWHEEL)
+			else if (SDL_MOUSEBUTTONUP == e.type)
+			{
+				std::vector<int>::iterator itr;
+				for (itr = this->m_input->m_buttons.begin(); itr != this->m_input->m_buttons.end(); ++itr)
+				{
+					if (e.button.button == *itr)
+					{
+						this->m_input->m_buttons.erase(itr);
+						--itr;
+					}
+				}
+
+				this->m_input->m_released_buttons.push_back(e.button.button);
+			}
+			else if (SDL_MOUSEWHEEL == e.type)
 			{
 				if (e.wheel.y > 0)
 				{
-
+					this->m_input->m_wheel = 1;
 				}
 				else if (e.wheel.y < 0)
 				{
-
+					this->m_input->m_wheel = -1;
 				}
 			}
 		}
+	}
 
-		/* Update */
-		core->m_window->tick();
+	void Core::do_tick()
+	{
+		this->m_window->tick();
 
 		// Execute on specified ticks randomly
 		std::vector<std::shared_ptr<Entity>>::iterator itr;
-		for (itr = core->m_entities.begin(); itr != core->m_entities.end(); ++itr)
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{
 			(*itr)->fixed_tick();
 		}
 
 		// Execute on every tick sequentially
-		for (itr = core->m_entities.begin(); itr != core->m_entities.end(); ++itr)
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{
 			(*itr)->tick();
 		}
 
 		// Be the last tick to execute sequentially
-		for (itr = core->m_entities.begin(); itr != core->m_entities.end(); ++itr)
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{
 			(*itr)->late_tick();
 		}
 
 		// Clear input buffers
-		core->m_input->m_pressed_keys.clear();
-		core->m_input->m_released_keys.clear();
+		this->m_input->m_pressed_keys.clear();
+		this->m_input->m_released_keys.clear();
+		this->m_input->m_pressed_buttons.clear();
+		this->m_input->m_released_buttons.clear();
+		this->m_input->m_wheel = 0;
+		this->m_input->m_motion = false;
+	}
 
-		/* Render */
+	void Core::do_render()
+	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
 
-		for (itr = core->m_entities.begin(); itr < core->m_entities.end(); ++itr)
+		std::vector<std::shared_ptr<Entity>>::iterator itr;
+		for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
 		{
 			(*itr)->display();
 		}
 
-		for (itr = core->m_entities.begin(); itr < core->m_entities.end(); ++itr)
+		for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
 		{
 			(*itr)->gui();
 		}
 
-		SDL_GL_SwapWindow(core->m_window->ID());
+		SDL_GL_SwapWindow(this->m_window->ID());
 	}
 
 	std::shared_ptr<Core> Core::initialize()

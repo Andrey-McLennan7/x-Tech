@@ -46,8 +46,72 @@ namespace xTech
 		return false;
 	}
 
-	std::shared_ptr<Mouse> Input::mouse() const
+	bool Input::is_button(int button) const
 	{
-		return this->m_mouse;
+		std::vector<int>::const_iterator itr;
+		for (itr = this->m_buttons.begin(); itr != this->m_buttons.end(); ++itr)
+		{
+			if (button == *itr)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool Input::is_button_pressed(int button) const
+	{
+		std::vector<int>::iterator itr;
+		for (itr = this->m_pressed_buttons.begin(); itr != this->m_pressed_buttons.end(); ++itr)
+		{
+			if (button == *itr)
+			{
+				this->m_pressed_buttons.erase(itr);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool Input::is_button_released(int button) const
+	{
+		std::vector<int>::iterator itr;
+		for (itr = this->m_released_buttons.begin(); itr != this->m_released_buttons.end(); ++itr)
+		{
+			if (button == *itr)
+			{
+				this->m_released_buttons.erase(itr);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	int Input::wheel() const
+	{
+		return this->m_wheel;
+	}
+
+	bool Input::in_motion() const
+	{
+		return this->m_motion;
+	}
+
+	glm::ivec2 Input::cursor() const
+	{
+		return this->m_cursor;
+	}
+
+	int Input::cursor_x() const
+	{
+		return this->m_cursor.x;
+	}
+
+	int Input::cursor_y() const
+	{
+		return this->m_cursor.y;
 	}
 }

@@ -5,5 +5,6 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "Model.h"
 
 #endif

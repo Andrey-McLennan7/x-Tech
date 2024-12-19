@@ -15,16 +15,16 @@ public:
 
 	virtual void on_initialize() override
 	{
-		speed = 5.0f;
+		this->speed = 5.0f;
 	}
 
 	virtual void on_tick() override
 	{
 		vec3 position{ 0.0f };
 
-		if (input()->is_key(KEY_W))
+		if (this->input()->is_key(KEY_W))
 		{
-			if (input()->is_key(KEY_LSHIFT))
+			if (this->input()->is_key(KEY_LSHIFT))
 			{
 				position.z -= speed * this->delta_time();
 			}
@@ -34,14 +34,14 @@ public:
 			}
 		}
 
-		if (input()->is_key(KEY_A))
+		if (this->input()->is_key(KEY_A))
 		{
 			position.x -= speed * this->delta_time();
 		}
 
-		if (input()->is_key(KEY_S))
+		if (this->input()->is_key(KEY_S))
 		{
-			if (input()->is_key(KEY_LSHIFT))
+			if (this->input()->is_key(KEY_LSHIFT))
 			{
 				position.z += speed * this->delta_time();
 			}
@@ -51,12 +51,41 @@ public:
 			}
 		}
 
-		if (input()->is_key(KEY_D))
+		if (this->input()->is_key(KEY_D))
 		{
 			position.x += speed * this->delta_time();
 		}
 
-		transform()->move(position);
+		if (this->input()->is_button(MOUSE_RIGHT))
+		{
+			std::cout << "Right click" << std::endl;
+		}
+
+		if (this->input()->is_button_pressed(MOUSE_LEFT))
+		{
+			std::cout << "Left click" << std::endl;
+		}
+
+		if (this->input()->is_button_released(MOUSE_MIDDLE))
+		{
+			std::cout << "Middle click" << std::endl;
+		}
+
+		if (this->input()->wheel() > 0)
+		{
+			std::cout << "Mouse wheel " << this->input()->wheel() << std::endl;
+		}
+		else if (this->input()->wheel() < 0)
+		{
+			std::cout << "Mouse wheel " << this->input()->wheel() << std::endl;
+		}
+
+		if (this->input()->in_motion())
+		{
+			std::cout << "Cursor: " << this->input()->cursor().x << ' ' << this->input()->cursor().y << std::endl;
+		}
+
+		this->transform()->move(position);
 	}
 };
 
@@ -92,11 +121,6 @@ int safe_main()
 	entity1->add_component<BoxCollider>();
 	entity1->add_component<RigidBody>();
 	entity1->add_component<EntityMover>();
-
-	std::shared_ptr<SoundSource> sound{ entity1->add_component<SoundSource>() };
-
-	sound->audio(audio);
-	sound->play();
 
 	core->run();
 

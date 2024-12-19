@@ -36,6 +36,10 @@ namespace xTech
 
 		static void loop(void* _core);
 
+		void do_input();
+		void do_tick();
+		void do_render();
+
 		// Public member functions
 	public:
 
