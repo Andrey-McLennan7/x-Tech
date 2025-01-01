@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef X_TECH_MODEL_H
-#define X_TECH_MODEL_H
+#ifndef REND_MODEL_H
+#define REND_MODEL_H
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
