@@ -45,7 +45,7 @@ namespace rend
             if (currentline.length() < 1) continue;
 
             std::vector<std::string> tokens;
-            split_string_whitespace(currentline, tokens);
+            this->split_string_whitespace(currentline, tokens);
             if (tokens.size() < 1) continue;
 
             if (tokens.at(0) == "v" && tokens.size() >= 4)
@@ -70,19 +70,19 @@ namespace rend
             {
                 Face f;
                 std::vector<std::string> sub;
-                split_string(tokens.at(1), '/', sub);
+                this->split_string(tokens.at(1), '/', sub);
                 if (sub.size() >= 1) f.a.position = positions.at(atoi(sub.at(0).c_str()) - 1);
                 if (sub.size() >= 2) f.a.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
                 if (sub.size() >= 3) f.a.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
 
-                for (size_t ti = 2; ti + 1 < tokens.size(); ti++)
+                for (int ti{ 2 }; ti + 1 < tokens.size(); ++ti)
                 {
-                    split_string(tokens.at(ti), '/', sub);
+                    this->split_string(tokens.at(ti), '/', sub);
                     if (sub.size() >= 1) f.b.position = positions.at(atoi(sub.at(0).c_str()) - 1);
                     if (sub.size() >= 2) f.b.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
                     if (sub.size() >= 3) f.b.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
 
-                    split_string(tokens.at(ti + 1), '/', sub);
+                    this->split_string(tokens.at(ti + 1), '/', sub);
                     if (sub.size() >= 1) f.c.position = positions.at(atoi(sub.at(0).c_str()) - 1);
                     if (sub.size() >= 2) f.c.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
                     if (sub.size() >= 3) f.c.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
@@ -128,7 +128,7 @@ namespace rend
 
         output.clear();
 
-        for (size_t i = 0; i < input.length(); i++)
+        for (int i{ 0 }; i < input.length(); ++i)
         {
             if (input.at(i) == ' ' ||
                 input.at(i) == '\r' ||
@@ -159,7 +159,7 @@ namespace rend
 
         output.clear();
 
-        for (size_t i = 0; i < input.length(); i++)
+        for (int i{ 0 }; i < input.length(); ++i)
         {
             if (input.at(i) == splitter)
             {
@@ -209,34 +209,35 @@ namespace rend
         {
             std::vector<GLfloat> data;
 
-            for (size_t fi = 0; fi < this->m_faces.size(); ++fi)
+            std::vector<Face>::iterator itr;
+            for (itr = this->m_faces.begin(); itr != this->m_faces.end(); ++itr)
             {
-                data.push_back(this->m_faces[fi].a.position.x);
-                data.push_back(this->m_faces[fi].a.position.y);
-                data.push_back(this->m_faces[fi].a.position.z);
-                data.push_back(this->m_faces[fi].a.texcoord.x);
-                data.push_back(this->m_faces[fi].a.texcoord.y);
-                data.push_back(this->m_faces[fi].a.normal.x);
-                data.push_back(this->m_faces[fi].a.normal.y);
-                data.push_back(this->m_faces[fi].a.normal.z);
+                data.push_back(itr->a.position.x);
+                data.push_back(itr->a.position.y);
+                data.push_back(itr->a.position.z);
+                data.push_back(itr->a.texcoord.x);
+                data.push_back(itr->a.texcoord.y);
+                data.push_back(itr->a.normal.x);
+                data.push_back(itr->a.normal.y);
+                data.push_back(itr->a.normal.z);
 
-                data.push_back(this->m_faces[fi].b.position.x);
-                data.push_back(this->m_faces[fi].b.position.y);
-                data.push_back(this->m_faces[fi].b.position.z);
-                data.push_back(this->m_faces[fi].b.texcoord.x);
-                data.push_back(this->m_faces[fi].b.texcoord.y);
-                data.push_back(this->m_faces[fi].b.normal.x);
-                data.push_back(this->m_faces[fi].b.normal.y);
-                data.push_back(this->m_faces[fi].b.normal.z);
+                data.push_back(itr->b.position.x);
+                data.push_back(itr->b.position.y);
+                data.push_back(itr->b.position.z);
+                data.push_back(itr->b.texcoord.x);
+                data.push_back(itr->b.texcoord.y);
+                data.push_back(itr->b.normal.x);
+                data.push_back(itr->b.normal.y);
+                data.push_back(itr->b.normal.z);
 
-                data.push_back(this->m_faces[fi].c.position.x);
-                data.push_back(this->m_faces[fi].c.position.y);
-                data.push_back(this->m_faces[fi].c.position.z);
-                data.push_back(this->m_faces[fi].c.texcoord.x);
-                data.push_back(this->m_faces[fi].c.texcoord.y);
-                data.push_back(this->m_faces[fi].c.normal.x);
-                data.push_back(this->m_faces[fi].c.normal.y);
-                data.push_back(this->m_faces[fi].c.normal.z);
+                data.push_back(itr->c.position.x);
+                data.push_back(itr->c.position.y);
+                data.push_back(itr->c.position.z);
+                data.push_back(itr->c.texcoord.x);
+                data.push_back(itr->c.texcoord.y);
+                data.push_back(itr->c.normal.x);
+                data.push_back(itr->c.normal.y);
+                data.push_back(itr->c.normal.z);
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo);
