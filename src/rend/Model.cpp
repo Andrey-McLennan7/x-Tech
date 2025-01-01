@@ -205,7 +205,7 @@ namespace rend
 			{
 				texture tex;
 
-				tex.id = texture_from_file(str.C_Str(), this->m_directory);
+				tex.id = this->texture_from_file(str.C_Str(), this->m_directory);
 				tex.path = str.C_Str();
 				tex.type = typeName;
 				textures.push_back(tex);
