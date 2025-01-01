@@ -10,6 +10,8 @@
 
 namespace xTech
 {
+	class Shader;
+
 	class Model : public Resource
 	{
 	// Private data members
@@ -21,8 +23,7 @@ namespace xTech
 	public:
 
 		virtual void on_load() override;
-
-		std::shared_ptr<rend::Model> model() const;
+		void draw(std::shared_ptr<Shader> shader);
 	};
 
 }

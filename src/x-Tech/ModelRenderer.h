@@ -16,15 +16,16 @@ namespace xTech
 	// Private data members
 	private:
 
-		std::shared_ptr<rend::Shader> m_shader;
-		std::shared_ptr<rend::Model> m_model;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<Model> m_model;
 
 	// Public member functions
 	public:
 
 		virtual void on_display() override;
 
-		void shader(std::shared_ptr<rend::Shader> shader);
+		void shader(std::shared_ptr<Shader> shader);
+		void model(std::shared_ptr<Model> model);
 	};
 }
 

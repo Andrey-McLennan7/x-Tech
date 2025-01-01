@@ -3,8 +3,6 @@
 #ifndef REND_MODEL_H
 #define REND_MODEL_H
 
-#include "rend/rend.h"
-
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -14,10 +12,15 @@
 
 namespace rend
 {
-	GLuint TextureFromFile(const char* path, const std::string& directory);
+	struct texture;
+	struct vertex;
+
+	class Mesh;
+	class Shader;
 
 	class Model
 	{
+	// Private data members
 	private:
 
 		// Model data
@@ -25,16 +28,22 @@ namespace rend
 		std::vector<Mesh> m_meshes;
 		std::string m_directory;
 
+	// Private member functions
+	private:
+
 		void load_model(const std::string& path);
 		void process_node(aiNode* node, const aiScene* scene);
 		Mesh process_mesh(aiMesh* mesh, const aiScene* scene);
 
+		GLuint texture_from_file(const char* path, const std::string& directory);
+
 		std::vector<texture> load_material_texture(aiMaterial* mat, aiTextureType type, std::string typeName);
 
+	// Public member functions
 	public:
 
 		Model(const std::string& path);
-		void draw(std::shared_ptr<rend::Shader> shader);
+		void draw(std::shared_ptr<Shader> shader);
 	};
 }
 

@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Shader.h"
 
 namespace rend
 {

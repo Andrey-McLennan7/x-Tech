@@ -3,10 +3,10 @@
 #ifndef REND_MESH_H
 #define REND_MESH_H
 
-#include "Shader.h"
-
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#include <string>
 #include <vector>
 #include <memory>
 
@@ -25,6 +25,8 @@ namespace rend
 		std::string type;
 		std::string path;
 	};
+
+	class Shader;
 
 	class Mesh
 	{
@@ -47,7 +49,7 @@ namespace rend
 		// Constructors
 		Mesh(std::vector<vertex> vertices, std::vector<GLuint> indicies, std::vector<texture> textures);
 
-		void draw(std::shared_ptr<rend::Shader> shader);
+		void draw(std::shared_ptr<Shader> shader);
 	};
 }
 

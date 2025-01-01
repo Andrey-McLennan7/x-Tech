@@ -12,6 +12,7 @@ bool windows
 #endif
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 namespace xTech
 {
 	using namespace glm;
@@ -38,5 +39,7 @@ namespace xTech
 #include "RigidBody.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
+#include "Model.h"
+#include "ModelRenderer.h"
 
 #endif

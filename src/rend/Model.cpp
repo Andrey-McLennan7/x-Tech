@@ -1,4 +1,6 @@
 #include "Model.h"
+#include "Mesh.h"
+
 #include "stb_image.h"
 
 #include <stdexcept>
@@ -123,45 +125,7 @@ namespace rend
 		return Mesh(vertices, indecies, textures);
 	}
 
-	std::vector<texture> Model::load_material_texture(aiMaterial* mat, aiTextureType type, std::string typeName)
-	{
-		std::vector<texture> textures;
-
-		for (int i{ 0 }; i < mat->GetTextureCount(type); ++i)
-		{
-			aiString str;
-
-			mat->GetTexture(type, i, &str);
-
-			bool skip{ false };
-
-			for (int j{ 0 }; j < this->m_textures_loaded.size(); ++j)
-			{
-				if (std::strcmp(this->m_textures_loaded.at(j).path.data(), str.C_Str()) == 0)
-				{
-					textures.push_back(this->m_textures_loaded.at(j));
-					skip = true;
-					break;
-				}
-			}
-
-			if (!skip)
-			{
-				texture tex;
-
-				tex.id = TextureFromFile(str.C_Str(), this->m_directory);
-				tex.path = str.C_Str();
-				tex.type = typeName;
-				textures.push_back(tex);
-
-				this->m_textures_loaded.push_back(tex);
-			}
-		}
-
-		return textures;
-	}
-
-	GLuint TextureFromFile(const char* path, const std::string& directory)
+	GLuint Model::texture_from_file(const char* path, const std::string& directory)
 	{
 		std::string fileName{ std::string(path) };
 		fileName = directory + '/' + fileName;
@@ -213,5 +177,43 @@ namespace rend
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		return textureID;
+	}
+
+	std::vector<texture> Model::load_material_texture(aiMaterial* mat, aiTextureType type, std::string typeName)
+	{
+		std::vector<texture> textures;
+
+		for (int i{ 0 }; i < mat->GetTextureCount(type); ++i)
+		{
+			aiString str;
+
+			mat->GetTexture(type, i, &str);
+
+			bool skip{ false };
+
+			for (int j{ 0 }; j < this->m_textures_loaded.size(); ++j)
+			{
+				if (std::strcmp(this->m_textures_loaded.at(j).path.data(), str.C_Str()) == 0)
+				{
+					textures.push_back(this->m_textures_loaded.at(j));
+					skip = true;
+					break;
+				}
+			}
+
+			if (!skip)
+			{
+				texture tex;
+
+				tex.id = texture_from_file(str.C_Str(), this->m_directory);
+				tex.path = str.C_Str();
+				tex.type = typeName;
+				textures.push_back(tex);
+
+				this->m_textures_loaded.push_back(tex);
+			}
+		}
+
+		return textures;
 	}
 }

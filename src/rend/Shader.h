@@ -40,7 +40,6 @@ namespace rend
 		// Shader Unuse
 		void unuse() const;
 
-		// Setters
 		// Utility uniforms
 		void set_float(const std::string& attribute, float value) const;
 		void set_int(const std::string& attribute, int value) const;
@@ -56,7 +55,6 @@ namespace rend
 
 		void set_mat4(const std::string& attribute, const glm::mat4& value) const;
 
-		// Getters
 		GLuint ID() const;
 	};
 }

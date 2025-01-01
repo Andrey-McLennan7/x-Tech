@@ -5,21 +5,34 @@
 
 using namespace xTech;
 
-class EntityMover : public Component
+class Player : public Component
 {
 private:
 
 	float speed;
+
+	vec3 camera_pos;
+
+	std::shared_ptr<Transform> tran;
+
+	mat4 projection;
+	mat4 view;
 
 public:
 
 	virtual void on_initialize() override
 	{
 		this->speed = 5.0f;
+		this->tran = this->transform();
+		this->camera_pos = vec3{ 0.0f, 0.0f, -5.0f };
+
+		this->projection = perspective(45.0f, float(this->window()->size().x) / float(this->window()->size().y), 0.1f, 100.0f);
+		this->view = translate(mat4{ 1.0f }, this->camera_pos);
 	}
 
 	virtual void on_tick() override
 	{
+		// Movement
 		vec3 position{ 0.0f };
 
 		if (this->input()->is_key(KEY_W))
@@ -85,7 +98,22 @@ public:
 			std::cout << "Cursor: " << this->input()->cursor().x << ' ' << this->input()->cursor().y << std::endl;
 		}
 
-		this->transform()->move(position);
+		this->tran->move(position);
+
+		// Update shader
+		std::shared_ptr<Shader> shader{ this->cache()->load<Shader>("Shader/model") };
+
+		// Vertex shader
+		shader->set_mat4("u_Projection", this->projection);
+		shader->set_mat4("u_View", this->view);
+		shader->set_mat4("u_Model", this->tran->model_matrix());
+
+		// Fragment shader
+		shader->set_vec3("u_ViewPos", this->camera_pos);
+		shader->set_vec3("u_Light.position", vec3{ 0.0f, 20.f, 0.0f });
+		shader->set_vec3("u_Light.ambient", vec3{ 0.8f });
+		shader->set_vec3("u_Light.diffuse", vec3{ 0.4f });
+		shader->set_vec3("u_Light.specular", vec3{ 0.5f });
 	}
 };
 
@@ -111,16 +139,17 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> shaders{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Audio> audio{ core->cache()->load<Audio>("Audio/dixie_horn") };
+	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
+	std::shared_ptr<Model> model{ core->cache()->load<Model>("Model/FA59AMako") };
 
 	// Create entity 1 and attach components
-	std::shared_ptr<Entity> entity1{ core->add_entity() };
+	std::shared_ptr<Entity> ship{ core->add_entity() };
 
-	entity1->add_component<TriangleRenderer>();
-	entity1->add_component<BoxCollider>();
-	entity1->add_component<RigidBody>();
-	entity1->add_component<EntityMover>();
+	std::shared_ptr<ModelRenderer> ship_renderer{ ship->add_component<ModelRenderer>() };
+	ship_renderer->shader(shader);
+	ship_renderer->model(model);
+
+	ship->add_component<Player>();
 
 	core->run();
 

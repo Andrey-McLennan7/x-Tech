@@ -1,14 +1,15 @@
 #include "Model.h"
+#include "Shader.h"
 
 namespace xTech
 {
     void Model::on_load()
     {
-        this->m_model = std::make_shared<rend::Model>(this->get_path());
+        this->m_model = std::make_shared<rend::Model>(this->get_path() + ".obj");
     }
 
-    std::shared_ptr<rend::Model> Model::model() const
+    void Model::draw(std::shared_ptr<Shader> shader)
     {
-        return this->m_model;
+        this->m_model->draw(shader->ID());
     }
 }
