@@ -32,22 +32,22 @@ uniform vec3 u_ViewPos;
 void main()
 {
 	// Ambient
-	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse, TexCoords));
+	vec3 ambient = u_Light.ambient * vec3(texture(u_Material.texture_diffuse, TexCoords));
 
 	// Diffuse
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(u_Light.position - FragPos);
 	float diff = max(dot(lightDir, norm), 0.0);
-	vec3 diffuse = light.diffuse * diff * vec3(texture(material.texture_diffuse, TexCoords));
+	vec3 diffuse = u_Light.diffuse * diff * vec3(texture(u_Material.texture_diffuse, TexCoords));
 
 	// Specular
-	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 viewDir = normalize(u_ViewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
-	vec3 specular = light.specular * spec * vec3(texture(material.texture_specular, TexCoords));
+	vec3 specular = u_Light.specular * spec * vec3(texture(u_Material.texture_specular, TexCoords));
 
 	// Attenuation
-	float Distance = length(light.position - FragPos);
+	float Distance = length(u_Light.position - FragPos);
 	float attenuation = 1.0 / (constant + linear * Distance + quadratic * pow(Distance, 2));
 
 	diffuse *= attenuation;
@@ -57,5 +57,5 @@ void main()
 	vec3 result = ambient + diffuse + specular;
 
 	gl_FragColor = vec4(result, 1.0);
-	//gl_FragColor = texture(material.texture_diffuse, TexCoords);
+	//gl_FragColor = texture(u_Material.texture_diffuse, TexCoords);
 }
