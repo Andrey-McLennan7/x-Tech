@@ -22,7 +22,7 @@ namespace xTech
 
 		virtual void on_load() override;
 
-		std::shared_ptr<rend::Model> ID() const;
+		std::shared_ptr<rend::Model> model() const;
 	};
 
 }

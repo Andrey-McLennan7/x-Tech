@@ -50,6 +50,8 @@ add_library(rend
 	src/rend/stb_image.h
 	src/rend/Model.h
 	src/rend/Model.cpp
+	src/rend/Mesh.h
+	src/rend/Mesh.cpp
 )
 
 add_library(x-Tech
@@ -76,7 +78,6 @@ add_library(x-Tech
 	src/x-Tech/Cache.cpp
 	src/x-Tech/Texture.h
 	src/x-Tech/Texture.cpp
-	src/x-Tech/ModelRenderer.h
 	src/x-Tech/Audio.h
 	src/x-Tech/Audio.cpp
 	src/x-Tech/SoundSource.h
@@ -95,9 +96,11 @@ add_library(x-Tech
 	src/x-Tech/MouseCode.h
 	src/x-Tech/Model.h
 	src/x-Tech/Model.cpp
+	src/x-Tech/ModelRenderer.h
+	src/x-Tech/ModelRenderer.cpp
 )
 
-target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL})
+target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd)
 
 target_link_libraries(x-Tech rend)
 

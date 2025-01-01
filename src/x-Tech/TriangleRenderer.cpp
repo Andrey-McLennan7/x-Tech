@@ -56,15 +56,15 @@ namespace xTech
 		glm::ivec2 wsize{ this->window()->size() };
 
 		model = this->entity()->get_component<xTech::Transform>()->model_matrix();
-		this->m_shader->ID()->set_mat4("u_Model", model);
+		this->m_shader->program()->set_mat4("u_Model", model);
 
 		projection = glm::perspective(45.0f, float(wsize.x) / float(wsize.y), 0.1f, 100.0f);
-		this->m_shader->ID()->set_mat4("u_Projection", projection);
+		this->m_shader->program()->set_mat4("u_Projection", projection);
 
 		view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-		this->m_shader->ID()->set_mat4("u_View", view);
+		this->m_shader->program()->set_mat4("u_View", view);
 
-		this->m_shader->ID()->set_vec3("u_Colour", glm::vec3(1.0f, 0.0f, 0.0f));
+		this->m_shader->program()->set_vec3("u_Colour", glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 
 	void TriangleRenderer::on_display()

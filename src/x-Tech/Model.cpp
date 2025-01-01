@@ -7,7 +7,7 @@ namespace xTech
         this->m_model = std::make_shared<rend::Model>(this->get_path());
     }
 
-    std::shared_ptr<rend::Model> Model::ID() const
+    std::shared_ptr<rend::Model> Model::model() const
     {
         return this->m_model;
     }

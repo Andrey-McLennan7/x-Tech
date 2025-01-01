@@ -3,62 +3,39 @@
 #ifndef REND_MODEL_H
 #define REND_MODEL_H
 
-#include <GL/glew.h>
-#include <glm/glm.hpp>
+#include "rend/rend.h"
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include <string>
-#include <fstream>
-#include <vector>
+#include <memory>
 
 namespace rend
 {
-    struct Vertex
-    {
-        Vertex();
+	GLuint TextureFromFile(const char* path, const std::string& directory);
 
-        glm::vec3 position;
-        glm::vec2 texcoord;
-        glm::vec3 normal;
-    };
+	class Model
+	{
+	private:
 
-    struct Face
-    {
-        Vertex a;
-        Vertex b;
-        Vertex c;
-    };
+		// Model data
+		std::vector<texture> m_textures_loaded;
+		std::vector<Mesh> m_meshes;
+		std::string m_directory;
 
-    class Model
-    {
-    // Private data members
-    private:
+		void load_model(const std::string& path);
+		void process_node(aiNode* node, const aiScene* scene);
+		Mesh process_mesh(aiMesh* mesh, const aiScene* scene);
 
-        std::vector<Face> m_faces;
+		std::vector<texture> load_material_texture(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-        GLuint m_vao;
-        GLuint m_vbo;
+	public:
 
-        bool m_dirty;
-
-    // Private member functions
-    private:
-
-        void split_string_whitespace(const std::string& input, std::vector<std::string>& output);
-        void split_string(const std::string& input, char splitter, std::vector<std::string>& output);
-
-    // Public member functions
-    public:
-
-        Model();
-        Model(const std::string& path);
-
-        Model(const Model& copy);
-        Model& operator=(const Model& assign);
-        virtual ~Model();
-
-        GLsizei vertex_count() const;
-        GLuint vao_id();
-    };
+		Model(const std::string& path);
+		void draw(std::shared_ptr<rend::Shader> shader);
+	};
 }
 
 #endif

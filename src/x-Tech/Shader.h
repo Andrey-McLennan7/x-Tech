@@ -25,7 +25,7 @@ namespace xTech
 		void use();
 		void unuse();
 
-		std::shared_ptr<rend::Shader> ID();
+		std::shared_ptr<rend::Shader> program();
 	};
 }
 

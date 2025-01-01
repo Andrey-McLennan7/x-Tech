@@ -26,7 +26,7 @@ namespace xTech
 		this->m_shader->unuse();
 	}
 
-	std::shared_ptr<rend::Shader> Shader::ID()
+	std::shared_ptr<rend::Shader> Shader::program()
 	{
 		return this->m_shader;
 	}

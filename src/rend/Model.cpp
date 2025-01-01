@@ -1,270 +1,217 @@
 #include "Model.h"
+#include "stb_image.h"
 
 #include <stdexcept>
 
 namespace rend
 {
-    GLsizei Model::vertex_count() const
-    {
-        return (GLsizei)this->m_faces.size() * 3;
-    }
+	Model::Model(const std::string& path)
+	{
+		this->load_model(path);
+	}
 
-    Vertex::Vertex() :
-        position{ 0.0f },
-        texcoord{ 0.0f },
-        normal{ 0.0f }
-    { }
+	void Model::draw(std::shared_ptr<rend::Shader> shader)
+	{
+		for (std::vector<Mesh>::iterator itr{ this->m_meshes.begin() }; itr != this->m_meshes.end(); ++itr)
+		{
+			(*itr).draw(shader);
+		}
+	}
 
-    Model::Model() :
-        m_vbo{ 0 },
-        m_vao{ 0 },
-        m_dirty{ false }
-    { }
+	void Model::load_model(const std::string& path)
+	{
+		Assimp::Importer importer;
+		const aiScene* scene{ importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs) };
 
-    Model::Model(const std::string& path) :
-        m_vbo{ 0 },
-        m_vao{ 0 },
-        m_dirty{ false }
-    {
-        std::vector<glm::vec3> positions;
-        std::vector<glm::vec2> tcs;
-        std::vector<glm::vec3> normals;
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::string err{ "ERROR::ASSIMP::" };
+			err.append(importer.GetErrorString());
 
-        std::string currentline;
+			throw std::runtime_error(err.c_str());
+		}
 
-        std::ifstream file{ path.c_str() };
+		this->m_directory = path.substr(0, path.find_last_of('/'));
 
-        if (!file.is_open())
-        {
-            throw std::runtime_error("ERROR::FAILED TO OPEN MODEL [" + path + "]");
-        }
+		this->process_node(scene->mRootNode, scene);
+	}
 
-        while (!file.eof())
-        {
-            std::getline(file, currentline);
-            if (currentline.length() < 1) continue;
+	void Model::process_node(aiNode* node, const aiScene* scene)
+	{
+		// Process all the node's meshes
+		for (int i{ 0 }; i < node->mNumMeshes; ++i)
+		{
+			aiMesh* mesh{ scene->mMeshes[node->mMeshes[i]] };
+			this->m_meshes.push_back(this->process_mesh(mesh, scene));
+		}
 
-            std::vector<std::string> tokens;
-            this->split_string_whitespace(currentline, tokens);
-            if (tokens.size() < 1) continue;
+		// Then do the same for each of its children
+		for (int i{ 0 }; i < node->mNumChildren; ++i)
+			this->process_node(node->mChildren[i], scene);
+	}
 
-            if (tokens.at(0) == "v" && tokens.size() >= 4)
-            {
-                glm::vec3 p(atof(tokens.at(1).c_str()), atof(tokens.at(2).c_str()), atof(tokens.at(3).c_str()));
+	Mesh Model::process_mesh(aiMesh* mesh, const aiScene* scene)
+	{
+		// Data
+		std::vector<vertex> vertices;
+		std::vector<GLuint> indecies;
+		std::vector<texture> textures;
 
-                positions.push_back(p);
-            }
-            else if (tokens.at(0) == "vt" && tokens.size() >= 3)
-            {
-                glm::vec2 tc(atof(tokens.at(1).c_str()), 1.0f - atof(tokens.at(2).c_str()));
+		// Vertex
+		for (int i{ 0 }; i < mesh->mNumVertices; ++i)
+		{
+			// Position
+			vertex vertex;
+			glm::vec3 vector3;
 
-                tcs.push_back(tc);
-            }
-            else if (tokens.at(0) == "vn" && tokens.size() >= 4)
-            {
-                glm::vec3 n(atof(tokens.at(1).c_str()), atof(tokens.at(2).c_str()), atof(tokens.at(3).c_str()));
+			vector3.x = mesh->mVertices[i].x;
+			vector3.y = mesh->mVertices[i].y;
+			vector3.z = mesh->mVertices[i].z;
 
-                normals.push_back(n);
-            }
-            else if (tokens.at(0) == "f" && tokens.size() >= 4)
-            {
-                Face f;
-                std::vector<std::string> sub;
-                this->split_string(tokens.at(1), '/', sub);
-                if (sub.size() >= 1) f.a.position = positions.at(atoi(sub.at(0).c_str()) - 1);
-                if (sub.size() >= 2) f.a.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
-                if (sub.size() >= 3) f.a.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
+			vertex.Positions = vector3;
 
-                for (int ti{ 2 }; ti + 1 < tokens.size(); ++ti)
-                {
-                    this->split_string(tokens.at(ti), '/', sub);
-                    if (sub.size() >= 1) f.b.position = positions.at(atoi(sub.at(0).c_str()) - 1);
-                    if (sub.size() >= 2) f.b.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
-                    if (sub.size() >= 3) f.b.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
+			// Normals
+			if (mesh->HasNormals())
+			{
+				vector3.x = mesh->mNormals[i].x;
+				vector3.y = mesh->mNormals[i].y;
+				vector3.z = mesh->mNormals[i].z;
 
-                    this->split_string(tokens.at(ti + 1), '/', sub);
-                    if (sub.size() >= 1) f.c.position = positions.at(atoi(sub.at(0).c_str()) - 1);
-                    if (sub.size() >= 2) f.c.texcoord = tcs.at(atoi(sub.at(1).c_str()) - 1);
-                    if (sub.size() >= 3) f.c.normal = normals.at(atoi(sub.at(2).c_str()) - 1);
+				vertex.Normals = vector3;
+			}
 
-                    this->m_faces.push_back(f);
-                    this->m_dirty = true;
-                }
-            }
-        }
-    }
+			// Texture Coordinate
+			if (mesh->mTextureCoords[0])
+			{
+				glm::vec2 vector2;
 
-    Model::~Model()
-    {
-        if (this->m_vao)
-        {
-            glDeleteVertexArrays(1, &this->m_vao);
-        }
+				vector2.x = mesh->mTextureCoords[0][i].x;
+				vector2.y = mesh->mTextureCoords[0][i].y;
 
-        if (this->m_vbo)
-        {
-            glDeleteBuffers(1, &this->m_vbo);
-        }
-    }
+				vertex.TexCoords = vector2;
+			}
+			else
+			{
+				vertex.TexCoords = glm::vec2(0.0f);
+			}
 
-    Model::Model(const Model& copy):
-        m_vao(0),
-        m_vbo(0),
-        m_faces(copy.m_faces),
-        m_dirty(true)
-    { }
+			vertices.push_back(vertex);
+		}
 
-    Model& Model::operator=(const Model& assign)
-    {
-        this->m_faces = assign.m_faces;
-        this->m_dirty = true;
+		// Indecies
+		for (int i{ 0 }; i < mesh->mNumFaces; ++i)
+		{
+			aiFace face{ mesh->mFaces[i] };
 
-        return *this;
-    }
+			for (int j{ 0 }; j < face.mNumIndices; ++j)
+			{
+				indecies.push_back(face.mIndices[j]);
+			}
+		}
 
-    void Model::split_string_whitespace(const std::string& input, std::vector<std::string>& output)
-    {
-        std::string curr;
+		// Texture
+		aiMaterial* material{ scene->mMaterials[mesh->mMaterialIndex] };
 
-        output.clear();
+		// Diffuse Map
+		std::vector<texture> diffuseMaps{ this->load_material_texture(material, aiTextureType_DIFFUSE, "texture_diffuse") };
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-        for (int i{ 0 }; i < input.length(); ++i)
-        {
-            if (input.at(i) == ' ' ||
-                input.at(i) == '\r' ||
-                input.at(i) == '\n' ||
-                input.at(i) == '\t')
-            {
-                if (curr.length() > 0)
-                {
-                    output.push_back(curr);
-                    curr = "";
-                }
-            }
-            else
-            {
-                curr += input.at(i);
-            }
-        }
+		// Specular Map
+		std::vector<texture> specularMaps{ this->load_material_texture(material, aiTextureType_SPECULAR, "texture_specular") };
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-        if (curr.length() > 0)
-        {
-            output.push_back(curr);
-        }
-    }
+		return Mesh(vertices, indecies, textures);
+	}
 
-    void Model::split_string(const std::string& input, char splitter, std::vector<std::string>& output)
-    {
-        std::string curr;
+	std::vector<texture> Model::load_material_texture(aiMaterial* mat, aiTextureType type, std::string typeName)
+	{
+		std::vector<texture> textures;
 
-        output.clear();
+		for (int i{ 0 }; i < mat->GetTextureCount(type); ++i)
+		{
+			aiString str;
 
-        for (int i{ 0 }; i < input.length(); ++i)
-        {
-            if (input.at(i) == splitter)
-            {
-                output.push_back(curr);
-                curr = "";
-            }
-            else
-            {
-                curr += input.at(i);
-            }
-        }
+			mat->GetTexture(type, i, &str);
 
-        if (curr.length() > 0)
-        {
-            output.push_back(curr);
-        }
-    }
+			bool skip{ false };
 
-    GLuint Model::vao_id()
-    {
-        if (!this->m_faces.size())
-        {
-            throw std::runtime_error("ERROR::MODEL IS EMPTY");
-        }
+			for (int j{ 0 }; j < this->m_textures_loaded.size(); ++j)
+			{
+				if (std::strcmp(this->m_textures_loaded.at(j).path.data(), str.C_Str()) == 0)
+				{
+					textures.push_back(this->m_textures_loaded.at(j));
+					skip = true;
+					break;
+				}
+			}
 
-        if (!this->m_vbo)
-        {
-            glGenBuffers(1, &this->m_vbo);
+			if (!skip)
+			{
+				texture tex;
 
-            if (!this->m_vbo)
-            {
-                throw std::runtime_error("ERROR::FAILED TO GENERATE VERTEX BUFFER");
-            }
-        }
+				tex.id = TextureFromFile(str.C_Str(), this->m_directory);
+				tex.path = str.C_Str();
+				tex.type = typeName;
+				textures.push_back(tex);
 
-        if (!this->m_vao)
-        {
-            glGenVertexArrays(1, &this->m_vao);
+				this->m_textures_loaded.push_back(tex);
+			}
+		}
 
-            if (!this->m_vao)
-            {
-                throw std::runtime_error("ERROR::FAILED TO GENERATE VERTEX ARRAY");
-            }
-        }
+		return textures;
+	}
 
-        if (this->m_dirty)
-        {
-            std::vector<GLfloat> data;
+	GLuint TextureFromFile(const char* path, const std::string& directory)
+	{
+		std::string fileName{ std::string(path) };
+		fileName = directory + '/' + fileName;
 
-            std::vector<Face>::iterator itr;
-            for (itr = this->m_faces.begin(); itr != this->m_faces.end(); ++itr)
-            {
-                data.push_back(itr->a.position.x);
-                data.push_back(itr->a.position.y);
-                data.push_back(itr->a.position.z);
-                data.push_back(itr->a.texcoord.x);
-                data.push_back(itr->a.texcoord.y);
-                data.push_back(itr->a.normal.x);
-                data.push_back(itr->a.normal.y);
-                data.push_back(itr->a.normal.z);
+		unsigned int textureID{ 0 };
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
 
-                data.push_back(itr->b.position.x);
-                data.push_back(itr->b.position.y);
-                data.push_back(itr->b.position.z);
-                data.push_back(itr->b.texcoord.x);
-                data.push_back(itr->b.texcoord.y);
-                data.push_back(itr->b.normal.x);
-                data.push_back(itr->b.normal.y);
-                data.push_back(itr->b.normal.z);
+		/* Filter Options */
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-                data.push_back(itr->c.position.x);
-                data.push_back(itr->c.position.y);
-                data.push_back(itr->c.position.z);
-                data.push_back(itr->c.texcoord.x);
-                data.push_back(itr->c.texcoord.y);
-                data.push_back(itr->c.normal.x);
-                data.push_back(itr->c.normal.y);
-                data.push_back(itr->c.normal.z);
-            }
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
-            glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo);
-            glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(data.at(0)), &data.at(0), GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+		int width{ 0 };
+		int height{ 0 };
+		int nrChannels{ 0 };
 
-            glBindVertexArray(this->m_vao);
-            glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo);
+		unsigned char* data{ stbi_load(fileName.c_str(), &width, &height, &nrChannels, 0) };
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(data.at(0)), (void*)0);
+		if (data)
+		{
+			GLenum format{ 0 };
 
-            glEnableVertexAttribArray(0);
+			switch (nrChannels)
+			{
+			case 1:
+				format = GL_RED; // jpeg
+				break;
+			case 3:
+				format = GL_RGB; // jpg
+				break;
+			case 4:
+				format = GL_RGBA; // png
+				break;
+			}
 
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(data.at(0)), (void*)(3 * sizeof(GLfloat)));
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+		{
+			throw std::runtime_error("ERROR::FAILED TO LOAD TEXTURE");
+		}
 
-            glEnableVertexAttribArray(1);
+		stbi_image_free(data);
 
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(data.at(0)), (void*)(5 * sizeof(GLfloat)));
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-            glEnableVertexAttribArray(2);
-
-            glBindVertexArray(0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-            this->m_dirty = false;
-        }
-
-        return this->m_vao;
-    }
+		return textureID;
+	}
 }
