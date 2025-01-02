@@ -142,7 +142,7 @@ int safe_main()
 	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
 	std::shared_ptr<Model> model{ core->cache()->load<Model>("Model/FA59AMako") };
 
-	// Create entity 1 and attach components
+	// Create entity and attach components
 	std::shared_ptr<Entity> ship{ core->add_entity() };
 
 	std::shared_ptr<ModelRenderer> ship_renderer{ ship->add_component<ModelRenderer>() };

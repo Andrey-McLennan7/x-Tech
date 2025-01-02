@@ -76,7 +76,7 @@ namespace xTech
 		this->m_shader->set_mat4(attribute, value);
 	}
 
-	std::shared_ptr<rend::Shader> Shader::ID() const
+	std::shared_ptr<rend::Shader> Shader::shader() const
 	{
 		return this->m_shader;
 	}

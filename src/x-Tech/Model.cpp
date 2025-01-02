@@ -10,6 +10,6 @@ namespace xTech
 
     void Model::draw(std::shared_ptr<Shader> shader)
     {
-        this->m_model->draw(shader->ID());
+        this->m_model->draw(shader->shader());
     }
 }

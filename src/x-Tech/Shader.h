@@ -39,7 +39,7 @@ namespace xTech
 
 		void set_mat4(const std::string& attribute, const glm::mat4& value) const;
 
-		std::shared_ptr<rend::Shader> ID() const;
+		std::shared_ptr<rend::Shader> shader() const;
 	};
 }
 
