@@ -1,36 +1,20 @@
 #pragma once
 
-#ifndef X_TECH_TRIANGLE_RENDERER_H
-#define X_TECH_TRIANGLE_RENDERER_H
+#ifndef REND_PYRAMID_H
+#define REND_PYRAMID_H
 
-#include <x-Tech/Component.h>
-#include <rend/rend.h>
+#include "Shape.h"
 
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
-namespace xTech
+namespace rend
 {
-	class Shader;
-
-	class TriangleRenderer : public Component
+	class Pyramid : public Shape
 	{
-	private:
-
-		GLuint m_vao;
-		int m_size;
-
-		std::shared_ptr<Shader> m_shader;
-
+		// Public member functions
 	public:
 
-		TriangleRenderer() : m_vao{ 0 }, m_size{ 0 } {};
+		Pyramid();
 
-		virtual void on_initialize() override;
-		virtual void on_tick() override;
-		virtual void on_display() override;
-
-		void shader(std::shared_ptr<Shader> shader);
+		virtual void draw(std::shared_ptr<Shader> shader) override;
 	};
 }
 

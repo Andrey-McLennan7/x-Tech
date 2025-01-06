@@ -7,5 +7,10 @@
 #include "Texture.h"
 #include "Model.h"
 #include "Mesh.h"
+#include "Shape.h"
+#include "Triangle.h"
+#include "Quad.h"
+#include "Cube.h"
+#include "Pyramid.h"
 
 #endif

@@ -11,14 +11,16 @@ private:
 
 	float speed;
 
-	std::shared_ptr<Transform> tran;
+	std::shared_ptr<Shader> m_shader;
 
 public:
 
 	virtual void on_initialize() override
 	{
 		this->speed = 5.0f;
-		this->tran = this->transform();
+
+		std::shared_ptr<Shader> m_shader = this->cache()->load<Shader>("Shader/model");
+
 		this->core()->camera()->position(vec3{ 0.0f, 0.0f, 5.0f });
 	}
 
@@ -90,22 +92,19 @@ public:
 			std::cout << "Cursor: " << this->input()->cursor().x << ' ' << this->input()->cursor().y << std::endl;
 		}
 
-		this->tran->move(position);
+		this->transform()->move(position);
 
-		// Update shader
-		std::shared_ptr<Shader> shader{ this->cache()->load<Shader>("Shader/model") };
-
+		/* Update Shader */
 		// Vertex shader
-		shader->set_mat4("u_Projection", this->core()->camera()->projection_matrix());
-		shader->set_mat4("u_View", this->core()->camera()->view_matrix());
-		shader->set_mat4("u_Model", this->tran->model_matrix());
+		m_shader->set_mat4("u_Projection", this->core()->camera()->projection_matrix());
+		m_shader->set_mat4("u_View", this->core()->camera()->view_matrix());
 
 		// Fragment shader
-		shader->set_vec3("u_ViewPos", this->core()->camera()->transform()->position());
-		shader->set_vec3("u_Light.position", vec3{ 0.0f, 20.f, 0.0f });
-		shader->set_vec3("u_Light.ambient", vec3{ 0.8f });
-		shader->set_vec3("u_Light.diffuse", vec3{ 0.4f });
-		shader->set_vec3("u_Light.specular", vec3{ 0.5f });
+		m_shader->set_vec3("u_ViewPos", this->core()->camera()->transform()->position());
+		m_shader->set_vec3("u_Light.position", vec3{ 0.0f, 20.f, 0.0f });
+		m_shader->set_vec3("u_Light.ambient", vec3{ 0.8f });
+		m_shader->set_vec3("u_Light.diffuse", vec3{ 0.4f });
+		m_shader->set_vec3("u_Light.specular", vec3{ 0.5f });
 	}
 };
 
@@ -136,6 +135,8 @@ int safe_main()
 
 	// Create entity and attach components
 	std::shared_ptr<Entity> ship{ core->add_entity() };
+
+	ship->add_component<ShapeRenderer>();
 
 	std::shared_ptr<ModelRenderer> ship_renderer{ ship->add_component<ModelRenderer>() };
 	ship_renderer->shader(shader);

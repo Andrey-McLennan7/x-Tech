@@ -2,7 +2,7 @@
 	precision highp float;
 #endif
 
-uniform vec3 u_Colour;
+uniform vec3 u_Colour = vec3(1.0);
 
 void main()
 {

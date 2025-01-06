@@ -20,7 +20,7 @@ namespace xTech
 
 	// Public members functions
 	public:
-		
+
 		template <typename T>
 		std::shared_ptr<T> load(const std::string& path)
 		{
@@ -38,7 +38,16 @@ namespace xTech
 			// Create new instance, construct and add to cache
 			std::shared_ptr<T> rtn{ std::make_shared<T>() };
 
-			rtn->m_path = "../res/" + path;
+			// Check the type of models loaded
+			if (path == "QUAD" || path == "CUBE" || path == "TRIANGLE" || path == "PYRAMID")
+			{
+				rtn->m_path = path;
+			}
+			else
+			{
+				rtn->m_path = "../res/" + path;
+			}
+
 			rtn->load();
 
 			this->m_resources.push_back(rtn);

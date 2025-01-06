@@ -52,10 +52,10 @@ add_library(rend
 	src/rend/Model.cpp
 	src/rend/Mesh.h
 	src/rend/Mesh.cpp
+	src/rend/Shape.h
+	src/rend/Shape.cpp
 	src/rend/Triangle.h
 	src/rend/Triangle.cpp
-	src/rend/TriangularPrism.h
-	src/rend/TriangularPrism.cpp
 	src/rend/Pyramid.h
 	src/rend/Pyramid.cpp
 	src/rend/Quad.h
@@ -110,6 +110,10 @@ add_library(x-Tech
 	src/x-Tech/ModelRenderer.cpp
 	src/x-Tech/Camera.h
 	src/x-Tech/Camera.cpp
+	src/x-Tech/ShapeRenderer.h
+	src/x-Tech/ShapeRenderer.cpp
+	src/x-Tech/Shape.h
+	src/x-Tech/Shape.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd)

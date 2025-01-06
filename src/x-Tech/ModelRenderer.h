@@ -3,8 +3,7 @@
 #ifndef X_TECH_MODEL_RENDERER_H
 #define X_TECH_MODEL_RENDERER_H
 
-#include <x-Tech/Component.h>
-#include <rend/rend.h>
+#include "Component.h"
 
 namespace xTech
 {
@@ -22,6 +21,7 @@ namespace xTech
 	// Public member functions
 	public:
 
+		virtual void on_tick() override;
 		virtual void on_display() override;
 
 		void shader(std::shared_ptr<Shader> shader);

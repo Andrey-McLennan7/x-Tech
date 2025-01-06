@@ -1,6 +1,8 @@
 #include "Mesh.h"
 #include "Shader.h"
 
+#include <stdexcept>
+
 namespace rend
 {
 	Mesh::Mesh(std::vector<vertex> vertices, std::vector<GLuint> indicies, std::vector<texture> textures) :
@@ -40,6 +42,11 @@ namespace rend
 
 	void Mesh::draw(std::shared_ptr<rend::Shader> shader)
 	{
+		if (!shader)
+		{
+			throw std::runtime_error("ERROR::NO SHADER FOUND");
+		}
+
 		GLuint diffuseNr{ 1 };
 		GLuint specularNr{ 1 };
 

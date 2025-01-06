@@ -42,5 +42,7 @@ namespace xTech
 #include "Model.h"
 #include "ModelRenderer.h"
 #include "Camera.h"
+#include "Shape.h"
+#include "ShapeRenderer.h"
 
 #endif
