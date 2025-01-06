@@ -41,5 +41,6 @@ namespace xTech
 #include "SphereCollider.h"
 #include "Model.h"
 #include "ModelRenderer.h"
+#include "Camera.h"
 
 #endif

@@ -3,6 +3,7 @@
 #include "Transform.h"
 
 #include "Window.h"
+#include "Camera.h"
 #include "Cache.h"
 #include "Input.h"
 
@@ -174,6 +175,10 @@ namespace xTech
 		rtn->m_cache = std::make_shared<Cache>();
 		rtn->m_input = std::make_shared<Input>();
 
+		// Create default camera entity
+		std::shared_ptr<Entity> camera = rtn->add_entity();
+		rtn->m_camera = camera->add_component<Camera>();
+
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
 		if (!device)
@@ -246,5 +251,10 @@ namespace xTech
 	std::shared_ptr<Input> Core::input() const
 	{
 		return this->m_input;
+	}
+
+	std::shared_ptr<Camera> Core::camera() const
+	{
+		return this->m_camera;
 	}
 }

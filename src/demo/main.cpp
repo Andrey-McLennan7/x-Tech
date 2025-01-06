@@ -11,12 +11,7 @@ private:
 
 	float speed;
 
-	vec3 camera_pos;
-
 	std::shared_ptr<Transform> tran;
-
-	mat4 projection;
-	mat4 view;
 
 public:
 
@@ -24,10 +19,7 @@ public:
 	{
 		this->speed = 5.0f;
 		this->tran = this->transform();
-		this->camera_pos = vec3{ 0.0f, 0.0f, -5.0f };
-
-		this->projection = perspective(45.0f, float(this->window()->size().x) / float(this->window()->size().y), 0.1f, 100.0f);
-		this->view = translate(mat4{ 1.0f }, this->camera_pos);
+		this->core()->camera()->position(vec3{ 0.0f, 0.0f, 5.0f });
 	}
 
 	virtual void on_tick() override
@@ -104,12 +96,12 @@ public:
 		std::shared_ptr<Shader> shader{ this->cache()->load<Shader>("Shader/model") };
 
 		// Vertex shader
-		shader->set_mat4("u_Projection", this->projection);
-		shader->set_mat4("u_View", this->view);
+		shader->set_mat4("u_Projection", this->core()->camera()->projection_matrix());
+		shader->set_mat4("u_View", this->core()->camera()->view_matrix());
 		shader->set_mat4("u_Model", this->tran->model_matrix());
 
 		// Fragment shader
-		shader->set_vec3("u_ViewPos", this->camera_pos);
+		shader->set_vec3("u_ViewPos", this->core()->camera()->transform()->position());
 		shader->set_vec3("u_Light.position", vec3{ 0.0f, 20.f, 0.0f });
 		shader->set_vec3("u_Light.ambient", vec3{ 0.8f });
 		shader->set_vec3("u_Light.diffuse", vec3{ 0.4f });

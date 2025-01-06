@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Core.h"
 #include "Window.h"
+#include "Transform.h"
 
 namespace xTech
 {
@@ -50,11 +51,6 @@ namespace xTech
 		return this->m_entity.lock();
 	}
 
-	std::shared_ptr<Transform> Component::transform() const
-	{
-		return this->entity()->transform();
-	}
-
 	std::shared_ptr<Core> Component::core() const
 	{
 		return this->entity()->core();
@@ -73,6 +69,41 @@ namespace xTech
 	std::shared_ptr<Input> Component::input() const
 	{
 		return this->core()->input();
+	}
+
+	std::shared_ptr<Transform> Component::transform() const
+	{
+		return this->entity()->transform();
+	}
+
+	void Component::position(glm::vec3 position)
+	{
+		this->transform()->position(position);
+	}
+
+	glm::vec3 Component::position() const
+	{
+		return this->transform()->position();
+	}
+
+	void Component::rotation(glm::vec3 rotation)
+	{
+		this->transform()->rotation(rotation);
+	}
+
+	glm::vec3 Component::rotation() const
+	{
+		return this->transform()->rotation();
+	}
+
+	void Component::scale(glm::vec3 scale)
+	{
+		this->transform()->scale(scale);
+	}
+
+	glm::vec3 Component::scale() const
+	{
+		return this->transform()->scale();
 	}
 
 	float Component::delta_time() const

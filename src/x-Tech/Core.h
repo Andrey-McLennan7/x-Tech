@@ -5,10 +5,12 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace xTech
 {
 	class Window;
+	class Camera;
 	class Cache;
 	class Audio;
 	class Entity;
@@ -17,7 +19,7 @@ namespace xTech
 	// Core implementation
 	class Core
 	{
-		// Private data members
+	// Private data members
 	private:
 
 		std::shared_ptr<Window> m_window;
@@ -26,12 +28,15 @@ namespace xTech
 		std::shared_ptr<Cache> m_cache;
 		//std::shared_ptr<Physics> m_physics;
 
+		// Default entities
+		std::shared_ptr<Camera> m_camera;
+
 		bool m_run;
 
 		std::vector<std::shared_ptr<Entity>> m_entities;
 		std::weak_ptr<Core> m_self;
 
-		// Private member functions
+	// Private member functions
 	private:
 
 		static void loop(void* _core);
@@ -40,7 +45,7 @@ namespace xTech
 		void do_tick();
 		void do_render();
 
-		// Public member functions
+	// Public member functions
 	public:
 
 		static std::shared_ptr<Core> initialize();
@@ -56,6 +61,8 @@ namespace xTech
 		std::shared_ptr<Window> window() const;
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
+
+		std::shared_ptr<Camera> camera() const;
 
 		friend class Entity;
 	};
