@@ -114,6 +114,8 @@ add_library(x-Tech
 	src/x-Tech/ShapeRenderer.cpp
 	src/x-Tech/Shape.h
 	src/x-Tech/Shape.cpp
+	src/x-Tech/PointLight.h
+	src/x-Tech/PointLight.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd)

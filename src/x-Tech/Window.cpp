@@ -71,7 +71,7 @@ namespace xTech
 		glViewport(0, 0, w, h);
 	}
 
-	glm::ivec2 Window::size()
+	glm::ivec2 Window::size() const
 	{
 		int w{ 0 };
 		int h{ 0 };

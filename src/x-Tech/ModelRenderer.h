@@ -9,6 +9,7 @@ namespace xTech
 {
 	class Shader;
 	class Model;
+	class PointLight;
 
 	class ModelRenderer : public Component
 	{

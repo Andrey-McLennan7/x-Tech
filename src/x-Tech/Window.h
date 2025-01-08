@@ -31,7 +31,8 @@ namespace xTech
 
 		void tick();
 
-		glm::ivec2 size();
+		glm::ivec2 size() const;
+
 		float delta_time();
 
 		SDL_Window* ID();

@@ -15,6 +15,8 @@ namespace xTech
 	class Audio;
 	class Entity;
 	class Input;
+	class PointLight;
+	class ModelRenderer;
 
 	// Core implementation
 	class Core
@@ -22,24 +24,34 @@ namespace xTech
 	// Private data members
 	private:
 
+		// Core components
 		std::shared_ptr<Window> m_window;
 		std::shared_ptr<Input> m_input;
 		std::shared_ptr<Audio> m_audio;
 		std::shared_ptr<Cache> m_cache;
-		//std::shared_ptr<Physics> m_physics;
 
-		// Default entities
-		std::shared_ptr<Camera> m_camera;
-
-		bool m_run;
-
+		// Scene entities
 		std::vector<std::shared_ptr<Entity>> m_entities;
+
+		// Cameras
+		std::weak_ptr<Camera> m_current_camera;
+		std::vector<std::weak_ptr<Camera>> m_cameras;
+
+		// Lights
+		std::weak_ptr<PointLight> m_current_light;
+		std::vector<std::weak_ptr<PointLight>> m_lights;
+
+		// Additional members
 		std::weak_ptr<Core> m_self;
+		bool m_run;
 
 	// Private member functions
 	private:
 
 		static void loop(void* _core);
+
+		std::shared_ptr<Camera> current_camera() const;
+		std::shared_ptr<PointLight> current_light() const;
 
 		void do_input();
 		void do_tick();
@@ -50,21 +62,24 @@ namespace xTech
 
 		static std::shared_ptr<Core> initialize();
 
-		void run();
-		void end();
-
 		std::shared_ptr<Entity> add_entity();
 
-		template<typename T>
-		void find(std::vector<std::shared_ptr<T>>& out);
+		std::shared_ptr<Camera> add_camera();
+		std::shared_ptr<PointLight> add_light();
+
+		void run();
+		void end();
 
 		std::shared_ptr<Window> window() const;
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
+		std::shared_ptr<Camera> camera(int index) const;
 
-		std::shared_ptr<Camera> camera() const;
+		template<typename T>
+		void find(std::vector<std::shared_ptr<T>>& out);
 
 		friend class Entity;
+		friend class ModelRenderer;
 	};
 }
 

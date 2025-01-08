@@ -54,12 +54,14 @@ namespace xTech
 		std::shared_ptr<Transform> transform();
 		std::shared_ptr<Core> core();
 
-		friend Core;
-		friend Window;
+		friend class Core;
+		friend class Window;
 	};
 }
 
 #include "Component.h"
+#include "Camera.h"
+#include "PointLight.h"
 
 namespace xTech
 {

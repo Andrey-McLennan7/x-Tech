@@ -44,5 +44,6 @@ namespace xTech
 #include "Camera.h"
 #include "Shape.h"
 #include "ShapeRenderer.h"
+#include "PointLight.h"
 
 #endif

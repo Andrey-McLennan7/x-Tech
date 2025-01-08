@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Cache.h"
 #include "Input.h"
+#include "PointLight.h"
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -33,6 +34,16 @@ namespace xTech
 		core->do_input();
 		core->do_tick();
 		core->do_render();
+	}
+
+	std::shared_ptr<Camera> Core::current_camera() const
+	{
+		return this->m_current_camera.lock();
+	}
+
+	std::shared_ptr<PointLight> Core::current_light() const
+	{
+		return this->m_current_light.lock();
 	}
 
 	void Core::do_input()
@@ -154,15 +165,28 @@ namespace xTech
 
 		glEnable(GL_DEPTH_TEST);
 
-		std::vector<std::shared_ptr<Entity>>::iterator itr;
-		for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
+		std::vector<std::weak_ptr<Camera>>::iterator c_itr;
+		for (c_itr = this->m_cameras.begin(); c_itr != this->m_cameras.end(); ++c_itr)
 		{
-			(*itr)->display();
+			this->m_current_camera = *c_itr;
+
+			std::vector<std::weak_ptr<PointLight>>::iterator l_itr;
+			for (l_itr = this->m_lights.begin(); l_itr != this->m_lights.end(); ++l_itr)
+			{
+				this->m_current_light = *l_itr;
+
+				std::vector<std::shared_ptr<Entity>>::iterator e_itr;
+				for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
+				{
+					(*e_itr)->display();
+				}
+			}
 		}
 
-		for (itr = this->m_entities.begin(); itr < this->m_entities.end(); ++itr)
+		std::vector<std::shared_ptr<Entity>>::iterator g_itr;
+		for (g_itr = this->m_entities.begin(); g_itr < this->m_entities.end(); ++g_itr)
 		{
-			(*itr)->gui();
+			(*g_itr)->gui();
 		}
 
 		SDL_GL_SwapWindow(this->m_window->ID());
@@ -176,14 +200,16 @@ namespace xTech
 		rtn->m_self = rtn;
 		rtn->m_run = true;
 
-		// Create engine resrouces
+		// Create core components
 		rtn->m_window = std::make_shared<Window>();
 		rtn->m_cache = std::make_shared<Cache>();
 		rtn->m_input = std::make_shared<Input>();
 
-		// Create default camera entity
-		std::shared_ptr<Entity> camera = rtn->add_entity();
-		rtn->m_camera = camera->add_component<Camera>();
+		// Create the main camera
+		rtn->add_camera();
+
+		// Create main light source
+		rtn->add_light();
 
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
@@ -210,6 +236,42 @@ namespace xTech
 		return rtn;
 	}
 
+	std::shared_ptr<Entity> Core::add_entity()
+	{
+		std::shared_ptr<Entity> rtn = std::make_shared<Entity>();
+
+		rtn->m_core = this->m_self;
+		rtn->m_self = rtn;
+
+		rtn->m_transform = rtn->add_component<Transform>();
+
+		this->m_entities.push_back(rtn);
+
+		return rtn;
+	}
+
+	std::shared_ptr<Camera> Core::add_camera()
+	{
+		// Create a camera entity and add a camera component
+		std::shared_ptr<Entity> camera{ this->add_entity() };
+		std::weak_ptr<Camera> rtn{ camera->add_component<Camera>() };
+
+		this->m_cameras.push_back(rtn);
+
+		return rtn.lock();
+	}
+
+	std::shared_ptr<PointLight> Core::add_light()
+	{
+		// Create a camera entity and add a camera component
+		std::shared_ptr<Entity> light{ this->add_entity() };
+		std::weak_ptr<PointLight> rtn{ light->add_component<PointLight>() };
+
+		this->m_lights.push_back(rtn);
+
+		return rtn.lock();
+	}
+
 	void Core::run()
 	{
 		#ifdef __EMSCRIPTEN__
@@ -230,20 +292,6 @@ namespace xTech
 		this->m_run = false;
 	}
 
-	std::shared_ptr<Entity> Core::add_entity()
-	{
-		std::shared_ptr<Entity> rtn = std::make_shared<Entity>();
-
-		rtn->m_core = this->m_self;
-		rtn->m_self = rtn;
-
-		rtn->m_transform = rtn->add_component<Transform>();
-
-		this->m_entities.push_back(rtn);
-
-		return rtn;
-	}
-
 	std::shared_ptr<Window> Core::window() const
 	{
 		return this->m_window;
@@ -259,8 +307,8 @@ namespace xTech
 		return this->m_input;
 	}
 
-	std::shared_ptr<Camera> Core::camera() const
+	std::shared_ptr<Camera> Core::camera(int index) const
 	{
-		return this->m_camera;
+		return this->m_cameras.at(index).lock();
 	}
 }
