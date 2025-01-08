@@ -21,7 +21,6 @@ namespace xTech
 	// Public member functions
 	public:
 
-		virtual void on_tick() override;
 		virtual void on_display() override;
 
 		void shader(std::shared_ptr<Shader> shader);

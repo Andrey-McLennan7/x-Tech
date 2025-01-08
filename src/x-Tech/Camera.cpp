@@ -63,7 +63,11 @@ namespace xTech
 
 	glm::mat4 Camera::projection_matrix() const
 	{
-		return this->m_projection;
+		// Update camera matrcies
+		float height{ (float)this->core()->window()->size().y };
+		float width{ (float)this->core()->window()->size().x };
+
+		return glm::perspective(this->m_zoom, width / height, 0.1f, 100.0f);
 	}
 
 	glm::mat4 Camera::view_matrix() const

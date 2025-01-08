@@ -11,6 +11,7 @@
 namespace xTech
 {
 	class Shader;
+	class ModelRenderer;
 
 	class Model : public Resource
 	{
@@ -23,7 +24,8 @@ namespace xTech
 	public:
 
 		virtual void on_load() override;
-		void draw(std::shared_ptr<Shader> shader);
+		
+		friend class ModelRenderer;
 	};
 
 }

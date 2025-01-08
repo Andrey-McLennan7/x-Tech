@@ -12,8 +12,6 @@
 #include <string>
 #include <memory>
 
-GLuint texture_from_file(const char* path, const std::string& directory);
-
 namespace rend
 {
 	struct texture;
@@ -21,6 +19,8 @@ namespace rend
 
 	class Mesh;
 	class Shader;
+
+	
 
 	class Model
 	{

@@ -29,7 +29,7 @@ namespace xTech
 			for (itr = this->m_resources.begin(); itr != this->m_resources.end(); ++itr)
 			{
 				// Return it if found
-				if ((*itr)->get_path() == path)
+				if ((*itr)->get_path() == "../res/" + path)
 				{
 					return std::dynamic_pointer_cast<T>(*itr);
 				}

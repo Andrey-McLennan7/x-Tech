@@ -56,12 +56,15 @@ namespace xTech
 			else if (SDL_KEYUP == e.type)
 			{
 				std::vector<int>::iterator itr;
-				for (itr = this->m_input->m_keys.begin(); itr != this->m_input->m_keys.end(); ++itr)
+				for (itr = this->m_input->m_keys.begin(); itr != this->m_input->m_keys.end();)
 				{
 					if (e.key.keysym.sym == *itr)
 					{
-						this->m_input->m_keys.erase(itr);
-						--itr;
+						itr = this->m_input->m_keys.erase(itr);
+					}
+					else
+					{
+						++itr;
 					}
 				}
 
@@ -84,12 +87,15 @@ namespace xTech
 			else if (SDL_MOUSEBUTTONUP == e.type)
 			{
 				std::vector<int>::iterator itr;
-				for (itr = this->m_input->m_buttons.begin(); itr != this->m_input->m_buttons.end(); ++itr)
+				for (itr = this->m_input->m_buttons.begin(); itr != this->m_input->m_buttons.end();)
 				{
 					if (e.button.button == *itr)
 					{
-						this->m_input->m_buttons.erase(itr);
-						--itr;
+						itr = this->m_input->m_buttons.erase(itr);
+					}
+					else
+					{
+						++itr;
 					}
 				}
 

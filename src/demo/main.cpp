@@ -13,15 +13,22 @@ private:
 
 	std::shared_ptr<Shader> m_shader;
 
+	mat4 projection;
+	mat4 view;
+
 public:
 
 	virtual void on_initialize() override
 	{
 		this->speed = 5.0f;
 
-		std::shared_ptr<Shader> m_shader = this->cache()->load<Shader>("Shader/model");
+		this->m_shader = this->cache()->load<Shader>("Shader/model");
 
-		this->core()->camera()->position(vec3{ 0.0f, 0.0f, 5.0f });
+		float height{ (float)this->core()->window()->size().y };
+		float width{ (float)this->core()->window()->size().x };
+
+		this->projection = perspective(45.0f, width / height, 0.1f, 100.0f);
+		this->view = translate(mat4{ 1.0f }, vec3{ 0.0f, 0.0f, -20.0f });
 	}
 
 	virtual void on_tick() override
@@ -63,6 +70,28 @@ public:
 			position.x += speed * this->delta_time();
 		}
 
+		if (this->input()->is_key(KEY_LBRACKET))
+		{
+			this->scale(vec3{ this->scale() - 1.0f * this->delta_time() });
+		}
+
+		if (this->input()->is_key(KEY_RBRACKET))
+		{
+			this->scale(vec3{ this->scale() + 1.0f * this->delta_time() });
+		}
+
+		if (this->input()->is_key(KEY_LEFT))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
+			std::cout << this->rotation().y << std::endl;
+		}
+		
+		if (this->input()->is_key(KEY_RIGHT))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
+			std::cout << this->rotation().y << std::endl;
+		}
+
 		if (this->input()->is_button(MOUSE_RIGHT))
 		{
 			std::cout << "Right click" << std::endl;
@@ -96,15 +125,15 @@ public:
 
 		/* Update Shader */
 		// Vertex shader
-		m_shader->set_mat4("u_Projection", this->core()->camera()->projection_matrix());
-		m_shader->set_mat4("u_View", this->core()->camera()->view_matrix());
+		m_shader->set_mat4("u_Projection", projection);
+		m_shader->set_mat4("u_View", view);
 
 		// Fragment shader
-		m_shader->set_vec3("u_ViewPos", this->core()->camera()->transform()->position());
-		m_shader->set_vec3("u_Light.position", vec3{ 0.0f, 20.f, 0.0f });
-		m_shader->set_vec3("u_Light.ambient", vec3{ 0.8f });
-		m_shader->set_vec3("u_Light.diffuse", vec3{ 0.4f });
-		m_shader->set_vec3("u_Light.specular", vec3{ 0.5f });
+		m_shader->set_vec3("u_ViewPos", glm::vec3{ 0.0f, 0.0f, 0.0f });
+		m_shader->set_vec3("u_Light.position", glm::vec3{ 0.0f, 0.0f, 0.0f });
+		m_shader->set_vec3("u_Light.ambient", glm::vec3{ 0.8f });
+		m_shader->set_vec3("u_Light.diffuse", glm::vec3{ 0.4f });
+		m_shader->set_vec3("u_Light.specular", glm::vec3{ 0.5f });
 	}
 };
 
@@ -131,12 +160,10 @@ int safe_main()
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
 	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
-	std::shared_ptr<Model> model{ core->cache()->load<Model>("Model/FA59AMako") };
+	std::shared_ptr<Model> model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
 
 	// Create entity and attach components
 	std::shared_ptr<Entity> ship{ core->add_entity() };
-
-	ship->add_component<ShapeRenderer>();
 
 	std::shared_ptr<ModelRenderer> ship_renderer{ ship->add_component<ModelRenderer>() };
 	ship_renderer->shader(shader);

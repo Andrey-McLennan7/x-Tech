@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef _CAMERA_H_
-#define _CAMERA_H_
+#ifndef X_TECH_CAMERA_H
+#define X_TECH_CAMERA_H
 
 #include "Component.h"
 

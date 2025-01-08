@@ -1,12 +1,15 @@
 #include "Model.h"
 #include "Mesh.h"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include <stdexcept>
 
 namespace rend
 {
+	GLuint texture_from_file(const char* path, const std::string& directory);
+
 	Model::Model(const std::string& path)
 	{
 		this->load_model(path);
