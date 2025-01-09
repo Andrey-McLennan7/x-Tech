@@ -208,9 +208,6 @@ namespace xTech
 		// Create the main camera
 		rtn->add_camera();
 
-		// Create main light source
-		rtn->add_light();
-
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
 		if (!device)

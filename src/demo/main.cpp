@@ -175,18 +175,18 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
-	std::shared_ptr<Model> model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
+	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/basic") };
+	std::shared_ptr<Shape> cube_model{ core->cache()->load<Shape>("CUBE") };
 
 	// Create entity and attach components
-	std::shared_ptr<Entity> ship{ core->add_entity() };
+	std::shared_ptr<Entity> cube{ core->add_entity() };
 
-	std::shared_ptr<ModelRenderer> ship_renderer{ ship->add_component<ModelRenderer>() };
+	std::shared_ptr<ShapeRenderer> cube_renderer{ cube->add_component<ShapeRenderer>() };
 
-	ship_renderer->shader(shader);
-	ship_renderer->model(model);
+	cube_renderer->shader(shader);
+	cube_renderer->shape(cube_model);
 
-	ship->add_component<Player>();
+	cube->add_component<Player>();
 
 	core->run();
 

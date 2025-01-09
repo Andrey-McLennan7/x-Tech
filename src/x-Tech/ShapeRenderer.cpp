@@ -12,14 +12,6 @@ namespace xTech
 		this->m_colour = glm::vec3{ 1.0f };
 	}
 
-	void ShapeRenderer::on_tick()
-	{
-		if (this->m_shader)
-		{
-			this->m_shader->set_vec3("u_Colour", this->m_colour);
-		}
-	}
-
 	void ShapeRenderer::on_display()
 	{
 		if (!this->m_shader)
@@ -27,7 +19,9 @@ namespace xTech
 			throw std::runtime_error("ERROR::NO SHADERS FOUND");
 		}
 
-		this->m_shape->draw(this->m_shader);
+		this->m_shader->set_vec3("u_Colour", this->m_colour);
+
+		this->m_shape->m_shape->draw(this->m_shader->shader());
 	}
 
 	void ShapeRenderer::shader(std::shared_ptr<Shader> shader)

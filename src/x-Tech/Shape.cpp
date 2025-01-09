@@ -28,9 +28,4 @@ namespace xTech
 			throw std::runtime_error("ERROR::UNKNOWN SHAPE NAME");
 		}
 	}
-
-	void Shape::draw(std::shared_ptr<Shader> shader)
-	{
-		this->m_shape->draw(shader->shader());
-	}
 }

@@ -24,7 +24,6 @@ namespace xTech
 	public:
 
 		virtual void on_initialize() override;
-		virtual void on_tick() override;
 		virtual void on_display() override;
 
 		void shader(std::shared_ptr<Shader> shader);
