@@ -13,8 +13,6 @@ private:
 
 	std::shared_ptr<Shader> m_shader;
 
-	std::shared_ptr<Camera> m_camera;
-
 public:
 
 	virtual void on_initialize() override
@@ -22,7 +20,6 @@ public:
 		this->speed = 5.0f;
 
 		this->m_shader = this->cache()->load<Shader>("Shader/model");
-		this->m_camera = this->core()->camera(0);
 	}
 
 	virtual void on_tick() override
@@ -90,11 +87,11 @@ public:
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				this->m_camera->position(vec3{ 0.0f, 0.0f, this->m_camera->position().z - this->speed * this->delta_time() });
+				this->camera(0)->position(vec3{0.0f, 0.0f, this->camera(0)->position().z - this->speed * this->delta_time()});
 			}
 			else
 			{
-				this->m_camera->position(vec3{ 0.0f, this->m_camera->position().y + this->speed * this->delta_time(), 0.0f });
+				this->camera(0)->position(vec3{ 0.0f, this->camera(0)->position().y + this->speed * this->delta_time(), 0.0f });
 			}
 		}
 
@@ -102,22 +99,22 @@ public:
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				this->m_camera->position(vec3{ 0.0f, 0.0f, this->m_camera->position().z + this->speed * this->delta_time() });
+				this->camera(0)->position(vec3{ 0.0f, 0.0f, this->camera(0)->position().z + this->speed * this->delta_time() });
 			}
 			else
 			{
-				this->m_camera->position(vec3{ 0.0f, this->m_camera->position().y - this->speed * this->delta_time(), 0.0f });
+				this->camera(0)->position(vec3{ 0.0f, this->camera(0)->position().y - this->speed * this->delta_time(), 0.0f });
 			}
 		}
 
 		if (this->input()->is_key(KEY_LEFT))
 		{
-			this->m_camera->position(vec3{ this->m_camera->position().x - this->speed * this->delta_time(), 0.0f, 0.0f });
+			this->camera(0)->position(vec3{ this->camera(0)->position().x - this->speed * this->delta_time(), 0.0f, 0.0f });
 		}
 
 		if (this->input()->is_key(KEY_RIGHT))
 		{
-			this->m_camera->position(vec3{ this->m_camera->position().x + this->speed * this->delta_time(), 0.0f, 0.0f });
+			this->camera(0)->position(vec3{ this->camera(0)->position().x + this->speed * this->delta_time(), 0.0f, 0.0f });
 		}
 
 		if (this->input()->is_button(MOUSE_RIGHT))
@@ -175,16 +172,16 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Shape> cube_model{ core->cache()->load<Shape>("CUBE") };
+	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
+	std::shared_ptr<Model> cube_model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
 
 	// Create entity and attach components
 	std::shared_ptr<Entity> cube{ core->add_entity() };
 
-	std::shared_ptr<ShapeRenderer> cube_renderer{ cube->add_component<ShapeRenderer>() };
+	std::shared_ptr<ModelRenderer> cube_renderer{ cube->add_component<ModelRenderer>() };
 
 	cube_renderer->shader(shader);
-	cube_renderer->shape(cube_model);
+	cube_renderer->model(cube_model);
 
 	cube->add_component<Player>();
 

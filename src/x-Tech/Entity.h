@@ -25,6 +25,8 @@ namespace xTech
 		std::weak_ptr<Entity> m_self;
 		std::weak_ptr<Transform> m_transform;
 
+		std::string m_name;
+
 		bool m_alive;
 
 	// Private member functions
@@ -53,6 +55,9 @@ namespace xTech
 
 		std::shared_ptr<Transform> transform();
 		std::shared_ptr<Core> core();
+
+		void name(const std::string& name);
+		std::string name() const;
 
 		friend class Core;
 		friend class Window;

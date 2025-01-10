@@ -242,9 +242,32 @@ namespace xTech
 
 		rtn->m_transform = rtn->add_component<Transform>();
 
+		if (this->m_entities.empty())
+		{
+			rtn->m_name = "Entity";
+		}
+		else
+		{
+			rtn->m_name = "Entity" + std::to_string(this->m_entities.size());
+		}
+
 		this->m_entities.push_back(rtn);
 
 		return rtn;
+	}
+
+	std::shared_ptr<Entity> Core::get_entity_by_name(const std::string& name) const
+	{
+		std::vector<std::shared_ptr<Entity>>::const_iterator itr;
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+		{
+			if ((*itr)->m_name == name)
+			{
+				return *itr;
+			}
+		}
+
+		throw std::runtime_error("ERROR::ENTITY NOT FOUND");
 	}
 
 	std::shared_ptr<Camera> Core::add_camera()

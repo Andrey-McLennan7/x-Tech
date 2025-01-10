@@ -63,6 +63,7 @@ namespace xTech
 		static std::shared_ptr<Core> initialize();
 
 		std::shared_ptr<Entity> add_entity();
+		std::shared_ptr<Entity> get_entity_by_name(const std::string& name) const;
 
 		std::shared_ptr<Camera> add_camera();
 		std::shared_ptr<PointLight> add_light();

@@ -76,6 +76,11 @@ namespace xTech
 		return this->entity()->transform();
 	}
 
+	std::shared_ptr<Camera> Component::camera(int index) const
+	{
+		return this->core()->camera(index);
+	}
+
 	void Component::position(glm::vec3 position)
 	{
 		this->transform()->position(position);

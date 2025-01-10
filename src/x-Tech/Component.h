@@ -52,12 +52,16 @@ namespace xTech
 	// Public member functions
 	public:
 
+		// Entity components
 		std::shared_ptr<Entity> entity() const;
+		std::shared_ptr<Transform> transform() const;
+
+		// Core components
 		std::shared_ptr<Core> core() const;
 		std::shared_ptr<Window> window() const;
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
-		std::shared_ptr<Transform> transform() const;
+		std::shared_ptr<Camera> camera(int index) const;
 
 		void position(glm::vec3 position);
 		glm::vec3 position() const;

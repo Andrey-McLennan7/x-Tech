@@ -74,4 +74,14 @@ namespace xTech
 	{
 		return this->m_core.lock();
 	}
+
+	void Entity::name(const std::string& name)
+	{
+		this->m_name = name;
+	}
+
+	std::string Entity::name() const
+	{
+		return this->m_name;
+	}
 }
