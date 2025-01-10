@@ -235,7 +235,7 @@ namespace xTech
 
 	std::shared_ptr<Entity> Core::add_entity()
 	{
-		std::shared_ptr<Entity> rtn = std::make_shared<Entity>();
+		std::shared_ptr<Entity> rtn{ std::make_shared<Entity>() };
 
 		rtn->m_core = this->m_self;
 		rtn->m_self = rtn;
@@ -261,7 +261,7 @@ namespace xTech
 		std::vector<std::shared_ptr<Entity>>::const_iterator itr;
 		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{
-			if ((*itr)->m_name == name)
+			if (name == (*itr)->m_name)
 			{
 				return *itr;
 			}
@@ -329,6 +329,29 @@ namespace xTech
 
 	std::shared_ptr<Camera> Core::camera(int index) const
 	{
-		return this->m_cameras.at(index).lock();
+		if (index < 0)
+		{
+			index = 0;
+		}
+		else if (index >= this->m_cameras.size())
+		{
+			index = this->m_cameras.size() - 1;
+		}
+
+		return this->m_cameras[index].lock();
+	}
+
+	std::shared_ptr<PointLight> Core::light(int index) const
+	{
+		if (index < 0)
+		{
+			index = 0;
+		}
+		else if (index >= this->m_lights.size())
+		{
+			index = this->m_lights.size() - 1;
+		}
+
+		return this->m_lights[index].lock();
 	}
 }

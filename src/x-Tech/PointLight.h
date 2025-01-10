@@ -13,6 +13,7 @@ namespace xTech
 	private:
 
 		// Light Options
+		glm::vec3 m_direction;
 		glm::vec3 m_ambient;
 		glm::vec3 m_diffuse;
 		glm::vec3 m_specular;
@@ -21,6 +22,9 @@ namespace xTech
 	public:
 
 		virtual void on_initialize() override;
+
+		void direction(const glm::vec3& direction);
+		glm::vec3 direction() const;
 
 		void ambient(const glm::vec3& ambient);
 		glm::vec3 ambient() const;

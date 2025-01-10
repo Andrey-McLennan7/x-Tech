@@ -5,6 +5,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <vector>
+
 namespace xTech
 {
 	void Camera::on_initialize()

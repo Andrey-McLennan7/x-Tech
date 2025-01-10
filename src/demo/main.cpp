@@ -11,54 +11,50 @@ private:
 
 	float speed;
 
-	std::shared_ptr<Shader> m_shader;
-
 public:
 
 	virtual void on_initialize() override
 	{
 		this->speed = 5.0f;
-
-		this->m_shader = this->cache()->load<Shader>("Shader/model");
 	}
 
 	virtual void on_tick() override
 	{
-		// Movement
-		vec3 position{ 0.0f };
+		// Entity Movement
+		vec3 e_position{ 0.0f };
 
 		if (this->input()->is_key(KEY_W))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				position.z -= speed * this->delta_time();
+				e_position.z -= speed * this->delta_time();
 			}
 			else
 			{
-				position.y += speed * this->delta_time();
+				e_position.y += speed * this->delta_time();
 			}
 		}
 
 		if (this->input()->is_key(KEY_A))
 		{
-			position.x -= speed * this->delta_time();
+			e_position.x -= speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_S))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				position.z += speed * this->delta_time();
+				e_position.z += speed * this->delta_time();
 			}
 			else
 			{
-				position.y -= speed * this->delta_time();
+				e_position.y -= speed * this->delta_time();
 			}
 		}
 
 		if (this->input()->is_key(KEY_D))
 		{
-			position.x += speed * this->delta_time();
+			e_position.x += speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_LBRACKET))
@@ -74,24 +70,27 @@ public:
 		if (this->input()->is_key(KEY_COMMA))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
-			std::cout << this->rotation().y << std::endl;
 		}
 		
 		if (this->input()->is_key(KEY_DOT))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
-			std::cout << this->rotation().y << std::endl;
 		}
+
+		this->transform()->move(e_position);
+
+		// Camera movement
+		vec3 c_position{ 0.0f };
 
 		if (this->input()->is_key(KEY_UP))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				this->camera(0)->position(vec3{0.0f, 0.0f, this->camera(0)->position().z - this->speed * this->delta_time()});
+				c_position.z -= this->speed * this->delta_time();
 			}
 			else
 			{
-				this->camera(0)->position(vec3{ 0.0f, this->camera(0)->position().y + this->speed * this->delta_time(), 0.0f });
+				c_position.y += this->speed * this->delta_time();
 			}
 		}
 
@@ -99,54 +98,25 @@ public:
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				this->camera(0)->position(vec3{ 0.0f, 0.0f, this->camera(0)->position().z + this->speed * this->delta_time() });
+				c_position.z += this->speed * this->delta_time();
 			}
 			else
 			{
-				this->camera(0)->position(vec3{ 0.0f, this->camera(0)->position().y - this->speed * this->delta_time(), 0.0f });
+				c_position.y -= this->speed * this->delta_time();
 			}
 		}
 
 		if (this->input()->is_key(KEY_LEFT))
 		{
-			this->camera(0)->position(vec3{ this->camera(0)->position().x - this->speed * this->delta_time(), 0.0f, 0.0f });
+			c_position.x -= this->speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_RIGHT))
 		{
-			this->camera(0)->position(vec3{ this->camera(0)->position().x + this->speed * this->delta_time(), 0.0f, 0.0f });
+			c_position.x += this->speed * this->delta_time();
 		}
 
-		if (this->input()->is_button(MOUSE_RIGHT))
-		{
-			std::cout << "Right click" << std::endl;
-		}
-
-		if (this->input()->is_button_pressed(MOUSE_LEFT))
-		{
-			std::cout << "Left click" << std::endl;
-		}
-
-		if (this->input()->is_button_released(MOUSE_MIDDLE))
-		{
-			std::cout << "Middle click" << std::endl;
-		}
-
-		if (this->input()->wheel() > 0)
-		{
-			std::cout << "Mouse wheel " << this->input()->wheel() << std::endl;
-		}
-		else if (this->input()->wheel() < 0)
-		{
-			std::cout << "Mouse wheel " << this->input()->wheel() << std::endl;
-		}
-
-		if (this->input()->in_motion())
-		{
-			std::cout << "Cursor: " << this->input()->cursor().x << ' ' << this->input()->cursor().y << std::endl;
-		}
-
-		this->transform()->move(position);
+		this->camera(0)->transform()->move(c_position);
 	}
 };
 
@@ -172,18 +142,22 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/model") };
-	std::shared_ptr<Model> cube_model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
+	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/basic") };
+	std::shared_ptr<Shape> shape{ core->cache()->load<Shape>("CUBE") };
 
 	// Create entity and attach components
-	std::shared_ptr<Entity> cube{ core->add_entity() };
+	std::shared_ptr<Entity> e1{ core->add_entity() };
+	std::shared_ptr<ShapeRenderer> e1_renderer{ e1->add_component<ShapeRenderer>() };
 
-	std::shared_ptr<ModelRenderer> cube_renderer{ cube->add_component<ModelRenderer>() };
+	e1_renderer->shader(shader);
+	e1_renderer->shape(shape);
 
-	cube_renderer->shader(shader);
-	cube_renderer->model(cube_model);
+	e1->add_component<Player>();
 
-	cube->add_component<Player>();
+	// Add light
+	std::shared_ptr<PointLight> light{ core->add_light() };
+
+	light->direction(light->position() - e1->position());
 
 	core->run();
 

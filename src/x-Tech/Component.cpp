@@ -81,34 +81,44 @@ namespace xTech
 		return this->core()->camera(index);
 	}
 
-	void Component::position(glm::vec3 position)
+	void Component::position(const glm::vec3& position)
 	{
-		this->transform()->position(position);
+		this->entity()->position(position);
 	}
 
 	glm::vec3 Component::position() const
 	{
-		return this->transform()->position();
+		return this->entity()->position();
 	}
 
-	void Component::rotation(glm::vec3 rotation)
+	void Component::rotation(const glm::vec3& rotation)
 	{
-		this->transform()->rotation(rotation);
+		this->entity()->rotation(rotation);
 	}
 
 	glm::vec3 Component::rotation() const
 	{
-		return this->transform()->rotation();
+		return this->entity()->rotation();
 	}
 
-	void Component::scale(glm::vec3 scale)
+	void Component::scale(const glm::vec3& scale)
 	{
-		this->transform()->scale(scale);
+		this->entity()->scale(scale);
 	}
 
 	glm::vec3 Component::scale() const
 	{
-		return this->transform()->scale();
+		return this->entity()->scale();
+	}
+
+	void Component::name(const std::string& name)
+	{
+		this->entity()->name(name);
+	}
+
+	std::string Component::name() const
+	{
+		return this->entity()->name();
 	}
 
 	float Component::delta_time() const

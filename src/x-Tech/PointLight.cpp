@@ -4,9 +4,20 @@ namespace xTech
 {
 	void PointLight::on_initialize()
 	{
+		this->m_direction = glm::normalize(this->position());
 		this->m_ambient = glm::vec3{ 0.8f };
 		this->m_diffuse = glm::vec3{ 0.4f };
 		this->m_specular = glm::vec3{ 0.5f };
+	}
+
+	void PointLight::direction(const glm::vec3& direction)
+	{
+		this->m_direction = glm::normalize(direction);
+	}
+
+	glm::vec3 PointLight::direction() const
+	{
+		return glm::normalize(this->m_direction);
 	}
 
 	void PointLight::ambient(const glm::vec3& ambient)

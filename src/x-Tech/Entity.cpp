@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Component.h"
 #include "Window.h"
+#include "Transform.h"
 
 #include <SDL2/SDL.h>
 
@@ -75,8 +76,52 @@ namespace xTech
 		return this->m_core.lock();
 	}
 
+	void Entity::position(const glm::vec3& position)
+	{
+		this->m_transform.lock()->position(position);
+	}
+
+	glm::vec3 Entity::position() const
+	{
+		return this->m_transform.lock()->position();
+	}
+
+	void Entity::rotation(const glm::vec3& rotation)
+	{
+		this->m_transform.lock()->rotation(rotation);
+	}
+
+	glm::vec3 Entity::rotation() const
+	{
+		return this->m_transform.lock()->rotation();
+	}
+
+	void Entity::scale(const glm::vec3& scale)
+	{
+		this->m_transform.lock()->scale(scale);
+	}
+
+	glm::vec3 Entity::scale() const
+	{
+		return this->m_transform.lock()->scale();
+	}
+
 	void Entity::name(const std::string& name)
 	{
+		std::vector<std::shared_ptr<Entity>>::const_iterator itr;
+		for (itr = this->core()->m_entities.begin(); itr != this->core()->m_entities.end(); ++itr)
+		{
+			if ((*itr)->m_self.lock() == this->m_self.lock())
+			{
+				continue;
+			}
+
+			if (name == (*itr)->m_name)
+			{
+				throw std::runtime_error("ERROR::ENTITY NAMES CANNOT MATCH");
+			}
+		}
+
 		this->m_name = name;
 	}
 

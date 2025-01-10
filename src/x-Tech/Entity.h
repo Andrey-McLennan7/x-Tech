@@ -3,6 +3,8 @@
 #ifndef X_TECH_ENTITY_H
 #define X_TECH_ENTITY_H
 
+#include <glm/glm.hpp>
+
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -56,6 +58,16 @@ namespace xTech
 		std::shared_ptr<Transform> transform();
 		std::shared_ptr<Core> core();
 
+		// Setter/Getters
+		void position(const glm::vec3& position);
+		glm::vec3 position() const;
+
+		void rotation(const glm::vec3& rotation);
+		glm::vec3 rotation() const;
+
+		void scale(const glm::vec3& scale);
+		glm::vec3 scale() const;
+
 		void name(const std::string& name);
 		std::string name() const;
 
@@ -68,12 +80,19 @@ namespace xTech
 #include "Camera.h"
 #include "PointLight.h"
 
+#include <iostream>
+
 namespace xTech
 {
 	template <typename T>
 	std::shared_ptr<T> Entity::add_component()
 	{
 		std::shared_ptr<T> rtn{ std::make_shared<T>() };
+
+		if (typeid(T) == typeid(Camera))
+		{
+			std::cout << "Camera added" << std::endl;
+		}
 
 		rtn->m_entity = this->m_self;
 

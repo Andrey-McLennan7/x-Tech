@@ -4,7 +4,9 @@
 #define X_TECH_COMPONENT_H
 
 #include <glm/glm.hpp>
+
 #include <memory>
+#include <string>
 
 namespace xTech
 {
@@ -62,15 +64,19 @@ namespace xTech
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
 		std::shared_ptr<Camera> camera(int index) const;
-
-		void position(glm::vec3 position);
+		
+		// Setter/Getters
+		void position(const glm::vec3& position);
 		glm::vec3 position() const;
 
-		void rotation(glm::vec3 rotation);
+		void rotation(const glm::vec3& rotation);
 		glm::vec3 rotation() const;
 
-		void scale(glm::vec3 scale);
+		void scale(const glm::vec3& scale);
 		glm::vec3 scale() const;
+
+		void name(const std::string& name);
+		std::string name() const;
 
 		float delta_time() const;
 

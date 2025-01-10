@@ -15,6 +15,8 @@ namespace xTech
 	class Audio;
 	class Entity;
 	class Input;
+	class ShapeRenderer;
+	class ModelRenderer;
 	class PointLight;
 	class ModelRenderer;
 
@@ -50,9 +52,6 @@ namespace xTech
 
 		static void loop(void* _core);
 
-		std::shared_ptr<Camera> current_camera() const;
-		std::shared_ptr<PointLight> current_light() const;
-
 		void do_input();
 		void do_tick();
 		void do_render();
@@ -68,6 +67,9 @@ namespace xTech
 		std::shared_ptr<Camera> add_camera();
 		std::shared_ptr<PointLight> add_light();
 
+		std::shared_ptr<Camera> current_camera() const;
+		std::shared_ptr<PointLight> current_light() const;
+
 		void run();
 		void end();
 
@@ -75,12 +77,13 @@ namespace xTech
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
 		std::shared_ptr<Camera> camera(int index) const;
+		std::shared_ptr<PointLight> light(int index) const;
 
 		template<typename T>
 		void find(std::vector<std::shared_ptr<T>>& out);
 
 		friend class Entity;
-		friend class ModelRenderer;
+		friend class Camera;
 	};
 }
 

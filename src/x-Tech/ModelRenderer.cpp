@@ -27,7 +27,10 @@ namespace xTech
 
 		// Fragment shader
 		this->m_shader->set_vec3("u_ViewPos", this->core()->current_camera()->position());
+
 		this->m_shader->set_vec3("u_Light.position", this->core()->current_light()->position());
+		this->m_shader->set_vec3("u_Light.direction", this->core()->current_light()->direction());
+
 		this->m_shader->set_vec3("u_Light.ambient", this->core()->current_light()->ambient());
 		this->m_shader->set_vec3("u_Light.diffuse", this->core()->current_light()->diffuse());
 		this->m_shader->set_vec3("u_Light.specular", this->core()->current_light()->specular());
