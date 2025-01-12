@@ -104,6 +104,7 @@ add_library(x-Tech
 	src/x-Tech/Input.cpp
 	src/x-Tech/KeyCode.h
 	src/x-Tech/MouseCode.h
+	src/x-Tech/ControllerCode.h
 	src/x-Tech/Model.h
 	src/x-Tech/Model.cpp
 	src/x-Tech/ModelRenderer.h

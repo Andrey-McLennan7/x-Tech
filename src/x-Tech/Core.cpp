@@ -48,7 +48,6 @@ namespace xTech
 
 	void Core::do_input()
 	{
-		/* Input */
 		SDL_Event e;
 		while (SDL_PollEvent(&e))
 		{
@@ -58,7 +57,7 @@ namespace xTech
 				this->end();
 			}
 
-			// Detect keyboard inputs
+			// Read keyboard inputs
 			if (SDL_KEYDOWN == e.type)
 			{
 				this->m_input->m_keys.push_back(e.key.keysym.sym);
@@ -82,27 +81,27 @@ namespace xTech
 				this->m_input->m_released_keys.push_back(e.key.keysym.sym);
 			}
 
-			// Detect mouse inputs
+			// Read mouse inputs
 			if (SDL_MOUSEMOTION == e.type)
 			{
-				this->m_input->m_motion = true;
+				this->m_input->m_mouse_motion = true;
 				this->m_input->m_cursor.x = e.motion.x;
 				this->m_input->m_cursor.y = e.motion.y;
 			}
 
 			if (SDL_MOUSEBUTTONDOWN == e.type)
 			{
-				this->m_input->m_buttons.push_back(e.button.button);
-				this->m_input->m_pressed_buttons.push_back(e.button.button);
+				this->m_input->m_m_buttons.push_back(e.button.button);
+				this->m_input->m_pressed_mouse_buttons.push_back(e.button.button);
 			}
 			else if (SDL_MOUSEBUTTONUP == e.type)
 			{
 				std::vector<int>::iterator itr;
-				for (itr = this->m_input->m_buttons.begin(); itr != this->m_input->m_buttons.end();)
+				for (itr = this->m_input->m_m_buttons.begin(); itr != this->m_input->m_m_buttons.end();)
 				{
 					if (e.button.button == *itr)
 					{
-						itr = this->m_input->m_buttons.erase(itr);
+						itr = this->m_input->m_m_buttons.erase(itr);
 					}
 					else
 					{
@@ -110,7 +109,7 @@ namespace xTech
 					}
 				}
 
-				this->m_input->m_released_buttons.push_back(e.button.button);
+				this->m_input->m_released_mouse_buttons.push_back(e.button.button);
 			}
 			else if (SDL_MOUSEWHEEL == e.type)
 			{
@@ -122,6 +121,103 @@ namespace xTech
 				{
 					this->m_input->m_wheel = -1;
 				}
+			}
+
+			// Read controller input
+			if (SDL_JOYAXISMOTION == e.type)
+			{
+				if (0 == e.jaxis.which)
+				{
+					if (0 == e.jaxis.axis)
+					{
+						int x{ 0 };
+
+						if (e.jaxis.value > this->m_input->m_dead_zone)
+						{
+							if (this->m_input->m_invert_x)
+							{
+								x = -1;
+							}
+							else
+							{
+								x = 1;
+							}
+						}
+						else if (e.jaxis.value < -this->m_input->m_dead_zone)
+						{
+							if (this->m_input->m_invert_x)
+							{
+								x = 1;
+							}
+							else
+							{
+								x = -1;
+							}
+						}
+						else
+						{
+							x = 0;
+						}
+
+						this->m_input->m_joy_stick_direction.x = x;
+					}
+					else if (1 == e.jaxis.axis)
+					{
+						int y{ 0 };
+
+						if (e.jaxis.value > this->m_input->m_dead_zone)
+						{
+							if (this->m_input->m_invert_y)
+							{
+								y = -1;
+							}
+							else
+							{
+								y = 1;
+							}
+						}
+						else if (e.jaxis.value < -this->m_input->m_dead_zone)
+						{
+							if (this->m_input->m_invert_y)
+							{
+								y = 1;
+							}
+							else
+							{
+								y = -1;
+							}
+						}
+						else
+						{
+							y = 0;
+						}
+
+						this->m_input->m_joy_stick_direction.y = y;
+					}
+				}
+			}
+
+			if (SDL_JOYBUTTONDOWN == e.type)
+			{
+				this->m_input->m_controller_buttons.push_back(e.jbutton.button);
+				this->m_input->m_pressed_controller_buttons.push_back(e.jbutton.button);
+			}
+			else if (SDL_JOYBUTTONUP == e.type)
+			{
+				std::vector<int>::iterator itr;
+				for (itr = this->m_input->m_controller_buttons.begin(); itr != this->m_input->m_controller_buttons.end();)
+				{
+					if (e.jbutton.button == *itr)
+					{
+						itr = this->m_input->m_controller_buttons.erase(itr);
+					}
+					else
+					{
+						++itr;
+					}
+				}
+
+				this->m_input->m_released_controller_buttons.push_back(e.jbutton.button);
 			}
 		}
 	}
@@ -152,10 +248,13 @@ namespace xTech
 		// Clear input buffers
 		this->m_input->m_pressed_keys.clear();
 		this->m_input->m_released_keys.clear();
-		this->m_input->m_pressed_buttons.clear();
-		this->m_input->m_released_buttons.clear();
+		this->m_input->m_pressed_mouse_buttons.clear();
+		this->m_input->m_released_mouse_buttons.clear();
+		this->m_input->m_pressed_controller_buttons.clear();
+		this->m_input->m_released_controller_buttons.clear();
+
 		this->m_input->m_wheel = 0;
-		this->m_input->m_motion = false;
+		this->m_input->m_mouse_motion = false;
 	}
 
 	void Core::do_render()
@@ -194,6 +293,11 @@ namespace xTech
 
 	std::shared_ptr<Core> Core::initialize()
 	{
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
+		{
+			throw std::runtime_error("ERROR::FAILED TO INITIALIZE SDL2");
+		}
+
 		std::shared_ptr<Core> rtn = std::make_shared<Core>();
 
 		// Make pointer reference to self

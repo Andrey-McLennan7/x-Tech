@@ -29,6 +29,7 @@ namespace xTech
 #include "Input.h"
 #include "KeyCode.h"
 #include "MouseCode.h"
+#include "ControllerCode.h"
 #include "TriangleRenderer.h"
 #include "Resource.h"
 #include "Cache.h"

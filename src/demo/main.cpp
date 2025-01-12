@@ -11,11 +11,17 @@ private:
 
 	float speed;
 
+	std::shared_ptr<BoxCollider> collider;
+	std::shared_ptr<ShapeRenderer> renderer;
+
 public:
 
 	virtual void on_initialize() override
 	{
 		this->speed = 5.0f;
+
+		this->collider = this->entity()->get_component<BoxCollider>();
+		this->renderer = this->entity()->get_component<ShapeRenderer>();
 	}
 
 	virtual void on_tick() override
@@ -77,7 +83,83 @@ public:
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 		}
 
+		if (this->input()->joy_stick_direction_x() != 0)
+		{
+			int x = this->input()->joy_stick_direction_x();
+			position.x += x * this->speed * this->delta_time();
+		}
+
+		if (this->input()->joy_stick_direction_y() != 0)
+		{
+			int y = this->input()->joy_stick_direction_y();
+			position.y += y * this->speed * this->delta_time();
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_A))
+		{
+			this->renderer->colour(vec3{ 0.0f, 255.0f, 0.0f });
+			std::cout << "Colour changes to green" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_B))
+		{
+			this->renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
+			std::cout << "Colour changes to red" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_X))
+		{
+			this->renderer->colour(vec3{ 0.0f, 0.0f, 255.0f });
+			std::cout << "Colour changes to green" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_Y))
+		{
+			this->renderer->colour(vec3{ 255.0f, 255.0f, 0.0f });
+			std::cout << "Colour changes to red" << std::endl;
+		}
+
 		this->transform()->move(position);
+		this->collider->size(this->scale());
+	}
+};
+
+class ControllerDebug : public Component
+{
+public:
+
+	virtual void on_tick() override
+	{
+		if (this->input()->joy_stick_direction_x() != 0 || this->input()->joy_stick_direction_y() != 0)
+		{
+			std::cout << "Joy stick x-axis: " << this->input()->joy_stick_direction_x() << std::endl;
+			std::cout << "Joy stick y-axis: " << this->input()->joy_stick_direction_y() << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_A))
+		{
+			std::cout << "Controller button A pressed" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_UP))
+		{
+			std::cout << "Controller button DPAD UP pressed" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_DOWN))
+		{
+			std::cout << "Controller button DPAD DOWN pressed" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_LEFT))
+		{
+			std::cout << "Controller button DPAD LEFT pressed" << std::endl;
+		}
+
+		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_RIGHT))
+		{
+			std::cout << "Controller button DPAD RIGHT pressed" << std::endl;
+		}
 	}
 };
 
@@ -193,9 +275,9 @@ int safe_main()
 	e1_renderer->shader(shader);
 	e1_renderer->shape(shape);
 
-	e1->add_component<Player>();
 	e1->add_component<BoxCollider>();
 	e1->add_component<RigidBody>();
+	e1->add_component<Player>();
 
 	e1->position(vec3{ 0.0f, 0.0f, -4.0f });
 
@@ -205,11 +287,17 @@ int safe_main()
 
 	e2_renderer->shader(shader);
 	e2_renderer->shape(shape);
+	e2_renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
 
 	e2->add_component<BoxCollider>();
 	e2->add_component<RigidBody>();
 
 	e2->position(vec3{ 2.0f, 0.0f, -4.0f });
+
+	// Create entity 3 and attach components
+	std::shared_ptr<Entity> e3{ core->add_entity() };
+
+	e3->add_component<ControllerDebug>();
 
 	// Add light
 	std::shared_ptr<PointLight> light{ core->add_light() };
