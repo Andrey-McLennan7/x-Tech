@@ -201,7 +201,7 @@ namespace xTech
 		rtn->m_run = true;
 
 		// Create core components
-		rtn->m_window = std::make_shared<Window>();
+		rtn->m_window = std::make_shared<Window>(1240, 720);
 		rtn->m_cache = std::make_shared<Cache>();
 		rtn->m_input = std::make_shared<Input>();
 

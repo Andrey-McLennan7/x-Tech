@@ -14,7 +14,7 @@ namespace xTech
 
 	class Window
 	{
-		// Private data members
+	// Private data members
 	private:
 
 		SDL_Window* m_id;
@@ -23,7 +23,7 @@ namespace xTech
 		float m_delta_time;
 		Uint64 m_tick_count;
 
-		// Public member functions
+	// Public member functions
 	public:
 
 		Window(int width = 1920, int height = 1080);

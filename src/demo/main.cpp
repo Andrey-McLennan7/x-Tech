@@ -21,40 +21,40 @@ public:
 	virtual void on_tick() override
 	{
 		// Entity Movement
-		vec3 e_position{ 0.0f };
+		vec3 position{ 0.0f };
 
 		if (this->input()->is_key(KEY_W))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				e_position.z -= speed * this->delta_time();
+				position.z -= speed * this->delta_time();
 			}
 			else
 			{
-				e_position.y += speed * this->delta_time();
+				position.y += speed * this->delta_time();
 			}
 		}
 
 		if (this->input()->is_key(KEY_A))
 		{
-			e_position.x -= speed * this->delta_time();
+			position.x -= speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_S))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				e_position.z += speed * this->delta_time();
+				position.z += speed * this->delta_time();
 			}
 			else
 			{
-				e_position.y -= speed * this->delta_time();
+				position.y -= speed * this->delta_time();
 			}
 		}
 
 		if (this->input()->is_key(KEY_D))
 		{
-			e_position.x += speed * this->delta_time();
+			position.x += speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_LBRACKET))
@@ -77,20 +77,49 @@ public:
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 		}
 
-		this->transform()->move(e_position);
+		this->transform()->move(position);
+	}
+};
 
-		// Camera movement
-		vec3 c_position{ 0.0f };
+class CameraMover : public Component
+{
+private:
+
+	float speed;
+
+public:
+
+	virtual void on_initialize() override
+	{
+		this->speed = 5.0f;
+	}
+
+	virtual void on_tick() override
+	{
+		// Entity Movement
+		vec3 position{ 0.0f };
 
 		if (this->input()->is_key(KEY_UP))
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				c_position.z -= this->speed * this->delta_time();
+				position.z -= speed * this->delta_time();
 			}
 			else
 			{
-				c_position.y += this->speed * this->delta_time();
+				position.y += speed * this->delta_time();
+			}
+		}
+
+		if (this->input()->is_key(KEY_LEFT))
+		{
+			if (this->input()->is_key(KEY_LSHIFT))
+			{
+				this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
+			}
+			else
+			{
+				position.x -= speed * this->delta_time();
 			}
 		}
 
@@ -98,25 +127,37 @@ public:
 		{
 			if (this->input()->is_key(KEY_LSHIFT))
 			{
-				c_position.z += this->speed * this->delta_time();
+				position.z += speed * this->delta_time();
 			}
 			else
 			{
-				c_position.y -= this->speed * this->delta_time();
+				position.y -= speed * this->delta_time();
 			}
-		}
-
-		if (this->input()->is_key(KEY_LEFT))
-		{
-			c_position.x -= this->speed * this->delta_time();
 		}
 
 		if (this->input()->is_key(KEY_RIGHT))
 		{
-			c_position.x += this->speed * this->delta_time();
+			if (this->input()->is_key(KEY_LSHIFT))
+			{
+				this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
+			}
+			else
+			{
+				position.x += speed * this->delta_time();
+			}
 		}
 
-		this->camera(0)->transform()->move(c_position);
+		if (this->input()->is_key(KEY_COMMA))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
+		}
+
+		if (this->input()->is_key(KEY_DOT))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
+		}
+
+		this->transform()->move(position);
 	}
 };
 
@@ -145,7 +186,7 @@ int safe_main()
 	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/basic") };
 	std::shared_ptr<Shape> shape{ core->cache()->load<Shape>("CUBE") };
 
-	// Create entity and attach components
+	// Create entity 1 and attach components
 	std::shared_ptr<Entity> e1{ core->add_entity() };
 	std::shared_ptr<ShapeRenderer> e1_renderer{ e1->add_component<ShapeRenderer>() };
 
@@ -153,11 +194,30 @@ int safe_main()
 	e1_renderer->shape(shape);
 
 	e1->add_component<Player>();
+	e1->add_component<BoxCollider>();
+	e1->add_component<RigidBody>();
+
+	e1->position(vec3{ 0.0f, 0.0f, -4.0f });
+
+	// Create entity 2 and attach components
+	std::shared_ptr<Entity> e2{ core->add_entity() };
+	std::shared_ptr<ShapeRenderer> e2_renderer{ e2->add_component<ShapeRenderer>() };
+
+	e2_renderer->shader(shader);
+	e2_renderer->shape(shape);
+
+	e2->add_component<BoxCollider>();
+	e2->add_component<RigidBody>();
+
+	e2->position(vec3{ 2.0f, 0.0f, -4.0f });
 
 	// Add light
 	std::shared_ptr<PointLight> light{ core->add_light() };
-
 	light->direction(light->position() - e1->position());
+
+	std::shared_ptr<Camera> camera{ core->camera(0) };
+
+	camera->entity()->add_component<CameraMover>();
 
 	core->run();
 

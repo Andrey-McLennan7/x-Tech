@@ -1,7 +1,9 @@
 #include "ShapeRenderer.h"
 
+#include "Core.h"
 #include "Shape.h"
 #include "Shader.h"
+#include "Transform.h"
 
 #include <stdexcept>
 
@@ -19,6 +21,12 @@ namespace xTech
 			throw std::runtime_error("ERROR::NO SHADERS FOUND");
 		}
 
+		// Vertex shader
+		this->m_shader->set_mat4("u_Projection", this->core()->current_camera()->projection_matrix());
+		this->m_shader->set_mat4("u_View", this->core()->current_camera()->view_matrix());
+		this->m_shader->set_mat4("u_Model", this->transform()->model_matrix());
+
+		// Fragment shader
 		this->m_shader->set_vec3("u_Colour", this->m_colour);
 
 		this->m_shape->m_shape->draw(this->m_shader->shader());

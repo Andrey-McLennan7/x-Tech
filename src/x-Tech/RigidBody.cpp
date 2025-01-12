@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "Transform.h"
 
-#include <iostream>
 #include <vector>
 #include <memory>
 
@@ -31,7 +30,6 @@ namespace xTech
 
 				if ((*itr1)->on_collision(*ec2))
 				{
-					std::cout << "Colliding" << std::endl;
 					(*itr1)->get_collision_response(*ec2);
 				}
 			}
