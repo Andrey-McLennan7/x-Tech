@@ -279,7 +279,7 @@ namespace xTech
 	void Core::do_render()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
+		glClearColor(this->m_background_colour.x, this->m_background_colour.y, this->m_background_colour.z, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -292,12 +292,12 @@ namespace xTech
 			for (l_itr = this->m_lights.begin(); l_itr != this->m_lights.end(); ++l_itr)
 			{
 				this->m_current_light = *l_itr;
+			}
 
-				std::vector<std::shared_ptr<Entity>>::iterator e_itr;
-				for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
-				{
-					(*e_itr)->display();
-				}
+			std::vector<std::shared_ptr<Entity>>::iterator e_itr;
+			for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
+			{
+				(*e_itr)->display();
 			}
 		}
 
@@ -324,12 +324,15 @@ namespace xTech
 		rtn->m_run = true;
 
 		// Create core components
-		rtn->m_window = std::make_shared<Window>(1240, 720);
+		rtn->m_window = std::make_shared<Window>();
 		rtn->m_cache = std::make_shared<Cache>();
 		rtn->m_input = std::make_shared<Input>();
 
 		// Create the main camera
-		rtn->add_camera();
+		std::shared_ptr<Entity> camera{ rtn->add_entity() };
+		camera->add_component<Camera>();
+
+		rtn->m_background_colour = glm::vec3{ 0.1f, 0.1f, 0.3f };
 
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
@@ -393,28 +396,6 @@ namespace xTech
 		throw std::runtime_error("ERROR::ENTITY NOT FOUND");
 	}
 
-	std::shared_ptr<Camera> Core::add_camera()
-	{
-		// Create a camera entity and add a camera component
-		std::shared_ptr<Entity> camera{ this->add_entity() };
-		std::weak_ptr<Camera> rtn{ camera->add_component<Camera>() };
-
-		this->m_cameras.push_back(rtn);
-
-		return rtn.lock();
-	}
-
-	std::shared_ptr<PointLight> Core::add_light()
-	{
-		// Create a camera entity and add a camera component
-		std::shared_ptr<Entity> light{ this->add_entity() };
-		std::weak_ptr<PointLight> rtn{ light->add_component<PointLight>() };
-
-		this->m_lights.push_back(rtn);
-
-		return rtn.lock();
-	}
-
 	void Core::run()
 	{
 		#ifdef __EMSCRIPTEN__
@@ -452,6 +433,11 @@ namespace xTech
 
 	std::shared_ptr<Camera> Core::camera(int index) const
 	{
+		if (this->m_cameras.empty())
+		{
+			throw std::runtime_error("ERROR::NO CAMERAS ARE FOUND");
+		}
+
 		if (index < 0)
 		{
 			index = 0;
@@ -466,6 +452,11 @@ namespace xTech
 
 	std::shared_ptr<PointLight> Core::light(int index) const
 	{
+		if (this->m_lights.empty())
+		{
+			throw std::runtime_error("ERROR::NO LIGHTS ARE IN THE SCENE");
+		}
+
 		if (index < 0)
 		{
 			index = 0;
@@ -476,5 +467,15 @@ namespace xTech
 		}
 
 		return this->m_lights[index].lock();
+	}
+
+	void Core::background(const glm::vec3& colour)
+	{
+		this->m_background_colour = colour / 256.0f;
+	}
+
+	glm::vec3 Core::background() const
+	{
+		return this->m_background_colour;
 	}
 }

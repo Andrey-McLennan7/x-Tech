@@ -18,9 +18,11 @@ namespace xTech
 	// Private data members
 	private:
 
+		ALuint m_id;
+
 		std::shared_ptr<Audio> m_audio;
 
-		ALuint m_id;
+		bool m_loop;
 
 	// Public member functions
 	public:
@@ -31,6 +33,10 @@ namespace xTech
 		void play();
 
 		void audio(std::shared_ptr<Audio> audio);
+		std::shared_ptr<Audio> audio() const;
+
+		void loop(bool loop);
+		bool loop() const;
 	};
 }
 

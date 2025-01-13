@@ -12,20 +12,21 @@ namespace xTech
 		this->m_keyboard = std::make_shared<Keyboard>();
 		this->m_mouse = std::make_shared<Mouse>();
 
+		std::cout << "Controller status: ";
 		if (SDL_NumJoysticks() < 1)
 		{
-			std::cout << "No joystick available" << std::endl;
+			std::cout << "No controllers connected" << std::endl;
 		}
 		else
 		{
-			std::cout << SDL_NumJoysticks() << " joysticks connected" << std::endl;
+			std::cout << SDL_NumJoysticks() << " controllers connected" << std::endl;
 
 			for (int i{ 0 }; i < SDL_NumJoysticks(); ++i)
 			{
 				this->m_controllers.push_back(std::make_shared<Controller>());
 				this->m_controllers[i]->m_id = SDL_JoystickOpen(i);
 
-				std::cout << "JoystickID: " << SDL_JoystickInstanceID(this->m_controllers[i]->m_id) << std::endl;
+				std::cout << "Controller " << i << " ID: " << SDL_JoystickInstanceID(this->m_controllers[i]->m_id) << std::endl;
 			}
 		}
 	}
@@ -42,6 +43,11 @@ namespace xTech
 
 	std::shared_ptr<Controller> Input::controller(int index)
 	{
+		if (this->m_controllers.empty())
+		{
+			throw std::runtime_error("ERROR::NO CONTROLLERS ARE CONNECTED");
+		}
+
 		if (index < 0)
 		{
 			index = 0;

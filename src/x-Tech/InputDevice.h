@@ -16,6 +16,7 @@ namespace xTech
 	private:
 
 		std::vector<int> m_is;
+
 		mutable std::vector<int> m_is_pressed;
 		mutable std::vector<int> m_is_released;
 

@@ -12,6 +12,8 @@ namespace xTech
 	void Camera::on_initialize()
 	{
 		this->m_zoom = 45.0f;
+
+		this->core()->m_cameras.push_back(this->entity()->get_component<Camera>());
 	}
 
 	glm::mat4 Camera::projection_matrix() const

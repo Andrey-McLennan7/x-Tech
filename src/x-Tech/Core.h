@@ -3,6 +3,8 @@
 #ifndef X_TECH_CORE_H
 #define X_TECH_CORE_H
 
+#include <glm/glm.hpp>
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -47,6 +49,9 @@ namespace xTech
 		std::weak_ptr<Core> m_self;
 		bool m_run;
 
+		// Background colour
+		glm::vec3 m_background_colour;
+
 	// Private member functions
 	private:
 
@@ -64,9 +69,6 @@ namespace xTech
 		std::shared_ptr<Entity> add_entity();
 		std::shared_ptr<Entity> get_entity_by_name(const std::string& name) const;
 
-		std::shared_ptr<Camera> add_camera();
-		std::shared_ptr<PointLight> add_light();
-
 		std::shared_ptr<Camera> current_camera() const;
 		std::shared_ptr<PointLight> current_light() const;
 
@@ -79,11 +81,15 @@ namespace xTech
 		std::shared_ptr<Camera> camera(int index = 0) const;
 		std::shared_ptr<PointLight> light(int index = 0) const;
 
+		void background(const glm::vec3& colour);
+		glm::vec3 background() const;
+
 		template<typename T>
 		void find(std::vector<std::shared_ptr<T>>& out);
 
 		friend class Entity;
 		friend class Camera;
+		friend class PointLight;
 	};
 }
 

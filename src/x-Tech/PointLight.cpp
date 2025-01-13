@@ -1,5 +1,7 @@
 #include "PointLight.h"
 
+#include "Core.h"
+
 namespace xTech
 {
 	void PointLight::on_initialize()
@@ -8,6 +10,8 @@ namespace xTech
 		this->m_ambient = glm::vec3{ 0.8f };
 		this->m_diffuse = glm::vec3{ 0.4f };
 		this->m_specular = glm::vec3{ 0.5f };
+
+		this->core()->m_lights.push_back(this->entity()->get_component<PointLight>());
 	}
 
 	void PointLight::direction(const glm::vec3& direction)

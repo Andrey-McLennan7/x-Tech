@@ -77,27 +77,27 @@ namespace xTech
 }
 
 #include "Component.h"
-#include "Camera.h"
-#include "PointLight.h"
-
-#include <iostream>
 
 namespace xTech
 {
 	template <typename T>
 	std::shared_ptr<T> Entity::add_component()
 	{
-		std::shared_ptr<T> rtn{ std::make_shared<T>() };
-
-		if (typeid(T) == typeid(Camera))
+		std::vector<std::shared_ptr<Component>>::iterator itr;
+		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			std::cout << "Camera added" << std::endl;
+			if (typeid(T) == typeid(*itr))
+			{
+				throw std::runtime_error("ERROR::UNABLE TO ADD MULTIPLE OF THE SAME COMPONENT");
+			}
 		}
+
+		std::shared_ptr<T> rtn{ std::make_shared<T>() };
 
 		rtn->m_entity = this->m_self;
 
-		rtn->on_initialize();
 		this->m_components.push_back(rtn);
+		rtn->on_initialize();
 
 		return rtn;
 	}

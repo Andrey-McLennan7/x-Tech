@@ -29,6 +29,7 @@ float quadratic = 0.032;
 uniform Material u_Material;
 uniform Light u_Light;
 uniform vec3 u_ViewPos;
+uniform bool u_Attenuation;
 
 void main()
 {
@@ -46,14 +47,17 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
 	vec3 specular = u_Light.specular * spec * vec3(texture(u_Material.texture_specular, TexCoords));
+	
+	if (u_Attenuation)
+	{
+		// Attenuation
+		float Distance = length(u_Light.position - FragPos);
+		float attenuation = 1.0 / (constant + linear * Distance + quadratic * pow(Distance, 2));
 
-	// Attenuation
-	float Distance = length(u_Light.position - FragPos);
-	float attenuation = 1.0 / (constant + linear * Distance + quadratic * pow(Distance, 2));
-
-	diffuse *= attenuation;
-	ambient *= attenuation;
-	specular *= attenuation;
+		diffuse *= attenuation;
+		ambient *= attenuation;
+		specular *= attenuation;	
+	}
 
 	vec3 result = ambient + diffuse + specular;
 

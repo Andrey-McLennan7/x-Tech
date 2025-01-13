@@ -19,13 +19,19 @@ namespace xTech
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<Model> m_model;
 
+		bool m_attenuation;
+
 	// Public member functions
 	public:
 
+		virtual void on_initialize() override;
 		virtual void on_display() override;
 
 		void shader(std::shared_ptr<Shader> shader);
 		void model(std::shared_ptr<Model> model);
+
+		void attenuation(bool attenuation);
+		bool attenuation() const;
 	};
 }
 

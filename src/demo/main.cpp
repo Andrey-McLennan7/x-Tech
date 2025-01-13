@@ -5,6 +5,19 @@
 
 using namespace xTech;
 
+class Stop : public Component
+{
+public:
+
+	void on_late_tick()
+	{
+		if (input()->keyboard()->is(KEY_ESC))
+		{
+			this->core()->end();
+		}
+	}
+};
+
 class Player : public Component
 {
 private:
@@ -12,7 +25,8 @@ private:
 	float speed;
 
 	std::shared_ptr<BoxCollider> collider;
-	std::shared_ptr<ShapeRenderer> renderer;
+	std::shared_ptr<ModelRenderer> renderer;
+	std::shared_ptr<SoundSource> sound;
 
 public:
 
@@ -21,7 +35,9 @@ public:
 		this->speed = 5.0f;
 
 		this->collider = this->entity()->get_component<BoxCollider>();
-		this->renderer = this->entity()->get_component<ShapeRenderer>();
+		this->renderer = this->entity()->get_component<ModelRenderer>();
+		
+		this->sound = this->entity()->get_component<SoundSource>();
 	}
 
 	virtual void on_tick() override
@@ -83,40 +99,21 @@ public:
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 		}
 
+		if (this->input()->keyboard()->is_pressed(KEY_SPACE))
+		{
+			sound->play();
+		}
+
 		// Controller
 		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
 		{
-			if (this->input()->controller(i)->joy_stick_direction() != ivec2{ 0 })
+			if (this->input()->controller(i)->joy_stick_direction().length() < 0.1f)
 			{
 				int x = this->input()->controller(i)->joy_stick_direction().x;
 				int y = this->input()->controller(i)->joy_stick_direction().y;
 
 				position.x += x * this->speed * this->delta_time();
 				position.y += y * this->speed * this->delta_time();
-			}
-
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_A))
-			{
-				this->renderer->colour(vec3{ 0.0f, 255.0f, 0.0f });
-				std::cout << "Colour changes to green" << std::endl;
-			}
-
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_B))
-			{
-				this->renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
-				std::cout << "Colour changes to red" << std::endl;
-			}
-
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_X))
-			{
-				this->renderer->colour(vec3{ 0.0f, 0.0f, 255.0f });
-				std::cout << "Colour changes to green" << std::endl;
-			}
-
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_Y))
-			{
-				this->renderer->colour(vec3{ 255.0f, 255.0f, 0.0f });
-				std::cout << "Colour changes to red" << std::endl;
 			}
 		}
 
@@ -133,7 +130,7 @@ public:
 	{
 		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
 		{
-			if (this->input()->controller(i)->joy_stick_direction_x() != 0 || this->input()->controller(i)->joy_stick_direction_y() != 0)
+			if (this->input()->controller(i)->joy_stick_direction() != ivec2{ 0 })
 			{
 				std::cout << "Joy stick x-axis: " << this->input()->controller(i)->joy_stick_direction_x() << std::endl;
 				std::cout << "Joy stick y-axis: " << this->input()->controller(i)->joy_stick_direction_y() << std::endl;
@@ -233,16 +230,6 @@ public:
 			}
 		}
 
-		if (this->input()->keyboard()->is(KEY_COMMA))
-		{
-			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
-		}
-
-		if (this->input()->keyboard()->is(KEY_DOT))
-		{
-			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
-		}
-
 		this->transform()->move(position);
 	}
 };
@@ -269,47 +256,32 @@ int safe_main()
 
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-	std::shared_ptr<Shader> shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Shape> shape{ core->cache()->load<Shape>("CUBE") };
+	core->add_entity()->add_component<Stop>();
 
 	// Create entity 1 and attach components
 	std::shared_ptr<Entity> e1{ core->add_entity() };
-	std::shared_ptr<ShapeRenderer> e1_renderer{ e1->add_component<ShapeRenderer>() };
+	std::shared_ptr<ModelRenderer> e1_renderer{ e1->add_component<ModelRenderer>() };
+	std::shared_ptr<SoundSource> e1_sound_source{ e1->add_component<SoundSource>() };
 
-	e1_renderer->shader(shader);
-	e1_renderer->shape(shape);
+	e1_renderer->shader(core->cache()->load<Shader>("Shader/model"));
+	e1_renderer->model(core->cache()->load<Model>("Model/FA59AMako/FA59AMako"));
+	e1_renderer->attenuation(false);
+
+	e1_sound_source->audio(core->cache()->load<Audio>("Audio/pew"));
 
 	e1->add_component<BoxCollider>();
 	e1->add_component<RigidBody>();
 	e1->add_component<Player>();
 
-	e1->position(vec3{ 0.0f, 0.0f, -4.0f });
-
-	// Create entity 2 and attach components
-	std::shared_ptr<Entity> e2{ core->add_entity() };
-	std::shared_ptr<ShapeRenderer> e2_renderer{ e2->add_component<ShapeRenderer>() };
-
-	e2_renderer->shader(shader);
-	e2_renderer->shape(shape);
-	e2_renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
-
-	e2->add_component<BoxCollider>();
-	e2->add_component<RigidBody>();
-
-	e2->position(vec3{ 2.0f, 0.0f, -4.0f });
-
-	// Create entity 3 and attach components
-	std::shared_ptr<Entity> e3{ core->add_entity() };
-
-	e3->add_component<ControllerDebug>();
+	e1->position(vec3{ 0.0f, 0.0f, -5.0f });
 
 	// Add light
-	std::shared_ptr<PointLight> light{ core->add_light() };
-	light->direction(light->position() - e1->position());
+	std::shared_ptr<Entity> light{ core->add_entity() };
+	std::shared_ptr<PointLight> light_comp{ light->add_component<PointLight>() };
 
-	std::shared_ptr<Camera> camera{ core->camera() };
-
-	camera->entity()->add_component<CameraMover>();
+	// Camera
+	core->camera()->entity()->add_component<CameraMover>();
+	core->camera()->entity()->position(vec3{ 0.0f, 0.0f, 50.0f });
 
 	core->run();
 

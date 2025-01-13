@@ -13,6 +13,11 @@
 
 namespace xTech
 {
+	void ModelRenderer::on_initialize()
+	{
+		this->m_attenuation = false;
+	}
+
 	void ModelRenderer::on_display()
 	{
 		if (!this->m_shader)
@@ -28,14 +33,19 @@ namespace xTech
 		// Fragment shader
 		this->m_shader->set_vec3("u_ViewPos", this->core()->current_camera()->position());
 
-		this->m_shader->set_vec3("u_Light.position", this->core()->current_light()->position());
-		this->m_shader->set_vec3("u_Light.direction", this->core()->current_light()->direction());
+		if (this->core()->current_light())
+		{
+			this->m_shader->set_vec3("u_Light.position", this->core()->current_light()->position());
+			this->m_shader->set_vec3("u_Light.direction", this->core()->current_light()->direction());
 
-		this->m_shader->set_vec3("u_Light.ambient", this->core()->current_light()->ambient());
-		this->m_shader->set_vec3("u_Light.diffuse", this->core()->current_light()->diffuse());
-		this->m_shader->set_vec3("u_Light.specular", this->core()->current_light()->specular());
+			this->m_shader->set_vec3("u_Light.ambient", this->core()->current_light()->ambient());
+			this->m_shader->set_vec3("u_Light.diffuse", this->core()->current_light()->diffuse());
+			this->m_shader->set_vec3("u_Light.specular", this->core()->current_light()->specular());
 
-		this->m_model->m_model->draw(m_shader->shader());
+			this->m_shader->set_bool("u_Attenuation", this->m_attenuation);
+		}
+
+		this->m_model->m_model->draw(this->m_shader->shader());
 	}
 
 	void ModelRenderer::shader(std::shared_ptr<Shader> shader)
@@ -46,5 +56,15 @@ namespace xTech
 	void ModelRenderer::model(std::shared_ptr<Model> model)
 	{
 		this->m_model = model;
+	}
+
+	void ModelRenderer::attenuation(bool attenuation)
+	{
+		this->m_attenuation = attenuation;
+	}
+
+	bool ModelRenderer::attenuation() const
+	{
+		return this->m_attenuation;
 	}
 }
