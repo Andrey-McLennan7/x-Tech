@@ -5,7 +5,7 @@
 
 namespace xTech
 {
-	enum Button
+	enum MouseButton
 	{
 		MOUSE_SCROLL_UP = 1,
 		MOUSE_SCROLL_DOWN = -1,

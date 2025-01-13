@@ -7,7 +7,7 @@
 
 namespace xTech
 {
-    enum Controller
+    enum ControllerButton
     {
         CONTROLLER_BUTTON_INV = SDL_CONTROLLER_BUTTON_INVALID,
 

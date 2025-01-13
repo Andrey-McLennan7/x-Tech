@@ -76,8 +76,8 @@ namespace xTech
 		std::shared_ptr<Window> window() const;
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
-		std::shared_ptr<Camera> camera(int index) const;
-		std::shared_ptr<PointLight> light(int index) const;
+		std::shared_ptr<Camera> camera(int index = 0) const;
+		std::shared_ptr<PointLight> light(int index = 0) const;
 
 		template<typename T>
 		void find(std::vector<std::shared_ptr<T>>& out);

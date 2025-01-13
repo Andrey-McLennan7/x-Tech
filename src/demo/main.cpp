@@ -26,12 +26,12 @@ public:
 
 	virtual void on_tick() override
 	{
-		// Entity Movement
+		// Keyboard
 		vec3 position{ 0.0f };
 
-		if (this->input()->is_key(KEY_W))
+		if (this->input()->keyboard()->is(KEY_W))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				position.z -= speed * this->delta_time();
 			}
@@ -41,14 +41,14 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_A))
+		if (this->input()->keyboard()->is(KEY_A))
 		{
 			position.x -= speed * this->delta_time();
 		}
 
-		if (this->input()->is_key(KEY_S))
+		if (this->input()->keyboard()->is(KEY_S))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				position.z += speed * this->delta_time();
 			}
@@ -58,65 +58,66 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_D))
+		if (this->input()->keyboard()->is(KEY_D))
 		{
 			position.x += speed * this->delta_time();
 		}
 
-		if (this->input()->is_key(KEY_LBRACKET))
+		if (this->input()->keyboard()->is(KEY_LBRACKET))
 		{
 			this->scale(vec3{ this->scale() - 0.5f * this->delta_time() });
 		}
 
-		if (this->input()->is_key(KEY_RBRACKET))
+		if (this->input()->keyboard()->is(KEY_RBRACKET))
 		{
 			this->scale(vec3{ this->scale() + 0.5f * this->delta_time() });
 		}
 
-		if (this->input()->is_key(KEY_COMMA))
+		if (this->input()->keyboard()->is(KEY_COMMA))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
 		}
 		
-		if (this->input()->is_key(KEY_DOT))
+		if (this->input()->keyboard()->is(KEY_DOT))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 		}
 
-		if (this->input()->joy_stick_direction_x() != 0)
+		// Controller
+		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
 		{
-			int x = this->input()->joy_stick_direction_x();
-			position.x += x * this->speed * this->delta_time();
-		}
+			if (this->input()->controller(i)->joy_stick_direction() != ivec2{ 0 })
+			{
+				int x = this->input()->controller(i)->joy_stick_direction().x;
+				int y = this->input()->controller(i)->joy_stick_direction().y;
 
-		if (this->input()->joy_stick_direction_y() != 0)
-		{
-			int y = this->input()->joy_stick_direction_y();
-			position.y += y * this->speed * this->delta_time();
-		}
+				position.x += x * this->speed * this->delta_time();
+				position.y += y * this->speed * this->delta_time();
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_A))
-		{
-			this->renderer->colour(vec3{ 0.0f, 255.0f, 0.0f });
-			std::cout << "Colour changes to green" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_A))
+			{
+				this->renderer->colour(vec3{ 0.0f, 255.0f, 0.0f });
+				std::cout << "Colour changes to green" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_B))
-		{
-			this->renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
-			std::cout << "Colour changes to red" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_B))
+			{
+				this->renderer->colour(vec3{ 255.0f, 0.0f, 0.0f });
+				std::cout << "Colour changes to red" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_X))
-		{
-			this->renderer->colour(vec3{ 0.0f, 0.0f, 255.0f });
-			std::cout << "Colour changes to green" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_X))
+			{
+				this->renderer->colour(vec3{ 0.0f, 0.0f, 255.0f });
+				std::cout << "Colour changes to green" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_Y))
-		{
-			this->renderer->colour(vec3{ 255.0f, 255.0f, 0.0f });
-			std::cout << "Colour changes to red" << std::endl;
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_Y))
+			{
+				this->renderer->colour(vec3{ 255.0f, 255.0f, 0.0f });
+				std::cout << "Colour changes to red" << std::endl;
+			}
 		}
 
 		this->transform()->move(position);
@@ -130,35 +131,38 @@ public:
 
 	virtual void on_tick() override
 	{
-		if (this->input()->joy_stick_direction_x() != 0 || this->input()->joy_stick_direction_y() != 0)
+		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
 		{
-			std::cout << "Joy stick x-axis: " << this->input()->joy_stick_direction_x() << std::endl;
-			std::cout << "Joy stick y-axis: " << this->input()->joy_stick_direction_y() << std::endl;
-		}
+			if (this->input()->controller(i)->joy_stick_direction_x() != 0 || this->input()->controller(i)->joy_stick_direction_y() != 0)
+			{
+				std::cout << "Joy stick x-axis: " << this->input()->controller(i)->joy_stick_direction_x() << std::endl;
+				std::cout << "Joy stick y-axis: " << this->input()->controller(i)->joy_stick_direction_y() << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_A))
-		{
-			std::cout << "Controller button A pressed" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_A))
+			{
+				std::cout << "Controller button A pressed" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_UP))
-		{
-			std::cout << "Controller button DPAD UP pressed" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_UP))
+			{
+				std::cout << "Controller button DPAD UP pressed" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_DOWN))
-		{
-			std::cout << "Controller button DPAD DOWN pressed" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_DOWN))
+			{
+				std::cout << "Controller button DPAD DOWN pressed" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_LEFT))
-		{
-			std::cout << "Controller button DPAD LEFT pressed" << std::endl;
-		}
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_LEFT))
+			{
+				std::cout << "Controller button DPAD LEFT pressed" << std::endl;
+			}
 
-		if (this->input()->is_controller_button_pressed(CONTROLLER_BUTTON_DPAD_RIGHT))
-		{
-			std::cout << "Controller button DPAD RIGHT pressed" << std::endl;
+			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_RIGHT))
+			{
+				std::cout << "Controller button DPAD RIGHT pressed" << std::endl;
+			}
 		}
 	}
 };
@@ -181,9 +185,9 @@ public:
 		// Entity Movement
 		vec3 position{ 0.0f };
 
-		if (this->input()->is_key(KEY_UP))
+		if (this->input()->keyboard()->is(KEY_UP))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				position.z -= speed * this->delta_time();
 			}
@@ -193,9 +197,9 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_LEFT))
+		if (this->input()->keyboard()->is(KEY_LEFT))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 			}
@@ -205,9 +209,9 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_DOWN))
+		if (this->input()->keyboard()->is(KEY_DOWN))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				position.z += speed * this->delta_time();
 			}
@@ -217,9 +221,9 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_RIGHT))
+		if (this->input()->keyboard()->is(KEY_RIGHT))
 		{
-			if (this->input()->is_key(KEY_LSHIFT))
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
 			{
 				this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
 			}
@@ -229,12 +233,12 @@ public:
 			}
 		}
 
-		if (this->input()->is_key(KEY_COMMA))
+		if (this->input()->keyboard()->is(KEY_COMMA))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
 		}
 
-		if (this->input()->is_key(KEY_DOT))
+		if (this->input()->keyboard()->is(KEY_DOT))
 		{
 			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
 		}
@@ -303,7 +307,7 @@ int safe_main()
 	std::shared_ptr<PointLight> light{ core->add_light() };
 	light->direction(light->position() - e1->position());
 
-	std::shared_ptr<Camera> camera{ core->camera(0) };
+	std::shared_ptr<Camera> camera{ core->camera() };
 
 	camera->entity()->add_component<CameraMover>();
 

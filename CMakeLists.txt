@@ -117,6 +117,14 @@ add_library(x-Tech
 	src/x-Tech/Shape.cpp
 	src/x-Tech/PointLight.h
 	src/x-Tech/PointLight.cpp
+	src/x-Tech/InputDevice.h
+	src/x-Tech/InputDevice.cpp
+	src/x-Tech/Keyboard.h
+	src/x-Tech/Keyboard.cpp
+	src/x-Tech/Mouse.h
+	src/x-Tech/Mouse.cpp
+	src/x-Tech/Controller.h
+	src/x-Tech/Controller.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd)
