@@ -45,7 +45,7 @@ namespace xTech
 	{
 		if (this->m_controllers.empty())
 		{
-			throw std::runtime_error("ERROR::NO CONTROLLERS ARE CONNECTED");
+			throw std::runtime_error("ERROR::NO CONTROLLER IS CONNECTED");
 		}
 
 		if (index < 0)

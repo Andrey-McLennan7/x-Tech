@@ -137,9 +137,9 @@ namespace xTech
 
 				if (0 == e.jaxis.axis)
 				{
-					if (e.jaxis.value > this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 					{
-						if (this->m_input->controller(e.jdevice.which)->m_invert_x)
+						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
 						{
 							x = -1;
 						}
@@ -148,9 +148,9 @@ namespace xTech
 							x = 1;
 						}
 					}
-					else if (e.jaxis.value < -this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 					{
-						if (this->m_input->controller(e.jdevice.which)->m_invert_x)
+						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
 						{
 							x = 1;
 						}
@@ -166,9 +166,9 @@ namespace xTech
 				}
 				else if (1 == e.jaxis.axis)
 				{
-					if (e.jaxis.value > this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 					{
-						if (this->m_input->controller(e.jdevice.which)->m_invert_y)
+						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
 						{
 							y = -1;
 						}
@@ -177,9 +177,9 @@ namespace xTech
 							y = 1;
 						}
 					}
-					else if (e.jaxis.value < -this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 					{
-						if (this->m_input->controller(e.jdevice.which)->m_invert_y)
+						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
 						{
 							y = 1;
 						}
@@ -196,24 +196,24 @@ namespace xTech
 
 				if (0 == e.jaxis.which)
 				{
-					this->m_input->controller(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
+					this->m_input->m_controllers.at(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
 				}
 			}
 
 			// Read button inputs
 			if (SDL_JOYBUTTONDOWN == e.type)
 			{
-				this->m_input->controller(e.jdevice.which)->m_is.push_back(e.jbutton.button);
-				this->m_input->controller(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
+				this->m_input->m_controllers.at(e.jdevice.which)->m_is.push_back(e.jbutton.button);
+				this->m_input->m_controllers.at(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
 			}
 			else if (SDL_JOYBUTTONUP == e.type)
 			{
 				std::vector<int>::iterator itr;
-				for (itr = this->m_input->controller(e.jdevice.which)->m_is.begin(); itr != this->m_input->controller(e.jdevice.which)->m_is.end();)
+				for (itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.begin(); itr != this->m_input->m_controllers.at(e.jdevice.which)->m_is.end();)
 				{
 					if (e.jbutton.button == *itr)
 					{
-						itr = this->m_input->controller(e.jdevice.which)->m_is.erase(itr);
+						itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.erase(itr);
 					}
 					else
 					{
@@ -221,7 +221,7 @@ namespace xTech
 					}
 				}
 
-				this->m_input->controller(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
+				this->m_input->m_controllers.at(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
 			}
 		}
 	}
