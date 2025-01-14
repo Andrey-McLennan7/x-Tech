@@ -62,6 +62,8 @@ add_library(rend
 	src/rend/Quad.cpp
 	src/rend/Cube.h
 	src/rend/Cube.cpp
+	src/rend/Font.h
+	src/rend/Font.cpp
 )
 
 add_library(x-Tech
@@ -125,9 +127,13 @@ add_library(x-Tech
 	src/x-Tech/Mouse.cpp
 	src/x-Tech/Controller.h
 	src/x-Tech/Controller.cpp
+	src/x-Tech/Font.h
+	src/x-Tech/Font.cpp
+	src/x-Tech/GuiRenderer.h
+	src/x-Tech/GuiRenderer.cpp
 )
 
-target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd)
+target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd freetype)
 
 target_link_libraries(x-Tech rend)
 
