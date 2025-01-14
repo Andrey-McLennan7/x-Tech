@@ -21,7 +21,8 @@ namespace xTech
 
 		SDL_Joystick* m_id;
 
-		glm::ivec2 m_joy_stick_direction;
+		glm::ivec2 m_left_analogue;
+		glm::ivec2 m_right_analogue;
 
 		int m_dead_zone;
 
@@ -32,10 +33,17 @@ namespace xTech
 
 		Controller(int dead_zone = 8000);
 
-		glm::ivec2 joy_stick_direction() const;
+		glm::ivec2 left_analogue() const;
+		glm::ivec2 right_analogue() const;
 
-		int joy_stick_direction_x() const;
-		int joy_stick_direction_y() const;
+		int left_analogue_x() const;
+		int left_analogue_y() const;
+
+		int right_analogue_x() const;
+		int right_analogue_y() const;
+
+		bool left_analogue_in_motion() const;
+		bool right_analogue_in_motion() const;
 
 		void dead_zone(int dead_zone);
 		int dead_zone() const;

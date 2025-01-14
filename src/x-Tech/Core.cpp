@@ -129,106 +129,99 @@ namespace xTech
 			}
 
 			// Read controller inputs
-			std::vector<std::shared_ptr<Controller>>::iterator controller;
-			for (controller = this->m_input->m_controllers.begin(); controller != this->m_input->m_controllers.end(); ++controller)
+			// Read analog joy-stick motion
+			if (SDL_JOYAXISMOTION == e.type)
 			{
-				// Read analog joy-stick motion
-				if (SDL_JOYAXISMOTION == e.type)
+				int x{ 0 };
+				int y{ 0 };
+
+				if (0 == e.jaxis.axis)
 				{
-					if (0 == e.jaxis.which)
+					if (e.jaxis.value > this->m_input->controller(e.jdevice.which)->m_dead_zone)
 					{
-						if (0 == e.jaxis.axis)
+						if (this->m_input->controller(e.jdevice.which)->m_invert_x)
 						{
-							int x{ 0 };
-
-							if (e.jaxis.value > (*controller)->m_dead_zone)
-							{
-								if ((*controller)->m_invert_x)
-								{
-									x = -1;
-								}
-								else
-								{
-									x = 1;
-								}
-							}
-							else if (e.jaxis.value < -(*controller)->m_dead_zone)
-							{
-								if ((*controller)->m_invert_x)
-								{
-									x = 1;
-								}
-								else
-								{
-									x = -1;
-								}
-							}
-							else
-							{
-								x = 0;
-							}
-
-							(*controller)->m_joy_stick_direction.x = x;
-						}
-						else if (1 == e.jaxis.axis)
-						{
-							int y{ 0 };
-
-							if (e.jaxis.value > (*controller)->m_dead_zone)
-							{
-								if ((*controller)->m_invert_y)
-								{
-									y = -1;
-								}
-								else
-								{
-									y = 1;
-								}
-							}
-							else if (e.jaxis.value < -(*controller)->m_dead_zone)
-							{
-								if ((*controller)->m_invert_y)
-								{
-									y = 1;
-								}
-								else
-								{
-									y = -1;
-								}
-							}
-							else
-							{
-								y = 0;
-							}
-
-							(*controller)->m_joy_stick_direction.y = y;
-						}
-					}
-				}
-
-				// Read button inputs
-				if (SDL_JOYBUTTONDOWN == e.type)
-				{
-					(*controller)->m_is.push_back(e.jbutton.button);
-					(*controller)->m_is_pressed.push_back(e.jbutton.button);
-				}
-				else if (SDL_JOYBUTTONUP == e.type)
-				{
-					std::vector<int>::iterator itr;
-					for (itr = (*controller)->m_is.begin(); itr != (*controller)->m_is.end();)
-					{
-						if (e.jbutton.button == *itr)
-						{
-							itr = (*controller)->m_is.erase(itr);
+							x = -1;
 						}
 						else
 						{
-							++itr;
+							x = 1;
 						}
 					}
-
-					(*controller)->m_is_released.push_back(e.jbutton.button);
+					else if (e.jaxis.value < -this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					{
+						if (this->m_input->controller(e.jdevice.which)->m_invert_x)
+						{
+							x = 1;
+						}
+						else
+						{
+							x = -1;
+						}
+					}
+					else
+					{
+						x = 0;
+					}
 				}
+				else if (1 == e.jaxis.axis)
+				{
+					if (e.jaxis.value > this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					{
+						if (this->m_input->controller(e.jdevice.which)->m_invert_y)
+						{
+							y = -1;
+						}
+						else
+						{
+							y = 1;
+						}
+					}
+					else if (e.jaxis.value < -this->m_input->controller(e.jdevice.which)->m_dead_zone)
+					{
+						if (this->m_input->controller(e.jdevice.which)->m_invert_y)
+						{
+							y = 1;
+						}
+						else
+						{
+							y = -1;
+						}
+					}
+					else
+					{
+						y = 0;
+					}
+				}
+
+				if (0 == e.jaxis.which)
+				{
+					this->m_input->controller(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
+				}
+			}
+
+			// Read button inputs
+			if (SDL_JOYBUTTONDOWN == e.type)
+			{
+				this->m_input->controller(e.jdevice.which)->m_is.push_back(e.jbutton.button);
+				this->m_input->controller(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
+			}
+			else if (SDL_JOYBUTTONUP == e.type)
+			{
+				std::vector<int>::iterator itr;
+				for (itr = this->m_input->controller(e.jdevice.which)->m_is.begin(); itr != this->m_input->controller(e.jdevice.which)->m_is.end();)
+				{
+					if (e.jbutton.button == *itr)
+					{
+						itr = this->m_input->controller(e.jdevice.which)->m_is.erase(itr);
+					}
+					else
+					{
+						++itr;
+					}
+				}
+
+				this->m_input->controller(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
 			}
 		}
 	}
@@ -312,7 +305,7 @@ namespace xTech
 
 	std::shared_ptr<Core> Core::initialize()
 	{
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
+		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		{
 			throw std::runtime_error("ERROR::FAILED TO INITIALIZE SDL2");
 		}

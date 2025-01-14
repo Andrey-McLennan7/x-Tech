@@ -107,10 +107,10 @@ public:
 		// Controller
 		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
 		{
-			if (this->input()->controller(i)->joy_stick_direction().length() < 0.1f)
+			if (this->input()->controller(i)->left_analogue().length() < 0.1f)
 			{
-				int x = this->input()->controller(i)->joy_stick_direction().x;
-				int y = this->input()->controller(i)->joy_stick_direction().y;
+				int x = this->input()->controller(i)->left_analogue().x;
+				int y = this->input()->controller(i)->left_analogue().y;
 
 				position.x += x * this->speed * this->delta_time();
 				position.y += y * this->speed * this->delta_time();
@@ -124,42 +124,77 @@ public:
 
 class ControllerDebug : public Component
 {
+	std::shared_ptr<Controller> controller;
+
 public:
+
+	virtual void on_initialize() override
+	{
+		controller = this->input()->controller();
+	}
 
 	virtual void on_tick() override
 	{
-		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
+		if (controller->left_analogue_in_motion())
 		{
-			if (this->input()->controller(i)->joy_stick_direction() != ivec2{ 0 })
-			{
-				std::cout << "Joy stick x-axis: " << this->input()->controller(i)->joy_stick_direction_x() << std::endl;
-				std::cout << "Joy stick y-axis: " << this->input()->controller(i)->joy_stick_direction_y() << std::endl;
-			}
+			std::cout << "Left Joy stick x-axis: " << controller->left_analogue().x << std::endl;
+			std::cout << "Left Joy stick y-axis: " << controller->left_analogue().y << std::endl;
+		}
 
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_A))
-			{
-				std::cout << "Controller button A pressed" << std::endl;
-			}
+		if (controller->right_analogue_in_motion())
+		{
+			std::cout << "Right Joy stick x-axis: " << controller->right_analogue().x << std::endl;
+			std::cout << "Right Joy stick y-axis: " << controller->right_analogue().y << std::endl;
+		}
 
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_UP))
-			{
-				std::cout << "Controller button DPAD UP pressed" << std::endl;
-			}
+		if (controller->is_pressed(CONTROLLER_BUTTON_A))
+		{
+			std::cout << "Controller button A pressed" << std::endl;
+		}
 
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_DOWN))
-			{
-				std::cout << "Controller button DPAD DOWN pressed" << std::endl;
-			}
+		if (controller->is_pressed(CONTROLLER_BUTTON_B))
+		{
+			std::cout << "Controller button B pressed" << std::endl;
+		}
 
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_LEFT))
-			{
-				std::cout << "Controller button DPAD LEFT pressed" << std::endl;
-			}
+		if (controller->is_pressed(CONTROLLER_BUTTON_X))
+		{
+			std::cout << "Controller button X pressed" << std::endl;
+		}
 
-			if (this->input()->controller(i)->is_pressed(CONTROLLER_BUTTON_DPAD_RIGHT))
-			{
-				std::cout << "Controller button DPAD RIGHT pressed" << std::endl;
-			}
+		if (controller->is_pressed(CONTROLLER_BUTTON_Y))
+		{
+			std::cout << "Controller button Y pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_START))
+		{
+			std::cout << "Controller button START pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_BACK))
+		{
+			std::cout << "Controller button BACK pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_LSHOULDER))
+		{
+			std::cout << "Controller button LEFT SHOULDER pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_RSHOULDER))
+		{
+			std::cout << "Controller button RIGHT SHOULDER pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_LSTICK))
+		{
+			std::cout << "Controller button LEFT STICK pressed" << std::endl;
+		}
+
+		if (controller->is_pressed(CONTROLLER_BUTTON_RSTICK))
+		{
+			std::cout << "Controller button RIGHT STICK pressed" << std::endl;
 		}
 	}
 };
@@ -274,6 +309,10 @@ int safe_main()
 	e1->add_component<Player>();
 
 	e1->position(vec3{ 0.0f, 0.0f, -5.0f });
+
+	std::shared_ptr<Entity> e2{ core->add_entity() };
+
+	e2->add_component<ControllerDebug>();
 
 	// Add light
 	std::shared_ptr<Entity> light{ core->add_entity() };
