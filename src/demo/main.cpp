@@ -199,76 +199,6 @@ public:
 	}
 };
 
-class CameraMover : public Component
-{
-private:
-
-	float speed;
-
-public:
-
-	virtual void on_initialize() override
-	{
-		this->speed = 5.0f;
-	}
-
-	virtual void on_tick() override
-	{
-		// Entity Movement
-		vec3 position{ 0.0f };
-
-		if (this->input()->keyboard()->is(KEY_UP))
-		{
-			if (this->input()->keyboard()->is(KEY_LSHIFT))
-			{
-				position.z -= speed * this->delta_time();
-			}
-			else
-			{
-				position.y += speed * this->delta_time();
-			}
-		}
-
-		if (this->input()->keyboard()->is(KEY_LEFT))
-		{
-			if (this->input()->keyboard()->is(KEY_LSHIFT))
-			{
-				this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
-			}
-			else
-			{
-				position.x -= speed * this->delta_time();
-			}
-		}
-
-		if (this->input()->keyboard()->is(KEY_DOWN))
-		{
-			if (this->input()->keyboard()->is(KEY_LSHIFT))
-			{
-				position.z += speed * this->delta_time();
-			}
-			else
-			{
-				position.y -= speed * this->delta_time();
-			}
-		}
-
-		if (this->input()->keyboard()->is(KEY_RIGHT))
-		{
-			if (this->input()->keyboard()->is(KEY_LSHIFT))
-			{
-				this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
-			}
-			else
-			{
-				position.x += speed * this->delta_time();
-			}
-		}
-
-		this->transform()->move(position);
-	}
-};
-
 int safe_main();
 
 int main()
@@ -319,7 +249,6 @@ int safe_main()
 	std::shared_ptr<PointLight> light_comp{ light->add_component<PointLight>() };
 
 	// Camera
-	core->camera()->entity()->add_component<CameraMover>();
 	core->camera()->entity()->position(vec3{ 0.0f, 0.0f, 50.0f });
 
 	core->run();
