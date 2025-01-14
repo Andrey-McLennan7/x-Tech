@@ -6,7 +6,9 @@
 #include "Component.h"
 
 #include <glm/glm.hpp>
+
 #include <memory>
+#include <string>
 
 namespace xTech
 {
@@ -24,7 +26,7 @@ namespace xTech
 		virtual void on_initialize() override;
 
 		// Camera transformation matricies
-		glm::mat4 projection_matrix() const;
+		glm::mat4 projection_matrix(const std::string& type = "PERSPECTIVE") const;
 		glm::mat4 view_matrix() const;
 
 		// Camera options
