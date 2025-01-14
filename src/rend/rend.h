@@ -12,5 +12,6 @@
 #include "Quad.h"
 #include "Cube.h"
 #include "Pyramid.h"
+#include "Font.h"
 
 #endif

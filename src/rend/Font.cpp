@@ -1,30 +1,26 @@
 #include "Font.h"
 #include "Shader.h"
 
-#include <iostream>
+#include <stdexcept>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 namespace rend
 {
-	Font::Font(std::string path) :
-		m_success{ true }
+	Font::Font(const std::string& path)
 	{
 		FT_Library ft;
 
 		if (FT_Init_FreeType(&ft))
 		{
-			this->m_error = "COULD NOT INITIALISE FREETYPE LIBRARY";
-			this->m_success = false;
-			return;
+			throw std::runtime_error("ERROR::FAILED TO INITIALISE FREETPE");
 		}
 
 		FT_Face face;
 		if (FT_New_Face(ft, path.c_str(), 0, &face))
 		{
-			this->m_error = "FAILED TO LOAD FONT";
-			this->m_success = false;
-			return;
+			throw std::runtime_error("ERROR::FAILED TO LOAD FONT");
 		}
 
 		FT_Set_Pixel_Sizes(face, 0, 48);
@@ -36,7 +32,6 @@ namespace rend
 		{
 			if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 			{
-				std::cerr << "ERROR: FAILED TO LOAD GLYMPH" << std::endl;
 				continue;
 			}
 
@@ -76,14 +71,28 @@ namespace rend
 
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
+
+		glGenBuffers(1, &this->m_vbo);
+		glGenVertexArrays(1, &this->m_vao);
+
+		glBindVertexArray(this->m_vao);
+		glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
 	}
 
-	void Font::draw(GLuint vao, GLuint vbo, Shader* shader, const std::string& text, glm::vec2 position, float scale)
+	void Font::draw(Shader* shader, const std::string& text, glm::vec2 position, float scale)
 	{
 		shader->use();
 		glActiveTexture(GL_TEXTURE0);
 
-		glBindVertexArray(vao);
+		glBindVertexArray(this->m_vao);
 
 		// Iterate through all characters
 		for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
@@ -111,7 +120,7 @@ namespace rend
 			glBindTexture(GL_TEXTURE_2D, ch.textureID);
 
 			// Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBindBuffer(GL_ARRAY_BUFFER, this->m_vbo);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -121,7 +130,7 @@ namespace rend
 			position.x += (ch.advance >> 6) * scale;
 		}
 
-		glBindVertexArray(vao);
+		glBindVertexArray(this->m_vao);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		shader->unuse();

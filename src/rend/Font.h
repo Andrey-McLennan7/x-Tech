@@ -27,16 +27,16 @@ namespace rend
 	{
 	private:
 
-		std::map<char, Character> m_characters;
+		GLuint m_vao;
+		GLuint m_vbo;
 
-		std::string m_error;
-		bool m_success;
+		std::map<char, Character> m_characters;
 
 	public:
 
-		Font(std::string path);
+		Font(const std::string& path);
 
-		void draw(GLuint vao, GLuint vbo, Shader* shader, const std::string& text, glm::vec2 position = glm::vec2(0.0f), float scale = 1.0f);
+		void draw(Shader* shader, const std::string& text, glm::vec2 position = glm::vec2(0.0f), float scale = 1.0f);
 	};
 }
 
