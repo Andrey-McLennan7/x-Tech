@@ -11,6 +11,7 @@
 namespace xTech
 {
 	class GuiRenderer;
+	class Shader;
 
 	class Font : public Resource
 	{
@@ -23,6 +24,8 @@ namespace xTech
 	private:
 
 		virtual void on_load() override;
+
+		void draw(std::shared_ptr<Shader> shader);
 
 		friend class GuiRenderer;
 	};

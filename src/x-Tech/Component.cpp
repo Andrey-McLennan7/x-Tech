@@ -111,6 +111,11 @@ namespace xTech
 		return this->entity()->scale();
 	}
 
+	void Component::lock_scale(bool lock)
+	{
+		this->entity()->lock_scale(lock);
+	}
+
 	void Component::name(const std::string& name)
 	{
 		this->entity()->name(name);

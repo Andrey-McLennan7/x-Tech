@@ -106,6 +106,11 @@ namespace xTech
 		return this->m_transform.lock()->scale();
 	}
 
+	void Entity::lock_scale(bool lock)
+	{
+		this->m_transform.lock()->lock_scale(lock);
+	}
+
 	void Entity::name(const std::string& name)
 	{
 		std::vector<std::shared_ptr<Entity>>::const_iterator itr;

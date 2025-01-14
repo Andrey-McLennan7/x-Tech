@@ -5,6 +5,8 @@ namespace xTech
 {
 	void Transform::on_initialize()
 	{
+		this->m_lock_scale = false;
+
 		this->m_position = glm::vec3{ 0.0f };
 		this->m_rotation = glm::vec3{ 0.0f };
 		this->m_scale = glm::vec3{ 1.0f };
@@ -36,19 +38,14 @@ namespace xTech
 		this->m_position = position;
 	}
 
-	void Transform::rotation(const glm::vec3& rotation)
-	{
-		this->m_rotation = rotation;
-	}
-
-	void Transform::scale(const glm::vec3& scale)
-	{
-		this->m_scale = scale;
-	}
-
 	glm::vec3 Transform::position() const
 	{
 		return this->m_position;
+	}
+
+	void Transform::rotation(const glm::vec3& rotation)
+	{
+		this->m_rotation = rotation;
 	}
 
 	glm::vec3 Transform::rotation() const
@@ -56,8 +53,33 @@ namespace xTech
 		return this->m_rotation;
 	}
 
+	void Transform::scale(const glm::vec3& scale)
+	{
+		if (this->m_lock_scale)
+		{
+			float v1{ (float)std::max(scale.x, scale.y) };
+			float v2{ (float)std::max(v1, scale.z) };
+
+			this->m_scale = glm::vec3{ v2 };
+		}
+		else
+		{
+			this->m_scale = scale;
+		}
+	}
+
+	void Transform::scale(float scale)
+	{
+		this->scale(scale);
+	}
+
 	glm::vec3 Transform::scale() const
 	{
 		return this->m_scale;
+	}
+
+	void Transform::lock_scale(bool lock)
+	{
+		this->m_lock_scale = lock;
 	}
 }

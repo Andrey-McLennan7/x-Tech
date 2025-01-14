@@ -63,7 +63,7 @@ namespace xTech
 		std::shared_ptr<Window> window() const;
 		std::shared_ptr<Cache> cache() const;
 		std::shared_ptr<Input> input() const;
-		std::shared_ptr<Camera> camera(int index) const;
+		std::shared_ptr<Camera> camera(int index = 0) const;
 		
 		// Setter/Getters
 		void position(const glm::vec3& position);
@@ -74,6 +74,8 @@ namespace xTech
 
 		void scale(const glm::vec3& scale);
 		glm::vec3 scale() const;
+
+		void lock_scale(bool lock);
 
 		void name(const std::string& name);
 		std::string name() const;

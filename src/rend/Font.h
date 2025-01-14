@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 
 #include <string>
+#include <memory>
 #include <map>
 
 namespace rend
@@ -36,7 +37,7 @@ namespace rend
 
 		Font(const std::string& path);
 
-		void draw(Shader* shader, const std::string& text, glm::vec2 position = glm::vec2(0.0f), float scale = 1.0f);
+		void draw(std::shared_ptr<Shader> shader, const std::string& text, glm::vec2 position = glm::vec2(0.0f), float scale = 1.0f);
 	};
 }
 

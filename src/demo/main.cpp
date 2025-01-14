@@ -104,19 +104,6 @@ public:
 			sound->play();
 		}
 
-		// Controller
-		for (int i{ 0 }; i < this->input()->connected_controllers(); ++i)
-		{
-			if (this->input()->controller(i)->left_analogue().length() < 0.1f)
-			{
-				int x = this->input()->controller(i)->left_analogue().x;
-				int y = this->input()->controller(i)->left_analogue().y;
-
-				position.x += x * this->speed * this->delta_time();
-				position.y += y * this->speed * this->delta_time();
-			}
-		}
-
 		this->transform()->move(position);
 		this->collider->size(this->scale());
 	}
@@ -223,6 +210,9 @@ int safe_main()
 	std::shared_ptr<Core> core{ Core::initialize() };
 	core->add_entity()->add_component<Stop>();
 
+	float width{ (float)core->window()->size().x };
+	float height{ (float)core->window()->size().y };
+
 	// Create entity 1 and attach components
 	std::shared_ptr<Entity> e1{ core->add_entity() };
 	std::shared_ptr<ModelRenderer> e1_renderer{ e1->add_component<ModelRenderer>() };
@@ -241,8 +231,14 @@ int safe_main()
 	e1->position(vec3{ 0.0f, 0.0f, -5.0f });
 
 	std::shared_ptr<Entity> e2{ core->add_entity() };
+	std::shared_ptr<GuiRenderer2D> gui(e2->add_component<GuiRenderer2D>());
 
-	e2->add_component<ControllerDebug>();
+	gui->shader(core->cache()->load<Shader>("Shader/gui"));
+	gui->font(core->cache()->load<Font>("Font/batmfa"));
+	gui->text("test");
+	gui->position(glm::vec3{ width / 2.0f, height / 2.0f, 0.0f });
+
+	//e2->add_component<ControllerDebug>();
 
 	// Add light
 	std::shared_ptr<Entity> light{ core->add_entity() };

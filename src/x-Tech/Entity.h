@@ -68,6 +68,8 @@ namespace xTech
 		void scale(const glm::vec3& scale);
 		glm::vec3 scale() const;
 
+		void lock_scale(bool lock);
+
 		void name(const std::string& name);
 		std::string name() const;
 

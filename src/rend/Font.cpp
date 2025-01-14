@@ -87,7 +87,7 @@ namespace rend
 		glBindVertexArray(0);
 	}
 
-	void Font::draw(Shader* shader, const std::string& text, glm::vec2 position, float scale)
+	void Font::draw(std::shared_ptr<Shader> shader, const std::string& text, glm::vec2 position, float scale)
 	{
 		shader->use();
 		glActiveTexture(GL_TEXTURE0);
