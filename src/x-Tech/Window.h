@@ -26,7 +26,7 @@ namespace xTech
 	// Public member functions
 	public:
 
-		Window(int width = 1920, int height = 1080);
+		Window(int width = 1240, int height = 720);
 		~Window();
 
 		void tick();

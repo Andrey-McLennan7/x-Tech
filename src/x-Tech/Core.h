@@ -49,9 +49,6 @@ namespace xTech
 		std::weak_ptr<Core> m_self;
 		bool m_run;
 
-		// Background colour
-		glm::vec3 m_background_colour;
-
 	// Private member functions
 	private:
 
