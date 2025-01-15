@@ -128,100 +128,103 @@ namespace xTech
 				}
 			}
 
-			// Read controller inputs
-			// Read analog joy-stick motion
-			if (SDL_JOYAXISMOTION == e.type)
+			if (SDL_NumJoysticks() > 0)
 			{
-				int x{ 0 };
-				int y{ 0 };
-
-				if (0 == e.jaxis.axis)
+				// Read controller inputs
+				// Read analog joy-stick motion
+				if (SDL_JOYAXISMOTION == e.type)
 				{
-					if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+					int x{ 0 };
+					int y{ 0 };
+
+					if (0 == e.jaxis.axis)
 					{
-						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+						if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 						{
-							x = -1;
+							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+							{
+								x = -1;
+							}
+							else
+							{
+								x = 1;
+							}
+						}
+						else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						{
+							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+							{
+								x = 1;
+							}
+							else
+							{
+								x = -1;
+							}
 						}
 						else
 						{
-							x = 1;
+							x = 0;
 						}
 					}
-					else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+					else if (1 == e.jaxis.axis)
 					{
-						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+						if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
 						{
-							x = 1;
+							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
+							{
+								y = -1;
+							}
+							else
+							{
+								y = 1;
+							}
+						}
+						else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						{
+							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
+							{
+								y = 1;
+							}
+							else
+							{
+								y = -1;
+							}
 						}
 						else
 						{
-							x = -1;
+							y = 0;
 						}
 					}
-					else
+
+					if (0 == e.jaxis.which)
 					{
-						x = 0;
+						this->m_input->m_controllers.at(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
 					}
 				}
-				else if (1 == e.jaxis.axis)
+
+				// Read button inputs
+				if (SDL_JOYBUTTONDOWN == e.type)
 				{
-					if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+					this->m_input->m_controllers.at(e.jdevice.which)->m_is.push_back(e.jbutton.button);
+					this->m_input->m_controllers.at(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
+				}
+				else if (SDL_JOYBUTTONUP == e.type)
+				{
+					std::vector<int>::iterator itr;
+					for (itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.begin(); itr != this->m_input->m_controllers.at(e.jdevice.which)->m_is.end();)
 					{
-						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
+						if (e.jbutton.button == *itr)
 						{
-							y = -1;
+							itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.erase(itr);
 						}
 						else
 						{
-							y = 1;
+							++itr;
 						}
 					}
-					else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
-					{
-						if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
-						{
-							y = 1;
-						}
-						else
-						{
-							y = -1;
-						}
-					}
-					else
-					{
-						y = 0;
-					}
-				}
 
-				if (0 == e.jaxis.which)
-				{
-					this->m_input->m_controllers.at(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
+					this->m_input->m_controllers.at(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
 				}
-			}
-
-			// Read button inputs
-			if (SDL_JOYBUTTONDOWN == e.type)
-			{
-				this->m_input->m_controllers.at(e.jdevice.which)->m_is.push_back(e.jbutton.button);
-				this->m_input->m_controllers.at(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
-			}
-			else if (SDL_JOYBUTTONUP == e.type)
-			{
-				std::vector<int>::iterator itr;
-				for (itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.begin(); itr != this->m_input->m_controllers.at(e.jdevice.which)->m_is.end();)
-				{
-					if (e.jbutton.button == *itr)
-					{
-						itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.erase(itr);
-					}
-					else
-					{
-						++itr;
-					}
-				}
-
-				this->m_input->m_controllers.at(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
 			}
 		}
 	}
