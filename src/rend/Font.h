@@ -21,7 +21,6 @@ namespace rend
 		glm::ivec2 bearing;
 	};
 
-	class GUI;
 	class Shader;
 
 	class Font
@@ -37,7 +36,7 @@ namespace rend
 
 		Font(const std::string& path);
 
-		void draw(std::shared_ptr<Shader> shader, const std::string& text, glm::vec2 position = glm::vec2(0.0f), float scale = 1.0f);
+		void draw(std::shared_ptr<Shader> shader, const std::string& text, glm::vec2 position = glm::vec2{ 0.0f }, float scale = 1.0f);
 	};
 }
 

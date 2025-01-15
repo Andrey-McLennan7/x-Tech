@@ -30,12 +30,13 @@ namespace xTech
 	public:
 
 		Input();
+		~Input();
 
 		std::shared_ptr<Keyboard> keyboard();
 		std::shared_ptr<Mouse> mouse();
 
 		std::shared_ptr<Controller> controller(int index = 0);
-		int connected_controllers() const;
+		int controller_number() const;
 
 		friend class Core;
 	};

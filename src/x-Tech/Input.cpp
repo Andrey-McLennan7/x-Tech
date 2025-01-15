@@ -31,6 +31,17 @@ namespace xTech
 		}
 	}
 
+	Input::~Input()
+	{
+		std::vector<std::shared_ptr<Controller>>::iterator itr;
+		for (itr = this->m_controllers.begin(); itr != this->m_controllers.end(); ++itr)
+		{
+			SDL_JoystickClose((*itr)->m_id);
+		}
+
+		this->m_controllers.clear();
+	}
+
 	std::shared_ptr<Keyboard> Input::keyboard()
 	{
 		return this->m_keyboard;
@@ -60,7 +71,7 @@ namespace xTech
 		return this->m_controllers[index];
 	}
 
-	int Input::connected_controllers() const
+	int Input::controller_number() const
 	{
 		return this->m_controllers.size();
 	}
