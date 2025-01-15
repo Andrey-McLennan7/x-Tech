@@ -117,71 +117,77 @@ public:
 
 	virtual void on_initialize() override
 	{
-		controller = this->input()->controller();
+		if (!this->input()->controllers_connected())
+		{
+			controller = this->input()->controller();
+		}
 	}
 
 	virtual void on_tick() override
 	{
-		if (controller->left_analogue_in_motion())
+		if (!this->input()->controllers_connected())
 		{
-			std::cout << "Left Joy stick x-axis: " << controller->left_analogue().x << std::endl;
-			std::cout << "Left Joy stick y-axis: " << controller->left_analogue().y << std::endl;
-		}
+			if (controller->left_analogue_in_motion())
+			{
+				std::cout << "Left Joy stick x-axis: " << controller->left_analogue().x << std::endl;
+				std::cout << "Left Joy stick y-axis: " << controller->left_analogue().y << std::endl;
+			}
 
-		if (controller->right_analogue_in_motion())
-		{
-			std::cout << "Right Joy stick x-axis: " << controller->right_analogue().x << std::endl;
-			std::cout << "Right Joy stick y-axis: " << controller->right_analogue().y << std::endl;
-		}
+			if (controller->right_analogue_in_motion())
+			{
+				std::cout << "Right Joy stick x-axis: " << controller->right_analogue().x << std::endl;
+				std::cout << "Right Joy stick y-axis: " << controller->right_analogue().y << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_A))
-		{
-			std::cout << "Controller button A pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_A))
+			{
+				std::cout << "Controller button A pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_B))
-		{
-			std::cout << "Controller button B pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_B))
+			{
+				std::cout << "Controller button B pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_X))
-		{
-			std::cout << "Controller button X pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_X))
+			{
+				std::cout << "Controller button X pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_Y))
-		{
-			std::cout << "Controller button Y pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_Y))
+			{
+				std::cout << "Controller button Y pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_START))
-		{
-			std::cout << "Controller button START pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_START))
+			{
+				std::cout << "Controller button START pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_BACK))
-		{
-			std::cout << "Controller button BACK pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_BACK))
+			{
+				std::cout << "Controller button BACK pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_LSHOULDER))
-		{
-			std::cout << "Controller button LEFT SHOULDER pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_LSHOULDER))
+			{
+				std::cout << "Controller button LEFT SHOULDER pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_RSHOULDER))
-		{
-			std::cout << "Controller button RIGHT SHOULDER pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_RSHOULDER))
+			{
+				std::cout << "Controller button RIGHT SHOULDER pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_LSTICK))
-		{
-			std::cout << "Controller button LEFT STICK pressed" << std::endl;
-		}
+			if (controller->is_pressed(CONTROLLER_BUTTON_LSTICK))
+			{
+				std::cout << "Controller button LEFT STICK pressed" << std::endl;
+			}
 
-		if (controller->is_pressed(CONTROLLER_BUTTON_RSTICK))
-		{
-			std::cout << "Controller button RIGHT STICK pressed" << std::endl;
+			if (controller->is_pressed(CONTROLLER_BUTTON_RSTICK))
+			{
+				std::cout << "Controller button RIGHT STICK pressed" << std::endl;
+			}
 		}
 	}
 };
@@ -241,7 +247,7 @@ int safe_main()
 	gui->text("test");
 	gui->position(glm::vec3{ width / 2.0f, height / 2.0f, 0.0f });
 
-	//e2->add_component<ControllerDebug>();
+	e2->add_component<ControllerDebug>();
 
 	// Add light
 	std::shared_ptr<Entity> light{ core->add_entity() };

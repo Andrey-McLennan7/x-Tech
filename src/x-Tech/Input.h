@@ -36,7 +36,9 @@ namespace xTech
 		std::shared_ptr<Mouse> mouse();
 
 		std::shared_ptr<Controller> controller(int index = 0);
-		int controller_number() const;
+
+		int controllers_number() const;
+		bool controllers_connected() const;
 
 		friend class Core;
 	};

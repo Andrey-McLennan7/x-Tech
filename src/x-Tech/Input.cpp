@@ -54,7 +54,7 @@ namespace xTech
 
 	std::shared_ptr<Controller> Input::controller(int index)
 	{
-		if (this->m_controllers.empty())
+		if (this->controllers_connected())
 		{
 			throw std::runtime_error("ERROR::NO CONTROLLER IS CONNECTED");
 		}
@@ -71,7 +71,12 @@ namespace xTech
 		return this->m_controllers[index];
 	}
 
-	int Input::controller_number() const
+	bool Input::controllers_connected() const
+	{
+		return this->m_controllers.empty();
+	}
+
+	int Input::controllers_number() const
 	{
 		return this->m_controllers.size();
 	}

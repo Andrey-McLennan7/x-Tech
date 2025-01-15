@@ -276,21 +276,41 @@ namespace xTech
 
 		glEnable(GL_DEPTH_TEST);
 
+		// Etirate through all cameras first
 		std::vector<std::weak_ptr<Camera>>::iterator c_itr;
 		for (c_itr = this->m_cameras.begin(); c_itr != this->m_cameras.end(); ++c_itr)
 		{
+			// Get current camera
 			this->m_current_camera = *c_itr;
 
-			std::vector<std::weak_ptr<PointLight>>::iterator l_itr;
-			for (l_itr = this->m_lights.begin(); l_itr != this->m_lights.end(); ++l_itr)
+			// Check if the scene has any lights
+			if (!this->m_lights.empty())
 			{
-				this->m_current_light = *l_itr;
-			}
+				// Iterate through each one if there is
+				std::vector<std::weak_ptr<PointLight>>::iterator l_itr;
+				for (l_itr = this->m_lights.begin(); l_itr != this->m_lights.end(); ++l_itr)
+				{
+					// Get current light
+					this->m_current_light = *l_itr;
 
-			std::vector<std::shared_ptr<Entity>>::iterator e_itr;
-			for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
+					// Iterate through each entity and draw them with the
+					// current light
+					std::vector<std::shared_ptr<Entity>>::iterator e_itr;
+					for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
+					{
+						(*e_itr)->display();
+					}
+				}
+			}
+			else
 			{
-				(*e_itr)->display();
+				// Iterate through each entity and draw them normally with
+				// the default values in fragment shader (one light source)
+				std::vector<std::shared_ptr<Entity>>::iterator e_itr;
+				for (e_itr = this->m_entities.begin(); e_itr < this->m_entities.end(); ++e_itr)
+				{
+					(*e_itr)->display();
+				}
 			}
 		}
 

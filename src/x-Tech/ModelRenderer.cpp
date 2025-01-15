@@ -44,6 +44,19 @@ namespace xTech
 
 			this->m_shader->set_bool("u_Attenuation", this->m_attenuation);
 		}
+		else
+		{
+			glm::vec3 light_pos{ 0.0f };
+
+			this->m_shader->set_vec3("u_Light.position", light_pos);
+			this->m_shader->set_vec3("u_Light.direction", glm::normalize(light_pos));
+
+			this->m_shader->set_vec3("u_Light.ambient", glm::vec3{ 0.8f });
+			this->m_shader->set_vec3("u_Light.diffuse", glm::vec3{ 0.4f });
+			this->m_shader->set_vec3("u_Light.specular", glm::vec3{ 0.5f });
+
+			this->m_shader->set_bool("u_Attenuation", true);
+		}
 
 		this->m_model->m_model->draw(this->m_shader->shader());
 	}
