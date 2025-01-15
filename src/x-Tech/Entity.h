@@ -5,9 +5,9 @@
 
 #include <glm/glm.hpp>
 
+#include <string>
 #include <memory>
 #include <vector>
-#include <stdexcept>
 
 namespace xTech
 {
@@ -41,6 +41,9 @@ namespace xTech
 		void display();
 
 		void gui();
+
+		template <typename T>
+		void remove_sub_str(std::basic_string<T>& s, const std::basic_string<T> p);
 
 	// Public member functions
 	public:
@@ -79,18 +82,38 @@ namespace xTech
 }
 
 #include "Component.h"
+#include <stdexcept>
 
 namespace xTech
 {
+	template <typename T>
+	void Entity::remove_sub_str(std::basic_string<T>& s, const std::basic_string<T> p)
+	{
+		std::basic_string<T>::size_type n{ p.length() };
+
+		for (std::basic_string<T>::size_type i{ s.find(p) };
+			i != std::basic_string<T>::npos; i = s.find(p))
+		{
+			s.erase(i, n);
+		}
+	}
+
 	template <typename T>
 	std::shared_ptr<T> Entity::add_component()
 	{
 		std::vector<std::shared_ptr<Component>>::iterator itr;
 		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			if (typeid(T) == typeid(*itr))
+			std::shared_ptr<T> test{ std::dynamic_pointer_cast<T>(*itr) };
+
+			if (test)
 			{
-				throw std::runtime_error("ERROR::UNABLE TO ADD MULTIPLE OF THE SAME COMPONENT");
+				std::string type{ typeid(T).name() };
+
+				this->remove_sub_str(type, std::string{ "class " });
+				this->remove_sub_str(type, std::string{ "xTech::" });
+
+				throw std::runtime_error("ERROR::\'" + this->m_name + "\' ALREADY HAS A COMPONENT OF TYPE \'" + type + "\' ");
 			}
 		}
 
@@ -110,7 +133,7 @@ namespace xTech
 		std::vector<std::shared_ptr<Component>>::iterator itr;
 		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
 		{
-			std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(*itr);
+			std::shared_ptr<T> rtn{ std::dynamic_pointer_cast<T>(*itr) };
 
 			if (rtn)
 			{

@@ -113,20 +113,32 @@ namespace xTech
 
 	void Entity::name(const std::string& name)
 	{
+		// Check if 'name' matches the names of other entities in core
 		std::vector<std::shared_ptr<Entity>>::const_iterator itr;
 		for (itr = this->core()->m_entities.begin(); itr != this->core()->m_entities.end(); ++itr)
 		{
+			// Ignore self
 			if ((*itr)->m_self.lock() == this->m_self.lock())
 			{
 				continue;
 			}
 
+			// Compare names
 			if (name == (*itr)->m_name)
 			{
 				throw std::runtime_error("ERROR::ENTITY NAMES CANNOT MATCH");
 			}
 		}
 
+		// Check if there is any space between words in 'name'
+		// all names should be ONE word
+		int(*IsSpace)(int) = std::isspace;
+		if (std::find_if(name.begin(), name.end(), IsSpace) != name.end())
+		{
+			throw std::runtime_error("ERROR::\'" + name + "\' SHOULD BE ONE WORD");
+		}
+
+		// Assign different name
 		this->m_name = name;
 	}
 

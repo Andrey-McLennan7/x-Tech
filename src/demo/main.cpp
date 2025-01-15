@@ -218,6 +218,9 @@ int safe_main()
 	std::shared_ptr<ModelRenderer> e1_renderer{ e1->add_component<ModelRenderer>() };
 	std::shared_ptr<SoundSource> e1_sound_source{ e1->add_component<SoundSource>() };
 
+	e1->name("SpaceShip");
+	//e1->add_component<SoundSource>();
+
 	e1_renderer->shader(core->cache()->load<Shader>("Shader/model"));
 	e1_renderer->model(core->cache()->load<Model>("Model/FA59AMako/FA59AMako"));
 	e1_renderer->attenuation(false);
