@@ -275,7 +275,7 @@ namespace xTech
 	void Core::do_render()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(this->m_background_colour.x, this->m_background_colour.y, this->m_background_colour.z, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -347,8 +347,6 @@ namespace xTech
 		// Create the main camera
 		std::shared_ptr<Entity> camera{ rtn->add_entity() };
 		camera->add_component<Camera>();
-
-		rtn->m_background_colour = glm::vec3{ 0.1f, 0.1f, 0.3f };
 
 		ALCdevice* device{ alcOpenDevice(NULL) };
 
@@ -483,15 +481,5 @@ namespace xTech
 		}
 
 		return this->m_lights[index].lock();
-	}
-
-	void Core::background(const glm::vec3& colour)
-	{
-		this->m_background_colour = colour / 256.0f;
-	}
-
-	glm::vec3 Core::background() const
-	{
-		return this->m_background_colour;
 	}
 }
