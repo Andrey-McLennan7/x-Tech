@@ -35,6 +35,8 @@ namespace xTech
 
 		float delta_time();
 
+		void resizable(bool resizable = true);
+
 		SDL_Window* ID();
 
 		friend Core;

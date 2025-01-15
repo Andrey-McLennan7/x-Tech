@@ -88,6 +88,18 @@ namespace xTech
 		return this->m_delta_time;
 	}
 
+	void Window::resizable(bool resizable)
+	{
+		if (resizable)
+		{
+			SDL_SetWindowResizable(this->m_id, SDL_TRUE);
+		}
+		else
+		{
+			SDL_SetWindowResizable(this->m_id, SDL_FALSE);
+		}
+	}
+
 	SDL_Window* Window::ID()
 	{
 		return this->m_id;
