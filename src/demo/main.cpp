@@ -215,6 +215,7 @@ int safe_main()
 	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
 	core->add_entity()->add_component<Stop>();
+	core->window()->resizable(false);
 
 	float width{ (float)core->window()->size().x };
 	float height{ (float)core->window()->size().y };
