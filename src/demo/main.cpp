@@ -1,4 +1,4 @@
-#include <x-Tech/Core.h>
+#include <x-Tech/x-Tech.h>
 
 #include <iostream>
 
@@ -23,6 +23,10 @@ int safe_main()
 	// Create core
 	std::shared_ptr<xTech::Core> core{ xTech::Core::initialize() };
 
+	// Prevent the window from being resized
+	core->window()->resizable(false);
+
+	// Run engine
 	core->run();
 
 	return 0;
