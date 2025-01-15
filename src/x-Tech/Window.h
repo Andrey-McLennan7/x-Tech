@@ -26,7 +26,7 @@ namespace xTech
 	// Public member functions
 	public:
 
-		Window(int width = 1920, int height = 1080);
+		Window(int width = 1240, int height = 720);
 		~Window();
 
 		void tick();
@@ -34,6 +34,8 @@ namespace xTech
 		glm::ivec2 size() const;
 
 		float delta_time();
+
+		void resizable(bool resizable = true);
 
 		SDL_Window* ID();
 
