@@ -73,6 +73,7 @@ namespace xTech
 		glm::vec3 rotation() const;
 
 		void scale(const glm::vec3& scale);
+		void scale(float scale);
 		glm::vec3 scale() const;
 
 		void lock_scale(bool lock);

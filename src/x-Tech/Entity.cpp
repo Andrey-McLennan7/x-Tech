@@ -101,6 +101,11 @@ namespace xTech
 		this->m_transform.lock()->scale(scale);
 	}
 
+	void Entity::scale(float scale)
+	{
+		this->m_transform.lock()->scale(scale);
+	}
+
 	glm::vec3 Entity::scale() const
 	{
 		return this->m_transform.lock()->scale();
