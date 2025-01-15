@@ -106,6 +106,11 @@ namespace xTech
 		this->entity()->scale(scale);
 	}
 
+	void Component::scale(float scale)
+	{
+		this->entity()->scale(scale);
+	}
+
 	glm::vec3 Component::scale() const
 	{
 		return this->entity()->scale();

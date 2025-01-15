@@ -70,7 +70,7 @@ namespace xTech
 
 	void Transform::scale(float scale)
 	{
-		this->scale(scale);
+		this->scale(glm::vec3{ scale });
 	}
 
 	glm::vec3 Transform::scale() const

@@ -55,7 +55,7 @@ namespace xTech
 			this->m_shader->set_vec3("u_Light.diffuse", glm::vec3{ 0.4f });
 			this->m_shader->set_vec3("u_Light.specular", glm::vec3{ 0.5f });
 
-			this->m_shader->set_bool("u_Attenuation", true);
+			this->m_shader->set_bool("u_Attenuation", false);
 		}
 
 		this->m_model->m_model->draw(this->m_shader->shader());
