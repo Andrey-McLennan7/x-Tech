@@ -83,7 +83,7 @@ namespace xTech
 
 		float delta_time() const;
 
-		friend Entity;
+		friend class Entity;
 	};
 }
 
