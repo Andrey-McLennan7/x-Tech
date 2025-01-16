@@ -78,8 +78,6 @@ add_library(x-Tech
 	src/x-Tech/Debug.cpp
 	src/x-Tech/Transform.h
 	src/x-Tech/Transform.cpp
-	src/x-Tech/2DTransform.h
-	src/x-Tech/2DTransform.cpp
 	src/x-Tech/Window.h
 	src/x-Tech/Window.cpp
 	src/x-Tech/Shader.h
@@ -131,8 +129,8 @@ add_library(x-Tech
 	src/x-Tech/Controller.cpp
 	src/x-Tech/Font.h
 	src/x-Tech/Font.cpp
-	src/x-Tech/2DGuiRenderer.h
-	src/x-Tech/2DGuiRenderer.cpp
+	src/x-Tech/TextRenderer.h
+	src/x-Tech/TextRenderer.cpp
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd freetype)

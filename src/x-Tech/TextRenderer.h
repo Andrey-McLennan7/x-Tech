@@ -14,7 +14,7 @@ namespace xTech
 	class Font;
 	class Shader;
 
-	class GuiRenderer2D : public Component
+	class TextRenderer : public Component
 	{
 	// Private data members
 	private:
@@ -23,6 +23,8 @@ namespace xTech
 		std::shared_ptr<Shader> m_shader;
 
 		std::string m_text;
+
+		glm::vec3 m_colour;
 
 	// Public member functions
 	public:
@@ -35,6 +37,9 @@ namespace xTech
 
 		void text(const std::string& text);
 		std::string text() const;
+
+		void colour(const glm::vec3& colour);
+		glm::vec3 colour() const;
 	};
 }
 
