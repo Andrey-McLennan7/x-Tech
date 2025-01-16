@@ -49,7 +49,7 @@ namespace xTech
 #include "Shape.h"
 #include "ShapeRenderer.h"
 #include "PointLight.h"
-#include "2DGuiRenderer.h"
+#include "TextRenderer.h"
 #include "Font.h"
 
 #endif

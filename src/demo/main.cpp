@@ -237,8 +237,9 @@ int safe_main()
 	e1->position(vec3{ 0.0f, 0.0f, -5.0f });
 
 	std::shared_ptr<Entity> e2{ core->add_entity() };
-	std::shared_ptr<GuiRenderer2D> gui(e2->add_component<GuiRenderer2D>());
+	std::shared_ptr<TextRenderer> gui(e2->add_component<TextRenderer>());
 
+	gui->colour(vec3{ 191.0f / 255.0f });
 	gui->shader(core->cache()->load<Shader>("Shader/gui"));
 	gui->font(core->cache()->load<Font>("Font/batmfa"));
 	gui->text("test");
