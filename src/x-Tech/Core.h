@@ -61,6 +61,8 @@ namespace xTech
 		void do_tick();
 		void do_render();
 
+		int controller_index(int controller_id);
+
 	// Public member functions
 	public:
 
@@ -80,9 +82,6 @@ namespace xTech
 		std::shared_ptr<Input> input() const;
 		std::shared_ptr<Camera> camera(int index = 0) const;
 		std::shared_ptr<PointLight> light(int index = 0) const;
-
-		void background(const glm::vec3& colour);
-		glm::vec3 background() const;
 
 		template<typename T>
 		void find(std::vector<std::shared_ptr<T>>& out);

@@ -19,7 +19,7 @@ namespace xTech
 	{
 	private:
 
-		SDL_Joystick* m_id;
+		int m_id;
 
 		glm::ivec2 m_left_analogue;
 		glm::ivec2 m_right_analogue;

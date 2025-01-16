@@ -32,7 +32,7 @@ public:
 
 	virtual void on_initialize() override
 	{
-		this->speed = 5.0f;
+		this->speed = 50.0f;
 
 		this->collider = this->entity()->get_component<BoxCollider>();
 		this->renderer = this->entity()->get_component<ModelRenderer>();
@@ -104,6 +104,16 @@ public:
 			sound->play();
 		}
 
+		// Controller
+		if (this->input()->controllers_connected())
+		{
+			if (this->input()->controller()->left_analogue_in_motion())
+			{
+				position.x += (this->input()->controller()->left_analogue().x * speed) * this->delta_time();
+				position.y += (this->input()->controller()->left_analogue().y * speed) * this->delta_time();
+			}
+		}
+
 		this->transform()->move(position);
 		this->collider->size(this->scale());
 	}
@@ -111,32 +121,18 @@ public:
 
 class ControllerDebug : public Component
 {
-	std::shared_ptr<Controller> controller;
-
 public:
-
-	virtual void on_initialize() override
-	{
-		if (!this->input()->controllers_connected())
-		{
-			controller = this->input()->controller();
-		}
-	}
 
 	virtual void on_tick() override
 	{
-		if (!this->input()->controllers_connected())
+		if (this->input()->controllers_connected())
 		{
+			std::shared_ptr<Controller> controller{ this->input()->controller() };
+
 			if (controller->left_analogue_in_motion())
 			{
 				std::cout << "Left Joy stick x-axis: " << controller->left_analogue().x << std::endl;
 				std::cout << "Left Joy stick y-axis: " << controller->left_analogue().y << std::endl;
-			}
-
-			if (controller->right_analogue_in_motion())
-			{
-				std::cout << "Right Joy stick x-axis: " << controller->right_analogue().x << std::endl;
-				std::cout << "Right Joy stick y-axis: " << controller->right_analogue().y << std::endl;
 			}
 
 			if (controller->is_pressed(CONTROLLER_BUTTON_A))
@@ -248,7 +244,7 @@ int safe_main()
 	gui->text("test");
 	gui->position(glm::vec3{ width / 2.0f, height / 2.0f, 0.0f });
 
-	e2->add_component<ControllerDebug>();
+	//e2->add_component<ControllerDebug>();
 
 	// Add light
 	std::shared_ptr<Entity> light{ core->add_entity() };

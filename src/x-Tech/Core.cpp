@@ -128,20 +128,53 @@ namespace xTech
 				}
 			}
 
+			// Check for any added controller
+			if (SDL_JOYDEVICEADDED == e.type)
+			{
+				std::shared_ptr<Controller> controller{ std::make_shared<Controller>() };
+
+				this->m_input->m_controllers.push_back(controller);
+				controller->m_id = e.jaxis.which;
+				
+				SDL_JoystickOpen(controller->m_id);
+
+				std::cout << "Controller " << controller->m_id << ": connected" << std::endl;
+			}
+
+			// Check for any removed controller
+			if (SDL_JOYDEVICEREMOVED == e.type)
+			{
+				std::vector<std::shared_ptr<Controller>>::iterator itr;
+				for (itr = this->m_input->m_controllers.begin(); itr != this->m_input->m_controllers.end();)
+				{
+					if ((*itr)->m_id == e.jaxis.which)
+					{
+						std::cout << "Controller " << (*itr)->m_id << ": disconnected" << std::endl;
+
+						SDL_JoystickClose(SDL_JoystickFromInstanceID((*itr)->m_id));
+						itr = this->m_input->m_controllers.erase(itr);
+					}
+					else
+					{
+						++itr;
+					}
+				}
+			}
+
 			if (SDL_NumJoysticks() > 0)
 			{
 				// Read controller inputs
 				// Read analog joy-stick motion
 				if (SDL_JOYAXISMOTION == e.type)
 				{
-					int x{ 0 };
-					int y{ 0 };
+					int x{ this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->left_analogue().x };
+					int y{ this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->left_analogue().y };
 
 					if (0 == e.jaxis.axis)
 					{
-						if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						if (e.jaxis.value > this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_dead_zone)
 						{
-							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+							if (this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_invert_x)
 							{
 								x = -1;
 							}
@@ -150,9 +183,9 @@ namespace xTech
 								x = 1;
 							}
 						}
-						else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						else if (e.jaxis.value < -this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_dead_zone)
 						{
-							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_x)
+							if (this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_invert_x)
 							{
 								x = 1;
 							}
@@ -168,9 +201,9 @@ namespace xTech
 					}
 					else if (1 == e.jaxis.axis)
 					{
-						if (e.jaxis.value > this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						if (e.jaxis.value > this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_dead_zone)
 						{
-							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
+							if (this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_invert_y)
 							{
 								y = -1;
 							}
@@ -179,9 +212,9 @@ namespace xTech
 								y = 1;
 							}
 						}
-						else if (e.jaxis.value < -this->m_input->m_controllers.at(e.jdevice.which)->m_dead_zone)
+						else if (e.jaxis.value < -this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_dead_zone)
 						{
-							if (this->m_input->m_controllers.at(e.jdevice.which)->m_invert_y)
+							if (this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_invert_y)
 							{
 								y = 1;
 							}
@@ -198,24 +231,24 @@ namespace xTech
 
 					if (0 == e.jaxis.which)
 					{
-						this->m_input->m_controllers.at(e.jdevice.which)->m_left_analogue = glm::ivec2{ x, y };
+						this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_left_analogue = glm::ivec2{ x, y };
 					}
 				}
 
 				// Read button inputs
 				if (SDL_JOYBUTTONDOWN == e.type)
 				{
-					this->m_input->m_controllers.at(e.jdevice.which)->m_is.push_back(e.jbutton.button);
-					this->m_input->m_controllers.at(e.jdevice.which)->m_is_pressed.push_back(e.jbutton.button);
+					this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is.push_back(e.jbutton.button);
+					this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is_pressed.push_back(e.jbutton.button);
 				}
 				else if (SDL_JOYBUTTONUP == e.type)
 				{
 					std::vector<int>::iterator itr;
-					for (itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.begin(); itr != this->m_input->m_controllers.at(e.jdevice.which)->m_is.end();)
+					for (itr = this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is.begin(); itr != this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is.end();)
 					{
 						if (e.jbutton.button == *itr)
 						{
-							itr = this->m_input->m_controllers.at(e.jdevice.which)->m_is.erase(itr);
+							itr = this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is.erase(itr);
 						}
 						else
 						{
@@ -223,7 +256,7 @@ namespace xTech
 						}
 					}
 
-					this->m_input->m_controllers.at(e.jdevice.which)->m_is_released.push_back(e.jbutton.button);
+					this->m_input->m_controllers.at(this->controller_index(e.jaxis.which))->m_is_released.push_back(e.jbutton.button);
 				}
 			}
 		}
@@ -324,6 +357,19 @@ namespace xTech
 		}
 
 		SDL_GL_SwapWindow(this->m_window->ID());
+	}
+
+	int Core::controller_index(int controller_id)
+	{
+		for (int i{ 0 }; i < this->m_input->m_controllers.size(); ++i)
+		{
+			if (this->m_input->m_controllers.at(i)->m_id == controller_id)
+			{
+				return i;
+			}
+		}
+
+		throw std::runtime_error("ERROR::CONTROLLER RECONNECTION PROBLEMS OCCURED");
 	}
 
 	std::shared_ptr<Core> Core::initialize()

@@ -5,7 +5,7 @@
 namespace xTech
 {
 	Controller::Controller(int dead_zone) :
-		m_id{ nullptr },
+		m_id{ 0 },
 		m_left_analogue{ glm::ivec2{ 0 } },
 		m_right_analogue{ glm::ivec2{ 0 } },
 		m_invert_x{ false },
