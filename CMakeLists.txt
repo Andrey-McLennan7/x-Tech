@@ -82,8 +82,6 @@ add_library(x-Tech
 	src/x-Tech/Window.cpp
 	src/x-Tech/Shader.h
 	src/x-Tech/Shader.cpp
-	src/x-Tech/TriangleRenderer.h
-	src/x-Tech/TriangleRenderer.cpp
 	src/x-Tech/Resource.h
 	src/x-Tech/Resource.cpp
 	src/x-Tech/Cache.h
@@ -147,6 +145,10 @@ add_executable(demo
 	src/demo/Shoot.cpp
 	src/demo/Movement.h
 	src/demo/Movement.cpp
+	src/demo/Rotator.h
+	src/demo/Rotator.cpp
+	src/demo/CollisionResponce.h	
+	src/demo/CollisionResponce.cpp
 )
 
 target_link_libraries(demo x-Tech)

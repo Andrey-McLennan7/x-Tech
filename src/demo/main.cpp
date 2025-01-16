@@ -4,6 +4,8 @@
 #include "Movement.h"
 #include "Shoot.h"
 #include "Data.h"
+#include "Rotator.h"
+#include "CollisionResponce.h"
 
 #include <iostream>
 
@@ -46,7 +48,9 @@ int safe_main()
 	// Add quit option on ESCAPE key
 	core->add_entity()->add_component<Quit>();
 
-	// Load resources
+
+
+	/* Load resources */
 	// Shaders
 	std::shared_ptr<Shader> model_shader{ core->cache()->load<Shader>("Shader/model") };
 	std::shared_ptr<Shader> basic_shader{ core->cache()->load<Shader>("Shader/basic") };
@@ -63,13 +67,39 @@ int safe_main()
 	// Fonts
 	std::shared_ptr<Font> font{ core->cache()->load<Font>("Font/batmfa") };
 
-	// Adding entities
+	// Audio
+	std::shared_ptr<Audio> shoot_sound{ core->cache()->load<Audio>("Audio/pew")};
+
+
+
+	/* Adding entities */
+	// Add player
+	std::shared_ptr<Entity> player{ core->add_entity() };
+
+	std::shared_ptr<ModelRenderer> player_renderer{ player->add_component<ModelRenderer>() };
+	std::shared_ptr<SoundSource> player_sound{ player->add_component<SoundSource>() };
+
+	player->add_component<BoxCollider>();
+
+	player->add_component<CollisionResponce>();
+	player->add_component<Shoot>();
+	player->add_component<Controls>();
+	player->add_component<Data>();
+
+	player->rotation(vec3{ 0.0f, 1.5f, 0.0f });
+	player->scale(0.1f);
+
+	player_renderer->shader(model_shader);
+	player_renderer->model(ship_model);
+
+	player_sound->audio(shoot_sound);
+
 	// Asteroid
 	std::shared_ptr<Entity> asteroid{ core->add_entity() };
 
-	asteroid->scale(0.1f);
+	asteroid->scale(0.05f);
 
-	// Add asteroid component
+	// Add asteroid components
 	std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
 
 	asteroid_renderer->shader(model_shader);

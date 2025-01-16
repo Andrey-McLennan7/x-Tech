@@ -1,23 +1,18 @@
 #pragma once
 
-#ifndef DEMO_CONTROLS_H
-#define DEMO_CONTROLS_H
+#ifndef DEMO_COLLISION_RESPONCE_H
+#define DEMO_COLLISION_RESPONCE_H
 
 #include <x-Tech/x-Tech.h>
 
 using namespace xTech;
 
-class Shoot;
-
-class Controls : public Component
+class CollisionResponce : public Component
 {
 // Private data members
 private:
 
-	float m_speed;
 
-	std::shared_ptr<Shoot> m_shoot;
-	std::shared_ptr<SoundSource> m_sound;
 
 // Public member functions
 public:
