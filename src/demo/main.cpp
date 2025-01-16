@@ -9,6 +9,19 @@
 
 using namespace xTech;
 
+class Quit : public Component
+{
+public:
+
+	virtual void on_tick() override
+	{
+		if (this->input()->keyboard()->is_pressed(KEY_ESC))
+		{
+			this->core()->end();
+		}
+	}
+};
+
 int safe_main();
 
 int main()
@@ -29,6 +42,9 @@ int safe_main()
 {
 	// Create core
 	std::shared_ptr<Core> core{ Core::initialize() };
+
+	// Add quit option on ESCAPE key
+	core->add_entity()->add_component<Quit>();
 
 	// Load resources
 	// Shaders
