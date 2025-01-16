@@ -1,25 +1,189 @@
 #include <x-Tech/x-Tech.h>
 
-#include "Controls.h"
-#include "Movement.h"
-#include "Shoot.h"
-#include "Data.h"
-#include "Rotator.h"
-#include "CollisionResponce.h"
-
 #include <iostream>
+#include <ctime>
 
 using namespace xTech;
 
-class Quit : public Component
+class Stop : public Component
+{
+public:
+
+	void on_late_tick()
+	{
+		if (input()->keyboard()->is(KEY_ESC))
+		{
+			this->core()->end();
+		}
+	}
+};
+
+class Player : public Component
+{
+private:
+
+	float speed;
+
+	std::shared_ptr<BoxCollider> collider;
+	std::shared_ptr<ModelRenderer> renderer;
+	std::shared_ptr<SoundSource> sound;
+
+public:
+
+	virtual void on_initialize() override
+	{
+		this->speed = 50.0f;
+
+		this->collider = this->entity()->get_component<BoxCollider>();
+		this->renderer = this->entity()->get_component<ModelRenderer>();
+		
+		this->sound = this->entity()->get_component<SoundSource>();
+	}
+
+	virtual void on_tick() override
+	{
+		// Keyboard
+		vec3 position{ 0.0f };
+
+		if (this->input()->keyboard()->is(KEY_W))
+		{
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
+			{
+				position.z -= speed * this->delta_time();
+			}
+			else
+			{
+				position.y += speed * this->delta_time();
+			}
+		}
+
+		if (this->input()->keyboard()->is(KEY_A))
+		{
+			position.x -= speed * this->delta_time();
+		}
+
+		if (this->input()->keyboard()->is(KEY_S))
+		{
+			if (this->input()->keyboard()->is(KEY_LSHIFT))
+			{
+				position.z += speed * this->delta_time();
+			}
+			else
+			{
+				position.y -= speed * this->delta_time();
+			}
+		}
+
+		if (this->input()->keyboard()->is(KEY_D))
+		{
+			position.x += speed * this->delta_time();
+		}
+
+		if (this->input()->keyboard()->is(KEY_LBRACKET))
+		{
+			this->scale(vec3{ this->scale() - 0.5f * this->delta_time() });
+		}
+
+		if (this->input()->keyboard()->is(KEY_RBRACKET))
+		{
+			this->scale(vec3{ this->scale() + 0.5f * this->delta_time() });
+		}
+
+		if (this->input()->keyboard()->is(KEY_COMMA))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y - 1.0f * this->delta_time(), 0.0f });
+		}
+		
+		if (this->input()->keyboard()->is(KEY_DOT))
+		{
+			this->rotation(vec3{ 0.0f, this->rotation().y + 1.0f * this->delta_time(), 0.0f });
+		}
+
+		if (this->input()->keyboard()->is_pressed(KEY_SPACE))
+		{
+			sound->play();
+		}
+
+		// Controller
+		if (this->input()->controllers_connected())
+		{
+			if (this->input()->controller()->left_analogue_in_motion())
+			{
+				position.x += (this->input()->controller()->left_analogue().x * speed) * this->delta_time();
+				position.y += (this->input()->controller()->left_analogue().y * speed) * this->delta_time();
+			}
+		}
+
+		this->transform()->move(position);
+		this->collider->size(this->scale());
+	}
+};
+
+class ControllerDebug : public Component
 {
 public:
 
 	virtual void on_tick() override
 	{
-		if (this->input()->keyboard()->is_pressed(KEY_ESC))
+		if (this->input()->controllers_connected())
 		{
-			this->core()->end();
+			std::shared_ptr<Controller> controller{ this->input()->controller() };
+
+			if (controller->left_analogue_in_motion())
+			{
+				std::cout << "Left Joy stick x-axis: " << controller->left_analogue().x << std::endl;
+				std::cout << "Left Joy stick y-axis: " << controller->left_analogue().y << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_A))
+			{
+				std::cout << "Controller button A pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_B))
+			{
+				std::cout << "Controller button B pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_X))
+			{
+				std::cout << "Controller button X pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_Y))
+			{
+				std::cout << "Controller button Y pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_START))
+			{
+				std::cout << "Controller button START pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_BACK))
+			{
+				std::cout << "Controller button BACK pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_LSHOULDER))
+			{
+				std::cout << "Controller button LEFT SHOULDER pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_RSHOULDER))
+			{
+				std::cout << "Controller button RIGHT SHOULDER pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_LSTICK))
+			{
+				std::cout << "Controller button LEFT STICK pressed" << std::endl;
+			}
+
+			if (controller->is_pressed(CONTROLLER_BUTTON_RSTICK))
+			{
+				std::cout << "Controller button RIGHT STICK pressed" << std::endl;
+			}
 		}
 	}
 };
@@ -42,78 +206,54 @@ int main()
 
 int safe_main()
 {
-	// Create core
+	srand(time(0));
+
+	// Create core and add resources
 	std::shared_ptr<Core> core{ Core::initialize() };
-
-	// Add quit option on ESCAPE key
-	core->add_entity()->add_component<Quit>();
-
-
-
-	/* Load resources */
-	// Shaders
-	std::shared_ptr<Shader> model_shader{ core->cache()->load<Shader>("Shader/model") };
-	std::shared_ptr<Shader> basic_shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Shader> gui_shader{ core->cache()->load<Shader>("Shader/gui") };
-
-	// Models
-	std::shared_ptr<Model> asteroid_model{ core->cache()->load<Model>("Model/Meteorite/NHMW-MIN-J2669-Nakhla_low_res") };
-	std::shared_ptr<Model> ship_model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
-
-	// Shapes
-	std::shared_ptr<Shape> bullet_shape{ core->cache()->load<Shape>("QUAD") };
-	std::shared_ptr<Shape> star_shape{ core->cache()->load<Shape>("CUBE") };
-
-	// Fonts
-	std::shared_ptr<Font> font{ core->cache()->load<Font>("Font/batmfa") };
-
-	// Audio
-	std::shared_ptr<Audio> shoot_sound{ core->cache()->load<Audio>("Audio/pew")};
-
-
-
-	/* Adding entities */
-	// Add player
-	std::shared_ptr<Entity> player{ core->add_entity() };
-
-	std::shared_ptr<ModelRenderer> player_renderer{ player->add_component<ModelRenderer>() };
-	std::shared_ptr<SoundSource> player_sound{ player->add_component<SoundSource>() };
-
-	player->add_component<BoxCollider>();
-
-	player->add_component<CollisionResponce>();
-	player->add_component<Shoot>();
-	player->add_component<Controls>();
-	player->add_component<Data>();
-
-	player->rotation(vec3{ 0.0f, 1.5f, 0.0f });
-	player->scale(0.1f);
-
-	player_renderer->shader(model_shader);
-	player_renderer->model(ship_model);
-
-	player_sound->audio(shoot_sound);
-
-	// Asteroid
-	std::shared_ptr<Entity> asteroid{ core->add_entity() };
-
-	asteroid->scale(0.05f);
-
-	// Add asteroid components
-	std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
-
-	asteroid_renderer->shader(model_shader);
-	asteroid_renderer->model(asteroid_model);
-
-	// Adjust the default camera
-	std::shared_ptr<Camera> camera{ core->camera() };
-
-	camera->position(vec3{ 0.0f, 0.0f, 50.0f });
-
-	// Prevent the window from being resized
+	core->add_entity()->add_component<Stop>();
 	core->window()->resizable(false);
 
-	// Run engine
+	float width{ (float)core->window()->size().x };
+	float height{ (float)core->window()->size().y };
+
+	// Create entity 1 and attach components
+	std::shared_ptr<Entity> e1{ core->add_entity() };
+	std::shared_ptr<ModelRenderer> e1_renderer{ e1->add_component<ModelRenderer>() };
+	std::shared_ptr<SoundSource> e1_sound_source{ e1->add_component<SoundSource>() };
+
+	e1->name("SpaceShip");
+	//e1->add_component<SoundSource>();
+
+	e1_renderer->shader(core->cache()->load<Shader>("Shader/model"));
+	e1_renderer->model(core->cache()->load<Model>("Model/FA59AMako/FA59AMako"));
+	e1_renderer->attenuation(false);
+
+	e1_sound_source->audio(core->cache()->load<Audio>("Audio/pew"));
+
+	e1->add_component<BoxCollider>();
+	e1->add_component<RigidBody>();
+	e1->add_component<Player>();
+
+	e1->position(vec3{ 0.0f, 0.0f, -5.0f });
+
+	std::shared_ptr<Entity> e2{ core->add_entity() };
+	std::shared_ptr<TextRenderer> gui(e2->add_component<TextRenderer>());
+
+	gui->colour(vec3{ 191.0f / 255.0f });
+	gui->shader(core->cache()->load<Shader>("Shader/gui"));
+	gui->font(core->cache()->load<Font>("Font/batmfa"));
+	gui->text("test");
+	gui->position(glm::vec3{ width / 2.0f, height / 2.0f, 0.0f });
+
+	//e2->add_component<ControllerDebug>();
+
+	// Add light
+	std::shared_ptr<Entity> light{ core->add_entity() };
+	std::shared_ptr<PointLight> light_comp{ light->add_component<PointLight>() };
+
+	// Camera
+	core->camera()->entity()->position(vec3{ 0.0f, 0.0f, 50.0f });
+
 	core->run();
 
 	return 0;
