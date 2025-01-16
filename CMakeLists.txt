@@ -137,18 +137,6 @@ target_link_libraries(x-Tech rend)
 
 add_executable(demo
 	src/demo/main.cpp
-	src/demo/Data.h
-	src/demo/Data.cpp
-	src/demo/Controls.h
-	src/demo/Controls.cpp
-	src/demo/Shoot.h
-	src/demo/Shoot.cpp
-	src/demo/Movement.h
-	src/demo/Movement.cpp
-	src/demo/Rotator.h
-	src/demo/Rotator.cpp
-	src/demo/CollisionResponce.h	
-	src/demo/CollisionResponce.cpp
 )
 
 target_link_libraries(demo x-Tech)
