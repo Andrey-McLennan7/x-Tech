@@ -30,7 +30,6 @@ namespace xTech
 	public:
 
 		Input();
-		~Input();
 
 		std::shared_ptr<Keyboard> keyboard();
 		std::shared_ptr<Mouse> mouse();
