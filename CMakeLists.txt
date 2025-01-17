@@ -151,6 +151,8 @@ add_executable(demo
 	src/demo/Bullet.cpp
 	src/demo/Player.h
 	src/demo/Player.cpp
+	src/demo/Star.h
+	src/demo/Star.cpp
 )
 
 target_link_libraries(demo x-Tech)
