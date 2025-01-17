@@ -3,6 +3,7 @@
 #include "Font.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Cache.h"
 
 namespace xTech
 {
@@ -20,11 +21,21 @@ namespace xTech
 		this->m_font->m_font->draw(this->m_shader->shader(), this->m_text, glm::vec2{ this->position() }, this->scale().x);
 	}
 
+	void TextRenderer::font(const std::string& path)
+	{
+		this->font(this->cache()->load<Font>(path));
+	}
+
 	void TextRenderer::font(std::shared_ptr<Font> font)
 	{
 		this->m_font = font;
 	}
 
+	void TextRenderer::shader(const std::string& path)
+	{
+		this->shader(this->cache()->load<Shader>(path));
+	}
+	
 	void TextRenderer::shader(std::shared_ptr<Shader> shader)
 	{
 		this->m_shader = shader;

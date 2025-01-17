@@ -32,7 +32,10 @@ namespace xTech
 		virtual void on_initialize() override;
 		virtual void on_display() override;
 
+		void font(const std::string& path);
 		void font(std::shared_ptr<Font> font);
+
+		void shader(const std::string& path);
 		void shader(std::shared_ptr<Shader> shader);
 
 		void text(const std::string& text);
