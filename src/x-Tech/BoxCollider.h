@@ -26,6 +26,7 @@ namespace xTech
 		virtual void get_collision_response(const Collider& other) const override;
 
 		void size(const glm::vec3& size);
+		void size(float size);
 	};
 }
 

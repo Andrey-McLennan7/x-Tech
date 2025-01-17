@@ -110,4 +110,9 @@ namespace xTech
 	{
 		this->m_size = size;
 	}
+
+	void BoxCollider::size(float size)
+	{
+		this->size(glm::vec3{ size });
+	}
 }
