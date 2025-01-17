@@ -147,6 +147,10 @@ add_executable(demo
 	src/demo/Rotator.cpp
 	src/demo/CollisionResponce.h	
 	src/demo/CollisionResponce.cpp
+	src/demo/Shoot.h
+	src/demo/Shoot.cpp
+	src/demo/Bullet.h
+	src/demo/Bullet.cpp
 )
 
 target_link_libraries(demo x-Tech)

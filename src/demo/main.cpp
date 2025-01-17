@@ -5,6 +5,7 @@
 #include "Data.h"
 #include "Rotator.h"
 #include "CollisionResponce.h"
+#include "Shoot.h"
 
 #include <iostream>
 #include <ctime>
@@ -52,73 +53,74 @@ int safe_main()
 
 	/* Load resources */
 	// Shaders
-	std::shared_ptr<Shader> model_shader{ core->cache()->load<Shader>("Shader/model") };
-	std::shared_ptr<Shader> basic_shader{ core->cache()->load<Shader>("Shader/basic") };
-	std::shared_ptr<Shader> gui_shader{ core->cache()->load<Shader>("Shader/gui") };
+	std::weak_ptr<Shader> model_shader{ core->cache()->load<Shader>("Shader/model") };
+	std::weak_ptr<Shader> basic_shader{ core->cache()->load<Shader>("Shader/basic") };
+	std::weak_ptr<Shader> gui_shader{ core->cache()->load<Shader>("Shader/gui") };
 
 	// Models
-	std::shared_ptr<Model> asteroid_model{ core->cache()->load<Model>("Model/Meteorite/NHMW-MIN-J2669-Nakhla_low_res") };
-	std::shared_ptr<Model> ship_model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
+	std::weak_ptr<Model> asteroid_model{ core->cache()->load<Model>("Model/Meteorite/NHMW-MIN-J2669-Nakhla_low_res") };
+	std::weak_ptr<Model> ship_model{ core->cache()->load<Model>("Model/FA59AMako/FA59AMako") };
 
 	// Shapes
-	std::shared_ptr<Shape> star_shape{ core->cache()->load<Shape>("QUAD") };
+	std::weak_ptr<Shape> star_shape{ core->cache()->load<Shape>("QUAD") };
 
 	// Fonts
-	std::shared_ptr<Font> font{ core->cache()->load<Font>("Font/batmfa") };
+	std::weak_ptr<Font> font{ core->cache()->load<Font>("Font/batmfa") };
 
 	// Audio
-	std::shared_ptr<Audio> shoot_sound{ core->cache()->load<Audio>("Audio/pew")};
+	std::weak_ptr<Audio> shoot_sound{ core->cache()->load<Audio>("Audio/pew")};
 
 	/* Adding entities */
 	// Add player
-	std::shared_ptr<Entity> player{ core->add_entity() };
+	std::weak_ptr<Entity> player{ core->add_entity() };
 
-	std::shared_ptr<ModelRenderer> player_renderer{ player->add_component<ModelRenderer>() };
-	std::shared_ptr<SoundSource> player_sound{ player->add_component<SoundSource>() };
+	std::weak_ptr<ModelRenderer> player_renderer{ player.lock()->add_component<ModelRenderer>() };
+	std::weak_ptr<SoundSource> player_sound{ player.lock()->add_component<SoundSource>() };
 
-	player->add_component<BoxCollider>();
+	player.lock()->add_component<BoxCollider>();
 
-	player->add_component<CollisionResponce>();
-	player->add_component<Controls>();
-	player->add_component<Data>();
+	player.lock()->add_component<Shoot>();
+	player.lock()->add_component<CollisionResponce>();
+	player.lock()->add_component<Controls>();
+	player.lock()->add_component<Data>();
 
-	player->rotation(vec3{ 0.0f, 1.5f, 0.0f });
-	player->scale(0.1f);
-	player->name("Player");
+	player.lock()->rotation(vec3{ 0.0f, 1.5f, 0.0f });
+	player.lock()->scale(0.1f);
+	player.lock()->name("Player");
 
-	player_renderer->shader(model_shader);
-	player_renderer->model(ship_model);
+	player_renderer.lock()->shader(model_shader.lock());
+	player_renderer.lock()->model(ship_model.lock());
 
-	player_sound->audio(shoot_sound);
+	player_sound.lock()->audio(shoot_sound.lock());
 
 	// Asteroids
-	//for (int i{ 0 }; i < 20; ++i)
-	//{
-	//	std::shared_ptr<Entity> asteroid{ core->add_entity() };
-	//
-	//	int x{ 21 }, y{ 25 };
-	//	switch (rand() % 2)
-	//	{
-	//	case 0:
-	//		asteroid->position(glm::vec3((float)(rand() % x + 60), (float)(rand() % y + 1), 0.0f));
-	//		break;
-	//	case 1:
-	//		asteroid->position(glm::vec3((float)(rand() % x + 60), -(float)(rand() % y + 1), 0.0f));
-	//		break;
-	//	}
-	//
-	//	std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
-	//
-	//	asteroid_renderer->shader(model_shader);
-	//	asteroid_renderer->model(asteroid_model);
-	//
-	//	std::shared_ptr<Movement> asteroid_movement{ asteroid->add_component<Movement>() };
-	//
-	//	asteroid->add_component<BoxCollider>();
-	//
-	//	asteroid->scale(0.05f);
-	//	asteroid->name("Asteroid");
-	//}
+	for (int i{ 0 }; i < 20; ++i)
+	{
+		std::shared_ptr<Entity> asteroid{ core->add_entity() };
+
+		int x{ 21 }, y{ 25 };
+		switch (rand() % 2)
+		{
+		case 0:
+			asteroid->position(glm::vec3((float)(rand() % x + 60), (float)(rand() % y + 1), 0.0f));
+			break;
+		case 1:
+			asteroid->position(glm::vec3((float)(rand() % x + 60), -(float)(rand() % y + 1), 0.0f));
+			break;
+		}
+
+		std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
+
+		asteroid_renderer->shader(model_shader.lock());
+		asteroid_renderer->model(asteroid_model.lock());
+
+		std::shared_ptr<Movement> asteroid_movement{ asteroid->add_component<Movement>() };
+
+		asteroid->add_component<BoxCollider>();
+
+		asteroid->scale(0.05f);
+		asteroid->name("Asteroid");
+	}
 
 	// Stars
 	for (int i{ 0 }; i < 2000; ++i)
@@ -147,8 +149,8 @@ int safe_main()
 
 		std::shared_ptr<ShapeRenderer> star_renderer{ star->add_component<ShapeRenderer>() };
 
-		star_renderer->shader(basic_shader);
-		star_renderer->shape(star_shape);
+		star_renderer->shader(basic_shader.lock());
+		star_renderer->shape(star_shape.lock());
 
 		std::shared_ptr<Movement> star_movement{ star->add_component<Movement>() };
 
@@ -159,9 +161,9 @@ int safe_main()
 	}
 
 	// Adjust the default camera
-	std::shared_ptr<Camera> camera{ core->camera() };
+	std::weak_ptr<Camera> camera{ core->camera() };
 
-	camera->position(vec3{ 0.0f, 0.0f, 50.0f });
+	camera.lock()->position(vec3{ 0.0f, 0.0f, 50.0f });
 
 	// Prevent the window from being resized
 	core->window()->resizable(false);

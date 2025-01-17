@@ -1,10 +1,12 @@
 #include "Controls.h"
+#include "Shoot.h"
 
 void Controls::on_initialize()
 {
 	this->m_speed = 25.0f;
 
 	this->m_sound = this->entity()->get_component<SoundSource>();
+	this->m_shoot = this->entity()->get_component<Shoot>();
 }
 
 void Controls::on_tick()
@@ -33,7 +35,8 @@ void Controls::on_tick()
 
 	if (this->input()->keyboard()->is_pressed(KEY_SPACE) || this->input()->mouse()->is_pressed(MOUSE_LEFT))
 	{
-		this->m_sound->play();
+		this->m_sound.lock()->play();
+		this->m_shoot.lock()->shoot();
 	}
 
 	if (this->input()->controllers_connected())
@@ -48,7 +51,7 @@ void Controls::on_tick()
 
 		if (controller->is_pressed(CONTROLLER_BUTTON_A))
 		{
-			this->m_sound->play();
+			this->m_sound.lock()->play();
 		}
 	}
 
