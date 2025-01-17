@@ -274,9 +274,9 @@ namespace xTech
 		}
 
 		// Execute on every tick sequentially
-		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+		for (int i{ 0 }; i < this->m_entities.size(); ++i)
 		{
-			(*itr)->tick();
+			this->m_entities.at(i)->tick();
 		}
 
 		// Execute on every tick sequentially
