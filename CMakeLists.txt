@@ -137,8 +137,6 @@ target_link_libraries(x-Tech rend)
 
 add_executable(demo
 	src/demo/main.cpp
-	src/demo/Data.h
-	src/demo/Data.cpp
 	src/demo/Controls.h
 	src/demo/Controls.cpp
 	src/demo/Movement.h
@@ -151,6 +149,8 @@ add_executable(demo
 	src/demo/Shoot.cpp
 	src/demo/Bullet.h
 	src/demo/Bullet.cpp
+	src/demo/Player.h
+	src/demo/Player.cpp
 )
 
 target_link_libraries(demo x-Tech)
