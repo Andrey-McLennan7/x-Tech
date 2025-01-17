@@ -78,9 +78,9 @@ int safe_main()
 
 	player->add_component<BoxCollider>();
 
-	//player->add_component<CollisionResponce>();
+	player->add_component<CollisionResponce>();
 	player->add_component<Controls>();
-	//player->add_component<Data>();
+	player->add_component<Data>();
 
 	player->rotation(vec3{ 0.0f, 1.5f, 0.0f });
 	player->scale(0.1f);
@@ -92,35 +92,33 @@ int safe_main()
 	player_sound->audio(shoot_sound);
 
 	// Asteroids
-	for (int i{ 0 }; i < 20; ++i)
-	{
-		std::shared_ptr<Entity> asteroid{ core->add_entity() };
-
-		int x{ 21 }, y{ 25 };
-		switch (rand() % 2)
-		{
-		case 0:
-			asteroid->position(glm::vec3((float)(rand() % x + 60), (float)(rand() % y + 1), 0.0f));
-			break;
-		case 1:
-			asteroid->position(glm::vec3((float)(rand() % x + 60), -(float)(rand() % y + 1), 0.0f));
-			break;
-		}
-
-		std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
-
-		asteroid_renderer->shader(model_shader);
-		asteroid_renderer->model(asteroid_model);
-
-		std::shared_ptr<Movement> asteroid_movement{ asteroid->add_component<Movement>() };
-
-
-
-		asteroid->add_component<BoxCollider>();
-
-		asteroid->scale(0.05f);
-		asteroid->name("Asteroid");
-	}
+	//for (int i{ 0 }; i < 20; ++i)
+	//{
+	//	std::shared_ptr<Entity> asteroid{ core->add_entity() };
+	//
+	//	int x{ 21 }, y{ 25 };
+	//	switch (rand() % 2)
+	//	{
+	//	case 0:
+	//		asteroid->position(glm::vec3((float)(rand() % x + 60), (float)(rand() % y + 1), 0.0f));
+	//		break;
+	//	case 1:
+	//		asteroid->position(glm::vec3((float)(rand() % x + 60), -(float)(rand() % y + 1), 0.0f));
+	//		break;
+	//	}
+	//
+	//	std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
+	//
+	//	asteroid_renderer->shader(model_shader);
+	//	asteroid_renderer->model(asteroid_model);
+	//
+	//	std::shared_ptr<Movement> asteroid_movement{ asteroid->add_component<Movement>() };
+	//
+	//	asteroid->add_component<BoxCollider>();
+	//
+	//	asteroid->scale(0.05f);
+	//	asteroid->name("Asteroid");
+	//}
 
 	// Stars
 	for (int i{ 0 }; i < 2000; ++i)
@@ -156,6 +154,8 @@ int safe_main()
 
 		star_movement->speed(10.0f);
 		star_movement->end_point(110.0f);
+
+		star->name("Star" + std::to_string(i));
 	}
 
 	// Adjust the default camera
