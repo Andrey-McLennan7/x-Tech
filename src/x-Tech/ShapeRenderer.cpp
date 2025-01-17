@@ -45,7 +45,7 @@ namespace xTech
 
 	void ShapeRenderer::colour(const glm::vec3& colour)
 	{
-		this->m_colour = colour / 256.0f;
+		this->m_colour = colour / 255.0f;
 	}
 
 	glm::vec3 ShapeRenderer::colour() const
