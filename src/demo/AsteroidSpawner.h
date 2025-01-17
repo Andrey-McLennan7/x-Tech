@@ -1,21 +1,20 @@
 #include <x-Tech/x-Tech.h>
 
+#include <vector>
+#include <memory>
+
 using namespace xTech;
 
-class Asteroid : public Component
+class Player;
+
+class AsteroidSpawner : public Component
 {
 // Private data members
 private:
 
-	float m_movement_speed;
-	float m_rotation_speed;
+	float m_timer;
 
-	std::weak_ptr<BoxCollider> m_collider;
-
-// Private member functions
-private:
-
-	void random_velocity(float& movement, float& rotation);
+	std::weak_ptr<Player> m_player;
 
 // Public member functions
 public:
