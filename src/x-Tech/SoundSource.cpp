@@ -1,6 +1,7 @@
 #include "SoundSource.h"
 #include "Transform.h"
 #include "Audio.h"
+#include "Cache.h"
 
 #include <stdexcept>
 #include <vector>
@@ -31,6 +32,11 @@ namespace xTech
 	void SoundSource::play()
 	{
 		alSourcePlay(this->m_id);
+	}
+
+	void SoundSource::audio(const std::string& path)
+	{
+		this->audio(this->cache()->load<Audio>(path));
 	}
 
 	void SoundSource::audio(std::shared_ptr<Audio> audio)

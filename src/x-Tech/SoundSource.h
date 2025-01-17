@@ -32,6 +32,7 @@ namespace xTech
 
 		void play();
 
+		void audio(const std::string& path);
 		void audio(std::shared_ptr<Audio> audio);
 		std::shared_ptr<Audio> audio() const;
 
