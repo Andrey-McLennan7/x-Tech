@@ -267,10 +267,9 @@ namespace xTech
 		this->m_window->tick();
 
 		// Execute on specified ticks randomly
-		std::vector<std::shared_ptr<Entity>>::iterator itr;
-		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+		for (int i{ 0 }; i < this->m_entities.size(); ++i)
 		{
-			(*itr)->fixed_tick();
+			this->m_entities.at(i)->fixed_tick();
 		}
 
 		// Execute on every tick sequentially
@@ -279,7 +278,8 @@ namespace xTech
 			this->m_entities.at(i)->tick();
 		}
 
-		// Execute on every tick sequentially
+		// Check if entity is still alive
+		std::vector<std::shared_ptr<Entity>>::iterator itr;
 		for (itr = this->m_entities.begin(); itr != this->m_entities.end();)
 		{
 			if (!(*itr)->m_alive)
@@ -293,9 +293,9 @@ namespace xTech
 		}
 
 		// Be the last tick to execute sequentially
-		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+		for (int i{ 0 }; i < this->m_entities.size(); ++i)
 		{
-			(*itr)->late_tick();
+			this->m_entities.at(i)->late_tick();
 		}
 
 		// Clear input buffers
