@@ -18,6 +18,9 @@ private:
 
 	std::weak_ptr<BoxCollider> m_collider;
 
+	std::weak_ptr<TextRenderer> m_gui_health;
+	std::weak_ptr<TextRenderer> m_gui_distance;
+
 	std::vector<std::weak_ptr<Entity>> m_scene_asteroids;
 
 // Public member functions

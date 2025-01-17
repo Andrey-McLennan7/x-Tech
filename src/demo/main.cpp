@@ -84,10 +84,10 @@ int safe_main()
 	// Add player
 	core->add_entity()->add_component<Player>();
 
-	// Asteroid spawner
+	// Add asteroid spawner
 	core->add_entity()->add_component<AsteroidSpawner>();
 
-	// Stars
+	// Add stars
 	for (int i{ 0 }; i < 2000; ++i)
 	{
 		core->add_entity()->add_component<Star>();
