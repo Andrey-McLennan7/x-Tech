@@ -279,6 +279,19 @@ namespace xTech
 			(*itr)->tick();
 		}
 
+		// Execute on every tick sequentially
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end();)
+		{
+			if (!(*itr)->m_alive)
+			{
+				itr = this->m_entities.erase(itr);
+			}
+			else
+			{
+				++itr;
+			}
+		}
+
 		// Be the last tick to execute sequentially
 		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{

@@ -217,11 +217,11 @@ int safe_main()
 	float height{ (float)core->window()->size().y };
 
 	// Create entity 1 and attach components
-	std::shared_ptr<Entity> e1{ core->add_entity() };
-	std::shared_ptr<ModelRenderer> e1_renderer{ e1->add_component<ModelRenderer>() };
-	std::shared_ptr<SoundSource> e1_sound_source{ e1->add_component<SoundSource>() };
+	std::weak_ptr<Entity> e1{ core->add_entity() };
+	std::shared_ptr<ModelRenderer> e1_renderer{ e1.lock()->add_component<ModelRenderer>()};
+	std::shared_ptr<SoundSource> e1_sound_source{ e1.lock()->add_component<SoundSource>()};
 
-	e1->name("SpaceShip");
+	e1.lock()->name("SpaceShip");
 	//e1->add_component<SoundSource>();
 
 	e1_renderer->shader(core->cache()->load<Shader>("Shader/model"));

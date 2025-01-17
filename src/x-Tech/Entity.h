@@ -48,7 +48,7 @@ namespace xTech
 	// Public member functions
 	public:
 
-		~Entity() {};
+		Entity();
 
 		template <typename T>
 		std::shared_ptr<T> add_component();
@@ -121,6 +121,7 @@ namespace xTech
 		std::shared_ptr<T> rtn{ std::make_shared<T>() };
 
 		rtn->m_entity = this->m_self;
+		rtn->m_alive = true;
 
 		this->m_components.push_back(rtn);
 		rtn->on_initialize();

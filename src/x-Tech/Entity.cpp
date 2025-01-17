@@ -24,6 +24,18 @@ namespace xTech
 		{
 			(*itr)->tick();
 		}
+
+		for (itr = this->m_components.begin(); itr != this->m_components.end();)
+		{
+			if (!(*itr)->m_alive)
+			{
+				itr = this->m_components.erase(itr);
+			}
+			else
+			{
+				++itr;
+			}
+		}
 	}
 
 	void Entity::late_tick()
@@ -52,6 +64,10 @@ namespace xTech
 			(*itr)->gui();
 		}
 	}
+
+	Entity::Entity() :
+		m_alive{ true }
+	{}
 
 	void Entity::kill()
 	{
