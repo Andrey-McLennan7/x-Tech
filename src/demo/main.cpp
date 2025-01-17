@@ -1,6 +1,9 @@
 #include <x-Tech/x-Tech.h>
 
+#include "Paths.h"
+
 #include "Player.h"
+#include "AsteroidSpawner.h"
 #include "Star.h"
 
 #include <iostream>
@@ -8,9 +11,18 @@
 
 using namespace xTech;
 
-class Quit : public Component
+class BackgroundInitialiser : public Component
 {
 public:
+
+	virtual void on_initialize() override
+	{
+		std::shared_ptr<SoundSource> background_audio{ this->core()->add_entity()->add_component<SoundSource>() };
+
+		background_audio->audio(BACKGROUND_AUDIO);
+		background_audio->loop(true);
+
+	}
 
 	virtual void on_tick() override
 	{
@@ -45,59 +57,35 @@ int safe_main()
 	std::shared_ptr<Core> core{ Core::initialize() };
 
 	// Add quit option on ESCAPE key
-	core->add_entity()->add_component<Quit>();
+	core->add_entity()->add_component<BackgroundInitialiser>();
 
 	/* Load resources */
 	// Shaders
-	core->cache()->load<Shader>("Shader/model");
-	core->cache()->load<Shader>("Shader/basic");
-	core->cache()->load<Shader>("Shader/gui");
+	core->cache()->load<Shader>(MODEL_SHADER);
+	core->cache()->load<Shader>(BASIC_SHADER);
+	core->cache()->load<Shader>(GUI_SHADER);
 
 	// Models
-	core->cache()->load<Model>("Model/Meteorite/NHMW-MIN-J2669-Nakhla_low_res");
-	core->cache()->load<Model>("Model/FA59AMako/FA59AMako");
+	core->cache()->load<Model>(METIORITE_MODEL);
+	core->cache()->load<Model>(SHIP_MODEL);
 
 	// Shapes
-	core->cache()->load<Shape>("QUAD");
+	core->cache()->load<Shape>(QUAD_SHAPE);
+	core->cache()->load<Shape>(CUBE_SHAPE);
 
 	// Fonts
-	core->cache()->load<Font>("Font/batmfa");
+	core->cache()->load<Font>(BATMFA_FONT);
 
 	// Audio
-	core->cache()->load<Audio>("Audio/pew");
+	core->cache()->load<Audio>(BACKGROUND_AUDIO);
+	core->cache()->load<Audio>(PEW_AUDIO);
 
 	/* Adding entities */
 	// Add player
 	core->add_entity()->add_component<Player>();
 
-	// Asteroids
-	//for (int i{ 0 }; i < 20; ++i)
-	//{
-	//	std::shared_ptr<Entity> asteroid{ core->add_entity() };
-	//
-	//	int x{ 21 }, y{ 25 };
-	//	switch (rand() % 2)
-	//	{
-	//	case 0:
-	//		asteroid->position(glm::vec3((float)(rand() % x + 60), (float)(rand() % y + 1), 0.0f));
-	//		break;
-	//	case 1:
-	//		asteroid->position(glm::vec3((float)(rand() % x + 60), -(float)(rand() % y + 1), 0.0f));
-	//		break;
-	//	}
-	//
-	//	std::shared_ptr<ModelRenderer> asteroid_renderer{ asteroid->add_component<ModelRenderer>() };
-	//
-	//	asteroid_renderer->shader(model_shader.lock());
-	//	asteroid_renderer->model(asteroid_model.lock());
-	//
-	//	std::shared_ptr<Movement> asteroid_movement{ asteroid->add_component<Movement>() };
-	//
-	//	asteroid->add_component<BoxCollider>();
-	//
-	//	asteroid->scale(0.05f);
-	//	asteroid->name("Asteroid");
-	//}
+	// Asteroid spawner
+	core->add_entity()->add_component<AsteroidSpawner>();
 
 	// Stars
 	for (int i{ 0 }; i < 2000; ++i)

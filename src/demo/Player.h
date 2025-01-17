@@ -4,6 +4,8 @@ using namespace xTech;
 
 class Shoot;
 class Controls;
+class Asteroid;
+class AsteroidSpawner;
 class CollisionResponce;
 
 class Player : public Component
@@ -14,6 +16,10 @@ private:
 	float m_health;
 	float m_distance;
 
+	std::weak_ptr<BoxCollider> m_collider;
+
+	std::vector<std::weak_ptr<Entity>> m_scene_asteroids;
+
 // Public member functions
 public:
 
@@ -23,4 +29,5 @@ public:
 	// Executed every iteration
 	virtual void on_tick() override;
 
+	friend class AsteroidSpawner;
 };

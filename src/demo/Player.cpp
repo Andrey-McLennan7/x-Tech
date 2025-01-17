@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "Paths.h"
+
 #include "Shoot.h"
 #include "Controls.h"
 #include "CollisionResponce.h"
@@ -11,15 +13,15 @@ void Player::on_initialize()
 	this->m_health = 100.0f;
 	this->m_distance = 0.0f;
 
+	this->m_collider = entity()->add_component<BoxCollider>();
+
 	std::shared_ptr<ModelRenderer> player_renderer{ entity()->add_component<ModelRenderer>() };
 	std::shared_ptr<SoundSource> player_sound{ entity()->add_component<SoundSource>() };
 
-	player_renderer->shader(this->cache()->load<Shader>("Shader/model"));
-	player_renderer->model(this->cache()->load<Model>("Model/FA59AMako/FA59AMako"));
+	player_renderer->shader(this->cache()->load<Shader>(MODEL_SHADER));
+	player_renderer->model(this->cache()->load<Model>(SHIP_MODEL));
 
-	player_sound->audio(this->cache()->load<Audio>("Audio/pew"));
-
-	entity()->add_component<BoxCollider>();
+	player_sound->audio(this->cache()->load<Audio>(PEW_AUDIO));
 
 	entity()->add_component<Shoot>();
 	entity()->add_component<CollisionResponce>();

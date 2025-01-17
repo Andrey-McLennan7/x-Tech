@@ -1,13 +1,21 @@
 #include "Star.h"
 
+#include "Paths.h"
+
+Star::Star() :
+	m_speed{ 0.0f }
+{}
+
 void Star::on_initialize()
 {
 	this->m_speed = 10.0f;
 
 	std::shared_ptr<ShapeRenderer> star_renderer{ entity()->add_component<ShapeRenderer>()};
 
-	star_renderer->shader(cache()->load<Shader>("Shader/basic"));
-	star_renderer->shape(cache()->load<Shape>("QUAD"));
+	star_renderer->shader(cache()->load<Shader>(BASIC_SHADER));
+	star_renderer->shape(cache()->load<Shape>(QUAD_SHAPE));
+
+	this->scale(0.5f);
 
 	int x{ 110 }, y{ 200 };
 	float z{ -49.9f };
@@ -26,8 +34,6 @@ void Star::on_initialize()
 		this->position(vec3{ (float)(rand() % x), -(float)(rand() % y), z });
 		break;
 	}
-
-	this->scale(0.5f);
 }
 
 void Star::on_tick()

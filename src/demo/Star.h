@@ -12,6 +12,8 @@ private:
 // Public member functions
 public:
 
+	Star();
+
 	// First to execute when applied
 	virtual void on_initialize() override;
 

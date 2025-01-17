@@ -1,11 +1,13 @@
 #include "Bullet.h"
 
+#include "Paths.H"
+
 void Bullet::on_initialize()
 {
 	std::shared_ptr<ShapeRenderer> renderer{ entity()->add_component<ShapeRenderer>() };
 
-	renderer->shader(core()->cache()->load<Shader>("Shader/basic"));
-	renderer->shape(core()->cache()->load<Shape>("CUBE"));
+	renderer->shader(core()->cache()->load<Shader>(BASIC_SHADER));
+	renderer->shape(core()->cache()->load<Shape>(CUBE_SHAPE));
 	renderer->colour(vec3{ 0.0f, 0.0f, 255.0f });
 
 	this->position(this->core()->get_entity_by_name("Player")->position() + vec3{5.0f, 0.0f, 0.0f});
