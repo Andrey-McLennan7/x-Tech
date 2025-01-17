@@ -7,7 +7,7 @@ class Star : public Component
 // Private data members
 private:
 
-
+	float m_speed;
 
 // Public member functions
 public:
@@ -17,5 +17,4 @@ public:
 
 	// Executed every iteration
 	virtual void on_tick() override;
-
 };

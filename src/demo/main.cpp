@@ -1,7 +1,7 @@
 #include <x-Tech/x-Tech.h>
 
 #include "Player.h"
-#include "Movement.h"
+#include "Star.h"
 
 #include <iostream>
 #include <ctime>
@@ -102,39 +102,7 @@ int safe_main()
 	// Stars
 	for (int i{ 0 }; i < 2000; ++i)
 	{
-		std::shared_ptr<Entity> star{ core->add_entity() };
-	
-		int x{ 110 }, y{ 200 };
-		float z{ -49.9f };
-		switch (rand() % 4)
-		{
-		case 0:
-			star->position(vec3{ (float)(rand() % x), (float)(rand() % y), z });
-			break;
-		case 1:
-			star->position(vec3{ -(float)(rand() % x), (float)(rand() % y), z });
-			break;
-		case 2:
-			star->position(vec3{ -(float)(rand() % x), -(float)(rand() % y), z });
-			break;
-		case 3:
-			star->position(vec3{ (float)(rand() % x), -(float)(rand() % y), z });
-			break;
-		}
-	
-		star->scale(0.5f);
-	
-		std::shared_ptr<ShapeRenderer> star_renderer{ star->add_component<ShapeRenderer>() };
-	
-		star_renderer->shader(core->cache()->load<Shader>("Shader/basic"));
-		star_renderer->shape(core->cache()->load<Shape>("QUAD"));
-	
-		std::shared_ptr<Movement> star_movement{ star->add_component<Movement>() };
-	
-		star_movement->speed(10.0f);
-		star_movement->end_point(110.0f);
-	
-		star->name("Star" + std::to_string(i));
+		core->add_entity()->add_component<Star>();
 	}
 
 	// Adjust the default camera
@@ -143,7 +111,7 @@ int safe_main()
 	camera.lock()->position(vec3{ 0.0f, 0.0f, 50.0f });
 
 	// Prevent the window from being resized
-	core->window()->resizable(true);
+	core->window()->resizable(false);
 
 	// Run engine
 	core->run();
