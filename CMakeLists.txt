@@ -149,6 +149,8 @@ add_executable(demo
 	src/demo/Player.cpp
 	src/demo/Star.h
 	src/demo/Star.cpp
+	src/demo/Asteroid.h
+	src/demo/Asteroid.cpp
 )
 
 target_link_libraries(demo x-Tech)
