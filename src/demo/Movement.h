@@ -1,8 +1,3 @@
-#pragma once
-
-#ifndef DEMO_MOVEMENT_H
-#define DEMO_MOVEMENT_H
-
 #include <x-Tech/x-Tech.h>
 
 using namespace xTech;
@@ -32,5 +27,3 @@ public:
 	void end_point(float point);
 	float end_point() const;
 };
-
-#endif

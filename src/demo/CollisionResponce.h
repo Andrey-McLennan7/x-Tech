@@ -1,8 +1,3 @@
-#pragma once
-
-#ifndef DEMO_COLLISION_RESPONCE_H
-#define DEMO_COLLISION_RESPONCE_H
-
 #include <x-Tech/x-Tech.h>
 
 using namespace xTech;
@@ -24,5 +19,3 @@ public:
 	virtual void on_tick() override;
 
 };
-
-#endif
