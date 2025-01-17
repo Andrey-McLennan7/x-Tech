@@ -139,10 +139,6 @@ add_executable(demo
 	src/demo/main.cpp
 	src/demo/Controls.h
 	src/demo/Controls.cpp
-	src/demo/Movement.h
-	src/demo/Movement.cpp
-	src/demo/Rotator.h
-	src/demo/Rotator.cpp
 	src/demo/CollisionResponce.h	
 	src/demo/CollisionResponce.cpp
 	src/demo/Shoot.h
