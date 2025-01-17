@@ -51,6 +51,7 @@ void Controls::on_tick()
 
 		if (controller->is_pressed(CONTROLLER_BUTTON_A))
 		{
+			this->m_shoot.lock()->shoot();
 			this->m_sound.lock()->play();
 		}
 	}
