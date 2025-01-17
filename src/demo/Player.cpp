@@ -12,7 +12,7 @@
 
 void Player::on_initialize()
 {
-	// Initiate player
+	// Initialise player
 	this->m_health = 100.0f;
 	this->m_distance = 0.0f;
 
