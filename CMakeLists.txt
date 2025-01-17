@@ -151,6 +151,9 @@ add_executable(demo
 	src/demo/Star.cpp
 	src/demo/Asteroid.h
 	src/demo/Asteroid.cpp
+	src/demo/AsteroidSpawner.h
+	src/demo/AsteroidSpawner.cpp
+	src/demo/Paths.h
 )
 
 target_link_libraries(demo x-Tech)
