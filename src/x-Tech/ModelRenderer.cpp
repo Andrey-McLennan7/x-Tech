@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "PointLight.h"
 #include "Transform.h"
+#include "Cache.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -61,11 +62,21 @@ namespace xTech
 		this->m_model->m_model->draw(this->m_shader->shader());
 	}
 
+	void ModelRenderer::shader(const std::string& path)
+	{
+		this->shader(this->cache()->load<Shader>(path));
+	}
+
 	void ModelRenderer::shader(std::shared_ptr<Shader> shader)
 	{
 		this->m_shader = shader;
 	}
 
+	void ModelRenderer::model(const std::string& path)
+	{
+		this->model(this->cache()->load<Model>(path));
+	}
+	
 	void ModelRenderer::model(std::shared_ptr<Model> model)
 	{
 		this->m_model = model;

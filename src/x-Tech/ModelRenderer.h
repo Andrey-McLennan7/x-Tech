@@ -27,7 +27,10 @@ namespace xTech
 		virtual void on_initialize() override;
 		virtual void on_display() override;
 
+		void shader(const std::string& path);
 		void shader(std::shared_ptr<Shader> shader);
+
+		void model(const std::string& path);
 		void model(std::shared_ptr<Model> model);
 
 		void attenuation(bool attenuation);
