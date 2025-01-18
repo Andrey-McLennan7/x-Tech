@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "Cache.h"
 
 #include <stdexcept>
 
@@ -33,9 +34,19 @@ namespace xTech
 		this->m_shape->m_shape->draw(this->m_shader->shader());
 	}
 
+	void ShapeRenderer::shader(const std::string& path)
+	{
+		this->shader(this->cache()->load<Shader>(path));
+	}
+
 	void ShapeRenderer::shader(std::shared_ptr<Shader> shader)
 	{
 		this->m_shader = shader;
+	}
+
+	void ShapeRenderer::shape(const std::string& path)
+	{
+		this->shape(this->cache()->load<Shape>(path));
 	}
 
 	void ShapeRenderer::shape(std::shared_ptr<Shape> shape)

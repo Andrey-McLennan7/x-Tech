@@ -5,6 +5,8 @@
 
 #include "Component.h"
 
+#include <string>
+
 namespace xTech
 {
 	class Shader;
@@ -26,7 +28,10 @@ namespace xTech
 		virtual void on_initialize() override;
 		virtual void on_display() override;
 
+		void shader(const std::string& path);
 		void shader(std::shared_ptr<Shader> shader);
+
+		void shape(const std::string& path);
 		void shape(std::shared_ptr<Shape> shape);
 
 		void colour(const glm::vec3& colour);
