@@ -450,6 +450,8 @@ namespace xTech
 			rtn->m_name = "Entity" + std::to_string(this->m_entities.size());
 		}
 
+		rtn->m_tag = "Entity";
+
 		this->m_entities.push_back(rtn);
 
 		return rtn;
@@ -461,6 +463,20 @@ namespace xTech
 		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
 		{
 			if (name == (*itr)->m_name)
+			{
+				return *itr;
+			}
+		}
+
+		throw std::runtime_error("ERROR::ENTITY NOT FOUND");
+	}
+
+	std::shared_ptr<Entity> Core::get_entity_by_tag(const std::string& tag) const
+	{
+		std::vector<std::shared_ptr<Entity>>::const_iterator itr;
+		for (itr = this->m_entities.begin(); itr != this->m_entities.end(); ++itr)
+		{
+			if (tag == (*itr)->m_name)
 			{
 				return *itr;
 			}

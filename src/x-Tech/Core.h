@@ -67,6 +67,7 @@ namespace xTech
 
 		std::shared_ptr<Entity> add_entity();
 		std::shared_ptr<Entity> get_entity_by_name(const std::string& name) const;
+		std::shared_ptr<Entity> get_entity_by_tag(const std::string& tag) const;
 
 		std::shared_ptr<Camera> current_camera() const;
 		std::shared_ptr<PointLight> current_light() const;
