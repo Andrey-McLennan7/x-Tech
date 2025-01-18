@@ -131,6 +131,16 @@ namespace xTech
 		return this->entity()->name();
 	}
 
+	void Component::tag(const std::string& tag)
+	{
+		this->entity()->tag(tag);
+	}
+
+	std::string Component::tag() const
+	{
+		return this->entity()->tag();
+	}
+
 	float Component::delta_time() const
 	{
 		return this->window()->delta_time();

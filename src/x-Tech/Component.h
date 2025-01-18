@@ -80,6 +80,9 @@ namespace xTech
 
 		void name(const std::string& name);
 		std::string name() const;
+		
+		void tag(const std::string& tag);
+		std::string tag() const;
 
 		float delta_time() const;
 
