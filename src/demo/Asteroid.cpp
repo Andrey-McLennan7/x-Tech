@@ -30,6 +30,7 @@ void Asteroid::on_initialize()
 	asteroid_renderer->model(this->cache()->load<Model>(METIORITE_MODEL));
 
 	this->scale(0.05f);
+	this->tag(ENEMY);
 
 	int x{ 21 }, y{ 25 };
 	switch (rand() % 2)

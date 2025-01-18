@@ -6,7 +6,6 @@
 void AsteroidSpawner::on_initialize()
 {
 	this->m_timer = 0.0f;
-	this->m_player = this->core()->get_entity_by_name("Player")->get_component<Player>();
 }
 
 void AsteroidSpawner::on_tick()

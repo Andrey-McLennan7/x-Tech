@@ -14,8 +14,6 @@ private:
 
 	float m_timer;
 
-	std::weak_ptr<Player> m_player;
-
 // Public member functions
 public:
 
