@@ -101,7 +101,7 @@ int safe_main()
 	camera.lock()->position(vec3{ 0.0f, 0.0f, 50.0f });
 
 	// Prevent the window from being resized
-	core->window()->resizable(false);
+	core->window()->resizable(true);
 
 	// Run engine
 	core->run();

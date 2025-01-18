@@ -40,7 +40,6 @@ void Player::on_initialize()
 	this->m_gui_health.lock()->font(BATMFA_FONT);
 	this->m_gui_health.lock()->shader(GUI_SHADER);
 
-	this->m_gui_health.lock()->position(vec3{ 25.0f, core()->window()->size().y - 50.0f, 0.0f});
 	this->m_gui_health.lock()->scale(0.7f);
 
 	// Add GUI distance
@@ -49,12 +48,13 @@ void Player::on_initialize()
 	this->m_gui_distance.lock()->font(BATMFA_FONT);
 	this->m_gui_distance.lock()->shader(GUI_SHADER);
 
-	this->m_gui_distance.lock()->position(vec3{ 25.0f, core()->window()->size().y - 100.0f, 0.0f });
 	this->m_gui_distance.lock()->scale(0.7f);
 }
 
 void Player::on_tick()
 {
+	this->m_distance += this->delta_time();
+
 	std::stringstream stream1;
 	std::stringstream stream2;
 
@@ -62,7 +62,10 @@ void Player::on_tick()
 	stream2 << std::fixed << "Distance: " << std::setprecision(2) << this->m_distance;
 
 	this->m_gui_health.lock()->text(stream1.str());
+	this->m_gui_health.lock()->position(vec3{ 25.0f, core()->window()->size().y - 50.0f, 0.0f });
+
 	this->m_gui_distance.lock()->text(stream2.str());
+	this->m_gui_distance.lock()->position(vec3{ 25.0f, core()->window()->size().y - 100.0f, 0.0f });
 
 	std::vector<std::shared_ptr<Collider>> colliders;
 	this->core()->find<Collider>(colliders);
