@@ -5,8 +5,6 @@
 
 #include "Component.h"
 
-#include <string>
-
 namespace xTech
 {
 	class Shader;
