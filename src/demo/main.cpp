@@ -78,7 +78,9 @@ int safe_main()
 
 	// Audio
 	core->cache()->load<Audio>(BACKGROUND_AUDIO);
+	core->cache()->load<Audio>(EXPLOSION_AUDIO);
 	core->cache()->load<Audio>(PEW_AUDIO);
+	core->cache()->load<Audio>(HIT_AUDIO);
 
 	/* Adding entities */
 	// Add player

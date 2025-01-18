@@ -17,14 +17,15 @@ void Player::on_initialize()
 	this->m_distance = 0.0f;
 
 	this->m_collider = entity()->add_component<BoxCollider>();
+	this->m_collider.lock()->size(vec3{ 5.0f, 3.0f, 9.0f });
+
+	this->m_hit = entity()->add_component<SoundSource>();
+	this->m_hit.lock()->audio(this->cache()->load<Audio>(HIT_AUDIO));
 
 	std::shared_ptr<ModelRenderer> player_renderer{ entity()->add_component<ModelRenderer>() };
-	std::shared_ptr<SoundSource> player_sound{ entity()->add_component<SoundSource>() };
 
 	player_renderer->shader(this->cache()->load<Shader>(MODEL_SHADER));
 	player_renderer->model(this->cache()->load<Model>(SHIP_MODEL));
-
-	player_sound->audio(this->cache()->load<Audio>(PEW_AUDIO));
 
 	entity()->add_component<Shoot>();
 	entity()->add_component<CollisionResponce>();
@@ -33,6 +34,7 @@ void Player::on_initialize()
 	this->rotation(vec3{ 0.0f, 1.5f, 0.0f });
 	this->scale(0.1f);
 	this->name("Player");
+	this->tag(PLAYER);
 
 	// Add GUI health
 	this->m_gui_health = core()->add_entity()->add_component<TextRenderer>();
@@ -55,8 +57,6 @@ void Player::on_initialize()
 
 void Player::on_tick()
 {
-	this->m_distance += 2.5f * this->delta_time();
-
 	std::stringstream stream1;
 	std::stringstream stream2;
 
@@ -65,6 +65,24 @@ void Player::on_tick()
 
 	this->m_gui_health.lock()->text(stream1.str());
 	this->m_gui_distance.lock()->text(stream2.str());
+
+	std::vector<std::shared_ptr<Collider>> colliders;
+	this->core()->find<Collider>(colliders);
+
+	std::vector<std::shared_ptr<Collider>>::iterator itr;
+	for (itr = colliders.begin(); itr != colliders.end(); ++itr)
+	{
+		if (this->m_collider.lock()->on_collision(*(*itr)))
+		{
+			if ((*itr)->tag() == ENEMY)
+			{
+				this->m_hit.lock()->play();
+				this->m_health -= 5.0f;
+
+				(*itr)->entity()->kill();
+			}
+		}
+	}
 
 	// Check health condition
 	if (this->m_health <= 0.00000001f)

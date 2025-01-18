@@ -106,22 +106,6 @@ namespace xTech
 	template <typename T>
 	std::shared_ptr<T> Entity::add_component()
 	{
-		std::vector<std::shared_ptr<Component>>::iterator itr;
-		for (itr = this->m_components.begin(); itr != this->m_components.end(); ++itr)
-		{
-			std::shared_ptr<T> test{ std::dynamic_pointer_cast<T>(*itr) };
-
-			if (test)
-			{
-				std::string type{ typeid(T).name() };
-
-				this->remove_sub_str(type, std::string{ "class " });
-				this->remove_sub_str(type, std::string{ "xTech::" });
-
-				throw std::runtime_error("ERROR::\'" + this->m_name + "\' ALREADY HAS A COMPONENT OF TYPE \'" + type + "\' ");
-			}
-		}
-
 		std::shared_ptr<T> rtn{ std::make_shared<T>() };
 
 		rtn->m_entity = this->m_self;

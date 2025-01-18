@@ -1,11 +1,15 @@
 #include "Controls.h"
 #include "Shoot.h"
 
+#include "Paths.h"
+
 void Controls::on_initialize()
 {
 	this->m_speed = 25.0f;
 
-	this->m_sound = this->entity()->get_component<SoundSource>();
+	this->m_sound = this->entity()->add_component<SoundSource>();
+	this->m_sound.lock()->audio(this->cache()->load<Audio>(PEW_AUDIO));
+
 	this->m_shoot = this->entity()->get_component<Shoot>();
 }
 

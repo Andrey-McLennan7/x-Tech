@@ -1,9 +1,14 @@
 #include "Bullet.h"
-
-#include "Paths.H"
+#include "Paths.h"
 
 void Bullet::on_initialize()
 {
+	this->m_collider = entity()->add_component<BoxCollider>();
+	this->m_collider.lock()->size(this->scale());
+
+	this->m_explosion = this->entity()->add_component<SoundSource>();
+	this->m_explosion.lock()->audio(EXPLOSION_AUDIO);
+
 	std::shared_ptr<ShapeRenderer> renderer{ entity()->add_component<ShapeRenderer>() };
 
 	renderer->shader(core()->cache()->load<Shader>(BASIC_SHADER));
@@ -24,5 +29,23 @@ void Bullet::on_tick()
 	if (this->position().x >= 60.0f)
 	{
 		this->entity()->kill();
+	}
+
+	std::vector<std::shared_ptr<Collider>> colliders;
+	this->core()->find<Collider>(colliders);
+
+	std::vector<std::shared_ptr<Collider>>::iterator itr;
+	for (itr = colliders.begin(); itr != colliders.end(); ++itr)
+	{
+		if (this->m_collider.lock()->on_collision(*(*itr)))
+		{
+			if ((*itr)->tag() == ENEMY)
+			{
+				this->m_explosion.lock()->play();
+
+				(*itr)->entity()->kill();
+				this->entity()->kill();
+			}
+		}
 	}
 }

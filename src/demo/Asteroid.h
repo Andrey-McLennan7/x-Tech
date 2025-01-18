@@ -11,6 +11,7 @@ private:
 	float m_rotation_speed;
 
 	std::weak_ptr<BoxCollider> m_collider;
+	std::weak_ptr<SoundSource> m_explosion;
 
 // Private member functions
 private:

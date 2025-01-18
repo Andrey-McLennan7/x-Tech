@@ -21,6 +21,8 @@ private:
 	std::weak_ptr<TextRenderer> m_gui_health;
 	std::weak_ptr<TextRenderer> m_gui_distance;
 
+	std::weak_ptr<SoundSource> m_hit;
+
 	std::vector<std::weak_ptr<Entity>> m_scene_asteroids;
 
 // Public member functions

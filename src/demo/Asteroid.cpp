@@ -21,7 +21,6 @@ void Asteroid::on_initialize()
 	this->random_velocity(this->m_movement_speed, this->m_rotation_speed);
 
 	this->m_collider = this->entity()->add_component<BoxCollider>();
-
 	this->m_collider.lock()->size(3.0f);
 
 	std::shared_ptr<ModelRenderer> asteroid_renderer{ this->entity()->add_component<ModelRenderer>() };

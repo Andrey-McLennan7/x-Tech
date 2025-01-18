@@ -11,4 +11,6 @@
 #define BATMFA_FONT "Font/batmfa"
 
 #define BACKGROUND_AUDIO "Audio/background"
+#define EXPLOSION_AUDIO "Audio/explosion"
 #define PEW_AUDIO "Audio/pew"
+#define HIT_AUDIO "Audio/hit"
