@@ -129,6 +129,7 @@ add_library(x-Tech
 	src/x-Tech/Font.cpp
 	src/x-Tech/TextRenderer.h
 	src/x-Tech/TextRenderer.cpp
+	src/x-Tech/tag.h
 )
 
 target_link_libraries(rend SDL2 ${LIBGLEW} ${LIBOPENGL} ${LIBOPENAL} assimp-vc143-mtd freetype)

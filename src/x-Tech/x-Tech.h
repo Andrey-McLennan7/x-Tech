@@ -43,5 +43,6 @@ namespace xTech
 #include "PointLight.h"
 #include "TextRenderer.h"
 #include "Font.h"
+#include "Tag.h"
 
 #endif
