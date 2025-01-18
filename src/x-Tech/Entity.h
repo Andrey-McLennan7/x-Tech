@@ -28,6 +28,7 @@ namespace xTech
 		std::weak_ptr<Transform> m_transform;
 
 		std::string m_name;
+		std::string m_tag;
 
 		bool m_alive;
 
@@ -76,6 +77,9 @@ namespace xTech
 
 		void name(const std::string& name);
 		std::string name() const;
+
+		void tag(const std::string& tag);
+		std::string tag() const;
 
 		friend class Core;
 		friend class Window;

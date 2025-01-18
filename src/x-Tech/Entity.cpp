@@ -167,4 +167,14 @@ namespace xTech
 	{
 		return this->m_name;
 	}
+
+	void Entity::tag(const std::string& tag)
+	{
+		this->m_tag = tag;
+	}
+
+	std::string Entity::tag() const
+	{
+		return this->m_tag;
+	}
 }
