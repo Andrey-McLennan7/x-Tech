@@ -20,7 +20,7 @@ namespace xTech
 
 		ALuint m_id;
 
-		std::shared_ptr<Audio> m_audio;
+		std::weak_ptr<Audio> m_audio;
 
 		bool m_loop;
 

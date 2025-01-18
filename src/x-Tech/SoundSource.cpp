@@ -48,12 +48,12 @@ namespace xTech
 
 	std::shared_ptr<Audio> SoundSource::audio() const
 	{
-		if (this->m_audio)
+		if (this->m_audio.lock())
 		{
 			throw std::runtime_error("ERROR::NO AUDIO SAMPLE");
 		}
 
-		return this->m_audio;
+		return this->m_audio.lock();
 	}
 
 	void SoundSource::loop(bool loop)
