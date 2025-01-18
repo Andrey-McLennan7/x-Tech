@@ -4,7 +4,6 @@
 
 #include "Shoot.h"
 #include "Controls.h"
-#include "CollisionResponce.h"
 
 #include <sstream>
 #include <iostream>
@@ -28,7 +27,6 @@ void Player::on_initialize()
 	player_renderer->model(this->cache()->load<Model>(SHIP_MODEL));
 
 	entity()->add_component<Shoot>();
-	entity()->add_component<CollisionResponce>();
 	entity()->add_component<Controls>();
 
 	this->rotation(vec3{ 0.0f, 1.5f, 0.0f });

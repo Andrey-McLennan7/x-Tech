@@ -6,7 +6,6 @@ class Shoot;
 class Controls;
 class Asteroid;
 class AsteroidSpawner;
-class CollisionResponce;
 
 class Player : public Component
 {
