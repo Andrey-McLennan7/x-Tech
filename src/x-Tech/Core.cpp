@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Transform.h"
 
+#include "Tag.h"
 #include "Window.h"
 #include "Camera.h"
 #include "Cache.h"
@@ -450,7 +451,7 @@ namespace xTech
 			rtn->m_name = "Entity" + std::to_string(this->m_entities.size());
 		}
 
-		rtn->m_tag = "Entity";
+		rtn->m_tag = ENTITY;
 
 		this->m_entities.push_back(rtn);
 
