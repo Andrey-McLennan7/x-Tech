@@ -31,7 +31,6 @@ namespace xTech
 		// Core components
 		std::shared_ptr<Window> m_window;
 		std::shared_ptr<Input> m_input;
-		std::shared_ptr<Audio> m_audio;
 		std::shared_ptr<Cache> m_cache;
 
 		// Scene entities
