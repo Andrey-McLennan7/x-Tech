@@ -12,7 +12,7 @@
 
 namespace rend
 {
-	struct Character
+	struct character
 	{
 		GLuint textureID;
 		GLuint advance;
@@ -30,7 +30,7 @@ namespace rend
 		GLuint m_vao;
 		GLuint m_vbo;
 
-		std::map<char, Character> m_characters;
+		std::map<char, character> m_characters;
 
 	public:
 

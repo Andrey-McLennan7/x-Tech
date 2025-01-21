@@ -11,40 +11,40 @@
 
 namespace rend
 {
-	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
+	Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
 	{
-		std::string vertexCode;
-		std::string fragmentCode;
+		std::string vertex_code;
+		std::string fragment_code;
 
-		std::stringstream vertexShaderStream;
-		std::stringstream fragmentShaderStream;
+		std::stringstream vertex_shader_stream;
+		std::stringstream fragment_shader_stream;
 
-		std::ifstream vertexShaderFile;
-		std::ifstream fragmentShaderFile;
+		std::ifstream vertex_shader_file;
+		std::ifstream fragment_shader_file;
 
-		const char* vertexShaderData;
-		const char* fragmentShaderData;
+		const char* vertex_shader_data;
+		const char* fragment_shader_data;
 
-		vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		fragmentShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		vertex_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		fragment_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
 		try
 		{
 			// Open Files
-			vertexShaderFile.open(vertexPath.c_str());
-			fragmentShaderFile.open(fragmentPath.c_str());
+			vertex_shader_file.open(vertex_path.c_str());
+			fragment_shader_file.open(fragment_path.c_str());
 
 			// Read Files
-			vertexShaderStream << vertexShaderFile.rdbuf();
-			fragmentShaderStream << fragmentShaderFile.rdbuf();
+			vertex_shader_stream << vertex_shader_file.rdbuf();
+			fragment_shader_stream << fragment_shader_file.rdbuf();
 
 			// Close Files
-			vertexShaderFile.close();
-			fragmentShaderFile.close();
+			vertex_shader_file.close();
+			fragment_shader_file.close();
 
 			// Read as a string
-			vertexCode = vertexShaderStream.str();
-			fragmentCode = fragmentShaderStream.str();
+			vertex_code = vertex_shader_stream.str();
+			fragment_code = fragment_shader_stream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
@@ -52,19 +52,19 @@ namespace rend
 		}
 
 		#ifdef _WIN32
-			vertexCode = "#version 330 core\n" + vertexCode;
-			fragmentCode = "#version 330 core\n" + fragmentCode;
+			vertex_code = "#version 330 core\n" + vertex_code;
+			fragment_code = "#version 330 core\n" + fragment_code;
 		#endif
 
 		// Read as constant character
-		vertexShaderData = vertexCode.c_str();
-		fragmentShaderData = fragmentCode.c_str();
+		vertex_shader_data = vertex_code.c_str();
+		fragment_shader_data = fragment_code.c_str();
 
 		// Vertex
-		this->compile_shader(this->m_vertex, vertexShaderData, GL_VERTEX_SHADER, "VERTEX");
+		this->compile_shader(this->m_vertex, vertex_shader_data, GL_VERTEX_SHADER, "VERTEX");
 
 		// Fragment
-		this->compile_shader(this->m_fragment, fragmentShaderData, GL_FRAGMENT_SHADER, "FRAGMENT");
+		this->compile_shader(this->m_fragment, fragment_shader_data, GL_FRAGMENT_SHADER, "FRAGMENT");
 
 		// Program
 		this->create_shader_program();
@@ -73,18 +73,18 @@ namespace rend
 	Shader::~Shader()
 	{}
 
-	void Shader::compile_shader(GLuint& shader, const char* shaderData, GLenum type)
+	void Shader::compile_shader(GLuint& shader, const char* shader_data, GLenum type)
 	{
-		this->compile_shader(shader, shaderData, type, "");
+		this->compile_shader(shader, shader_data, type, "");
 	}
 
-	void Shader::compile_shader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName)
+	void Shader::compile_shader(GLuint& shader, const char* shader_data, GLenum type, std::string shader_name)
 	{
 		int success{ 0 };
 		char infolog[1024];
 
 		shader = glCreateShader(type);
-		glShaderSource(shader, 1, &shaderData, NULL);
+		glShaderSource(shader, 1, &shader_data, NULL);
 		glCompileShader(shader);
 
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -93,7 +93,7 @@ namespace rend
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infolog);
 
-			throw std::runtime_error("ERROR::FAILED TO COMPILE " + shaderName + " SHADER::" + std::string(infolog));
+			throw std::runtime_error("ERROR::FAILED TO COMPILE " + shader_name + " SHADER::" + std::string(infolog));
 		}
 	}
 

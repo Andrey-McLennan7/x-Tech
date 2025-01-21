@@ -23,15 +23,15 @@ namespace rend
 	// Private member functions
 	private:
 
-		void compile_shader(GLuint& shader, const char* shaderData, GLenum type);
-		void compile_shader(GLuint& shader, const char* shaderData, GLenum type, std::string shaderName);
+		void compile_shader(GLuint& shader, const char* shader_data, GLenum type);
+		void compile_shader(GLuint& shader, const char* shader_data, GLenum type, std::string shader_name);
 		void create_shader_program();
 
 	// Public member functions
 	public:
 
 		// Constructor
-		Shader(const std::string& vertexPath, const std::string& fragmentPath);
+		Shader(const std::string& vertex_path, const std::string& fragment_path);
 		~Shader();
 
 		// Shader Use

@@ -57,7 +57,7 @@ namespace rend
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			// Store characters for later use
-			Character character =
+			character ch =
 			{
 				texture,
 				face->glyph->advance.x,
@@ -66,7 +66,7 @@ namespace rend
 				glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top)
 			};
 
-			this->m_characters.insert(std::pair<char, Character>(c, character));
+			this->m_characters.insert(std::pair<char, character>(c, ch));
 		}
 
 		FT_Done_Face(face);
@@ -97,7 +97,7 @@ namespace rend
 		// Iterate through all characters
 		for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 		{
-			Character ch = this->m_characters[*c];
+			character ch = this->m_characters[*c];
 
 			float xpos{ position.x + ch.bearing.x * scale };
 			float ypos{ position.y - (ch.size.y - ch.bearing.y) * scale };
