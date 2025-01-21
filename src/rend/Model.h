@@ -12,6 +12,9 @@
 #include <string>
 #include <memory>
 
+// Code source: https://learnopengl.com/Model-Loading/Model
+// Reused from 3DGP Assignment 2
+
 namespace rend
 {
 	struct texture;

@@ -9,6 +9,8 @@
 #include <sstream>
 #include <stdexcept>
 
+// Code source: https://learnopengl.com/Getting-started/Shaders
+
 namespace rend
 {
 	Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)

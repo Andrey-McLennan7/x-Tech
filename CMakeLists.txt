@@ -74,8 +74,6 @@ add_library(x-Tech
 	src/x-Tech/Entity.cpp
 	src/x-Tech/Component.h
 	src/x-Tech/Component.cpp
-	src/x-Tech/Debug.h
-	src/x-Tech/Debug.cpp
 	src/x-Tech/Transform.h
 	src/x-Tech/Transform.cpp
 	src/x-Tech/Window.h

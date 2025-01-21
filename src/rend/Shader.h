@@ -8,6 +8,8 @@
 
 #include <string>
 
+// Code source: https://learnopengl.com/Getting-started/Shaders
+
 namespace rend
 {
 	class Shader

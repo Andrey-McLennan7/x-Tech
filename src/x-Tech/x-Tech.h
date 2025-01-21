@@ -15,7 +15,6 @@ namespace xTech
 #include "Core.h"
 #include "Entity.h"
 #include "Component.h"
-#include "Debug.h"
 #include "Transform.h"
 #include "Window.h"
 #include "Input.h"

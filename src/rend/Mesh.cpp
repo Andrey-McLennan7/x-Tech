@@ -3,6 +3,9 @@
 
 #include <stdexcept>
 
+// Code source: https://learnopengl.com/Model-Loading/Mesh
+// Reused from 3DGP Assignment 2
+
 namespace rend
 {
 	Mesh::Mesh(std::vector<vertex> vertices, std::vector<GLuint> indicies, std::vector<texture> textures) :

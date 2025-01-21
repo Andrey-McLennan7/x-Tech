@@ -10,6 +10,10 @@
 #include <vector>
 #include <memory>
 
+
+// Code source: https://learnopengl.com/Model-Loading/Mesh
+// Reused from 3DGP Assignment 2
+
 namespace rend
 {
 	struct vertex

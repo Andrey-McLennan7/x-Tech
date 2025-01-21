@@ -6,6 +6,9 @@
 
 #include <stdexcept>
 
+// Code source: https://learnopengl.com/Model-Loading/Model
+// Reused from 3DGP Assignment 2
+
 namespace rend
 {
 	GLuint texture_from_file(const char* path, const std::string& directory);

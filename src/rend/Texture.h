@@ -9,6 +9,9 @@
 #include <GL/glew.h>
 #include <vector>
 
+// Code source: https://brightspace.bournemouth.ac.uk/content/enforced/448954-TBC/labs/lab3/rend.zip?isCourseFile=true&ou=448954
+// Navigation: rend->src->rend->Texture.h
+
 namespace rend
 {
 	class Texture
