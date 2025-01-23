@@ -178,6 +178,11 @@ namespace xTech
 		this->m_name = name;
 	}
 
+	void Entity::name(const char* name)
+	{
+		this->name(std::string{ name });
+	}
+
 	std::string Entity::name() const
 	{
 		return this->m_name;
@@ -186,6 +191,11 @@ namespace xTech
 	void Entity::tag(const std::string& tag)
 	{
 		this->m_tag = tag;
+	}
+
+	void Entity::tag(const char* tag)
+	{
+		this->tag(std::string{ tag });
 	}
 
 	std::string Entity::tag() const
