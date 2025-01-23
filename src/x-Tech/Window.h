@@ -31,7 +31,13 @@ namespace xTech
 
 		void tick();
 
+		void size(const glm::ivec2& size);
+		void size(int width, int height);
+
 		glm::ivec2 size() const;
+
+		int size_x() const;
+		int size_y() const;
 
 		float delta_time();
 

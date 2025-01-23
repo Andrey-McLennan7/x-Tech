@@ -71,6 +71,16 @@ namespace xTech
 		glViewport(0, 0, w, h);
 	}
 
+	void Window::size(const glm::ivec2& size)
+	{
+		SDL_SetWindowSize(this->m_id, size.x, size.y);
+	}
+
+	void Window::size(int width, int height)
+	{
+		this->size(glm::ivec2{ width, height });
+	}
+
 	glm::ivec2 Window::size() const
 	{
 		int w{ 0 };
@@ -81,6 +91,16 @@ namespace xTech
 		glm::ivec2 rtn{ w, h };
 
 		return rtn;
+	}
+
+	int Window::size_x() const
+	{
+		return this->size().x;
+	}
+
+	int Window::size_y() const
+	{
+		return this->size().y;
 	}
 
 	float Window::delta_time()
