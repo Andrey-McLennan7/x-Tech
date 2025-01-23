@@ -24,7 +24,6 @@ namespace xTech
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Controller.h"
-#include "TriangleRenderer.h"
 #include "Resource.h"
 #include "Cache.h"
 #include "Texture.h"

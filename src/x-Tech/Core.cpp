@@ -469,7 +469,7 @@ namespace xTech
 			}
 		}
 
-		throw std::runtime_error("ERROR::ENTITY NOT FOUND");
+		throw std::runtime_error("ERROR::ENTITY NOT FOUND, NO SUCH NAME EXISTS");
 	}
 
 	std::shared_ptr<Entity> Core::get_entity_by_tag(const std::string& tag) const
@@ -483,7 +483,7 @@ namespace xTech
 			}
 		}
 
-		throw std::runtime_error("ERROR::ENTITY NOT FOUND");
+		throw std::runtime_error("ERROR::NO SUCH TAG EXISTS");
 	}
 
 	void Core::run()

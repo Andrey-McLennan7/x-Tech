@@ -97,6 +97,11 @@ namespace xTech
 		this->m_transform.lock()->position(position);
 	}
 
+	void Entity::position(float x, float y, float z)
+	{
+		this->position(glm::vec3{ x, y, z });
+	}
+
 	glm::vec3 Entity::position() const
 	{
 		return this->m_transform.lock()->position();
@@ -107,6 +112,11 @@ namespace xTech
 		this->m_transform.lock()->rotation(rotation);
 	}
 
+	void Entity::rotation(float x, float y, float z)
+	{
+		this->rotation(glm::vec3{ x, y, z });
+	}
+
 	glm::vec3 Entity::rotation() const
 	{
 		return this->m_transform.lock()->rotation();
@@ -115,6 +125,11 @@ namespace xTech
 	void Entity::scale(const glm::vec3& scale)
 	{
 		this->m_transform.lock()->scale(scale);
+	}
+
+	void Entity::scale(float x, float y, float z)
+	{
+		this->m_transform.lock()->scale(glm::vec3{ x, y, z });
 	}
 
 	void Entity::scale(float scale)
