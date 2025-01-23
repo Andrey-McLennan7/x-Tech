@@ -141,6 +141,11 @@ namespace xTech
 		this->entity()->name(name);
 	}
 
+	void Component::name(const char* name)
+	{
+		this->name(std::string{ name });
+	}
+
 	std::string Component::name() const
 	{
 		return this->entity()->name();
@@ -149,6 +154,11 @@ namespace xTech
 	void Component::tag(const std::string& tag)
 	{
 		this->entity()->tag(tag);
+	}
+
+	void Component::tag(const char* tag)
+	{
+		this->tag(std::string{ tag });
 	}
 
 	std::string Component::tag() const

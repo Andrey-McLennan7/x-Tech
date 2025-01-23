@@ -260,6 +260,13 @@ namespace xTech
 		* \param name A std::string parameter
 		*/
 		void name(const std::string& name);
+		
+		/**
+		* \brief Sets the name of the component's parent entity
+		*
+		* \param name A const char* parameter
+		*/
+		void name(const char* name);
 
 		/**
 		* \brief Returns the name of the component's parent entity
@@ -274,6 +281,13 @@ namespace xTech
 		* \param tag A std::string parameter
 		*/
 		void tag(const std::string& tag);
+		
+		/**
+		* \brief Sets tag of the component's parent entity
+		*
+		* \param tag A const char* parameter
+		*/
+		void tag(const char* tag);
 
 		/**
 		* \brief Returns the component's parent entity tag
